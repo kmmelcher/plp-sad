@@ -1,5 +1,5 @@
 id,nome_autor,conteudo,horario,id_ticket
-1,killian melcher,"Boa tarde, Estou com duvida na questao pratica 3",Sat Jul 23 15:16:57 2020,1
-2,killian melcher,Como faco para ler uma lista de inteiros da entrada?,Sat Jul 23 15:17:22 2020,1
-3,luiggy ferreira,"OI, É só fazer o input <- getLine e depois  read input :: [[Int]]",Sat Jul 23 16:00:14 2020,1
-4,killian melcher,"Obrigado , deu certo aqui",Sat Jul 23 16:03:45 2020,1
+1,Kilian Melcher,"Boa tarde, Estou com duvida na questao pratica 3",Sat Jul 23 15:16:57 2020,1
+2,Kilian Melcher,Como faco para ler uma lista de inteiros da entrada?,Sat Jul 23 15:17:22 2020,1
+3,Luiggy Ferreira,"OI, É só fazer o input <- getLine e depois  read input :: [[Int]]",Sat Jul 23 16:00:14 2020,1
+4,Kilian Melcher,"Obrigado , deu certo aqui",Sat Jul 23 16:03:45 2020,1
