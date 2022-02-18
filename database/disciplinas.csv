@@ -1,0 +1,12 @@
+id,sigla,nome,professor,alunos,monitores,tickets
+1,oac,Organização e Arquitetura de Computadores,Joseana,,,
+2,loac,Laboratório de Organização e Arquitetura de Computadores,Joseana,,,
+3,psoft,Projeto de Software,Everton;Fábio,,,
+4,ip,Probabilidade,Areli,,,
+5,plp,Paradigmas de Linguagens de Programação,Everton,,,
+6,bd,Banco de dados,Campelo,,,
+7,so,Sistemas Operacionais,"Fubica,Manel",,,
+8,redes,Redes de computadores,Reinaldo,,,
+9,eda,Estrutura de Dados,Adalberto,,,
+10,leda,Laboratório de Estrutura de Dados,Adalberto,,,
+11,p2,Programação 2,Gaudêncio,,,
