@@ -1,7 +1,7 @@
-nome,matricula,disciplinas
-Kilian Melcher,120110991,"oac,loac,ip,plp,psoft"
-Pedro Adrian,120110299,"plp,so,psoft,redes,bd"
-"Álef Carlos ",120110281,"eda,leda,ip,plp"
-Vinícius Azevedo,120110295,"oac,loac,ip,plp,psoft,bd"
-Filipe Ramalho,120110293,"plp,redes,so,bd"
-Luiggy Ferreira,120110290,"so,redes,bd"
+id,matricula,nome,disciplinas
+1,120110991,Kilian Melcher,"oac,loac,ip,plp,psoft"
+2,120110299,Pedro Adrian,"plp,so,psoft,redes,bd"
+3,120110281,"Álef Carlos ","eda,leda,ip,plp"
+4,120110295,Vinícius Azevedo,"oac,loac,ip,plp,psoft,bd"
+5,120110293,Filipe Ramalho,"plp,redes,so,bd"
+6,120110290,Luiggy Ferreira,"so,redes,bd"
