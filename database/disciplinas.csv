@@ -1,7 +1,7 @@
 id,sigla,nome,professor,alunos,monitores,tickets
 1,oac,Organização e Arquitetura de Computadores,Joseana,,,
 2,loac,Laboratório de Organização e Arquitetura de Computadores,Joseana,,,
-3,psoft,Projeto de Software,"Everton,Fábio",,,
+3,psoft,Projeto de Software,Everton;Fábio,,,
 4,ip,Probabilidade,Areli,,,
 5,plp,Paradigmas de Linguagens de Programação,Everton,,,
 6,bd,Banco de dados,Campelo,,,
