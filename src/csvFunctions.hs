@@ -46,8 +46,3 @@ atualizaArquivo (linhaAtual:linhasRestantes) id arquivo = do
             hPutStrLn arquivo linhaAtual
             atualizaArquivo linhasRestantes id arquivo
         else atualizaArquivo linhasRestantes id arquivo
-
-main :: IO()
-main = do 
-  removeLinhaCsv "../database/alunos.csv" "120110407"
-  adicionaLinhaCsv "../database/alunos.csv" "120110338,Vinicus Azevedo,\"oac,loac\""
