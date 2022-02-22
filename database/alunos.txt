@@ -1,0 +1,6 @@
+Aluno{matricula = 120110123, nome = "Kilian Melcher", ["OAC", "LOAC", "PLP", "Psoft"]}
+Aluno{matricula = 120110456, nome = "Pedro Adrian", ["SO", "Redes", "PLP", "Psoft", "BD"]}
+Aluno{matricula = 120110789, nome = "Álef Carlos", ["EDA", "LEDA", "IP", "PLP"]}
+Aluno{matricula = 120110741, nome = "Vinícius Azevedo", ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
+Aluno{matricula = 120110258, nome = "Filipe Ramalho", ["PLP", "BD", "AS", "Redes", "SO"]}
+Aluno{matricula = 120110369, nome = "Luiggy Ferreira", ["OAC", "LOAC", "PLP", "Psoft"]}

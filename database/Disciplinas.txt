@@ -1,0 +1,13 @@
+Disciplina {id = 1, sigla = "OAC", nome = "Organização e Arquitetura de Computadores"}
+Disciplina {id = 2, sigla = "LOAC", nome = "Laboratório de Organização e Arquitetura de Computadores"}
+Disciplina {id = 3, sigla = "Psoft", nome = "Projeto de Software"}
+Disciplina {id = 4, sigla = "Psoft", nome = "Projeto de Software"}
+Disciplina {id = 5, sigla = "IP", nome = "Introdução à Probabilidade"}
+Disciplina {id = 6, sigla = "PLP", nome = "Paradigmas de Linguagens de Programação"}
+Disciplina {id = 7, sigla = "BD", nome = "Banco de Dados"}
+Disciplina {id = 8, sigla = "SO", nome = "Sistemas Operacionais"}
+Disciplina {id = 9, sigla = "Redes", nome = "Redes de computadores"}
+Disciplina {id = 10, sigla = "EDA", nome = "Estrutura de Dados e Algoritmos"}
+Disciplina {id = 11, sigla = "LEDA", nome = "Laboratório de Estrutura de Dados e Algoritmos"}
+Disciplina {id = 12, sigla = "AS", nome = "Análise de Sistemas"}
+Disciplina {id = 13, sigla = "P2", nome = "Programação 2"}
