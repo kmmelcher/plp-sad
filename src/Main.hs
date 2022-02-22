@@ -1,10 +1,6 @@
-import Util.CsvFunctions
+import Util.TxtFunctions
 
 
 main :: IO()
 main = do
-    print "Arquivo"
-    arquivo <- getLine
-    print "Insira os dados:"
-    dados <- getLine
-    adicionaLinhaCsv arquivo dados
+    print "Bem vindo ao SAD!"

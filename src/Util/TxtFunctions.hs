@@ -81,8 +81,3 @@ module Util.TxtFunctions where
         atualizaLista conteudoArquivo id "" arquivo
         hFlush arquivo
         hClose arquivo
-    
-    main:: IO()
-    main = do
-        removeLinha "../../database/alunos.txt" "120110338"
-        adicionaLinha "../../database/alunos.txt" "Aluno {id = 120110338, nome = \"Vinícius Azevedo\", [\"OAC\", \"LOAC\", \"PLP\", \"Psoft\", \"BD\"]}"
