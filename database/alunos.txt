@@ -1,0 +1,6 @@
+Aluno {id = 120110123, nome = "Kilian Melcher", ["OAC", "LOAC", "PLP", "Psoft"]}
+Aluno {id = 120110456, nome = "Pedro Adrian", ["SO", "Redes", "PLP", "Psoft", "BD"]}
+Aluno {id = 120110789, nome = "Álef Carlos", ["EDA", "LEDA", "IP", "PLP"]}
+Aluno {id = 120110338, nome = "Vinícius Azevedo", ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
+Aluno {id = 120110258, nome = "Filipe Ramalho", ["PLP", "BD", "AS", "Redes", "SO"]}
+Aluno {id = 120110369, nome = "Luiggy Ferreira", ["OAC", "LOAC", "PLP", "Psoft"]}

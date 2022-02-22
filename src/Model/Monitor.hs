@@ -3,7 +3,7 @@ module Model.Monitor where
     import Model.Disciplina (Disciplina)
     data Monitor = Monitor {
         id :: Integer,
-        aluno :: Aluno,
-        disciplina :: Disciplina,
+        aluno :: Integer,
+        disciplina :: String,
         horarios :: String
     }

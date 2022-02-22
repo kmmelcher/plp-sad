@@ -1,0 +1,1 @@
+Ticket{id = 1, mensagens = [1, 2, 3, 4], status = "Resolvido", "Kilian Melcher"}

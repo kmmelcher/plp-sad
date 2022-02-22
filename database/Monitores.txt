@@ -1,0 +1,3 @@
+Monitor {aluno = 120110789, disciplina = "LOAC", horarios = "QUA 14-16 SEX 14-16"}
+Monitor {aluno = 120110456, disciplina = "P2", horarios = "SEG 08-10 QUI 10-12"}
+Monitor {aluno = 120110258, disciplina = "PLP", horarios = "QUA 14-16 SEX 14-16"}
