@@ -1,7 +1,10 @@
 module Util.TxtFunctions where
     import System.IO
     import Control.Exception (evaluate)
-
+    import Data.List as T
+    import Prelude as P
+    
+    
     {-
     Esta função retorna um array de string com todo o conteúdo do arquivo tendo quebras de linha como separador.
     Parametros:
@@ -11,8 +14,8 @@ module Util.TxtFunctions where
     fileToStringArray path = do
         arquivo <- openFile path ReadMode
         conteudo <- hGetContents arquivo
-        evaluate (length conteudo)
-        let conteudoEmLista = lines conteudo
+        evaluate (P.length conteudo)
+        let conteudoEmLista = P.lines conteudo
         return conteudoEmLista
 
     
@@ -56,12 +59,12 @@ module Util.TxtFunctions where
     atualizaLista :: [String] -> String -> String -> Handle  -> IO ()
     atualizaLista [] _ _ _= return ()
     atualizaLista (linhaAtual:linhasRestantes) id novaLinha arquivo = do
-        if take (length id) linhaAtual /= id 
+        if (("id = " ++ id) `T.isInfixOf` linhaAtual)
             then do 
-                hPutStrLn arquivo linhaAtual
+                hPutStrLn arquivo novaLinha
                 atualizaLista linhasRestantes id novaLinha arquivo
             else do
-                hPutStrLn arquivo novaLinha 
+                hPutStrLn arquivo linhaAtual
                 atualizaLista linhasRestantes id novaLinha arquivo
     
     {-
@@ -78,3 +81,8 @@ module Util.TxtFunctions where
         atualizaLista conteudoArquivo id "" arquivo
         hFlush arquivo
         hClose arquivo
+    
+    main:: IO()
+    main = do
+        removeLinha "../../database/alunos.txt" "120110338"
+        adicionaLinha "../../database/alunos.txt" "Aluno {id = 120110338, nome = \"Vinícius Azevedo\", [\"OAC\", \"LOAC\", \"PLP\", \"Psoft\", \"BD\"]}"
