@@ -3,5 +3,5 @@ module Model.Professor where
     data Professor = Professor {
         id :: Integer,
         nome :: String,
-        disciplinas:: [Disciplina]
+        disciplinas:: [String]
     }

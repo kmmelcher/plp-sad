@@ -1,4 +1,4 @@
-module Util.CsvFunctions where
+module Util.TxtFunctions where
     import System.IO
     import Control.Exception (evaluate)
 
@@ -9,8 +9,8 @@ module Util.CsvFunctions where
         conteudo = Precisa ser no formato e na ordem do csv 
         path = caminho do arquivo no diretório
     -}
-    adicionaLinhaCsv :: FilePath -> String -> IO() 
-    adicionaLinhaCsv path conteudo = do
+    adicionaLinha :: FilePath -> String -> IO() 
+    adicionaLinha path conteudo = do
         let mensagem = conteudo ++ "\n"
         appendFile path mensagem
 
@@ -21,9 +21,9 @@ module Util.CsvFunctions where
         id = id da linha 
         novaLinha = conteudo da nova linha a ser atualizada
     -}
-    atualizaLinhaCsv :: FilePath -> String -> String -> IO()
-    atualizaLinhaCsv path id novaLinha = do
-        conteudoArquivo <- leConteudoGeralCsv path
+    atualizaLinha :: FilePath -> String -> String -> IO()
+    atualizaLinha path id novaLinha = do
+        conteudoArquivo <- leConteudoGeral path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
         atualizaArquivo conteudoArquivo id novaLinha arquivo
@@ -35,8 +35,8 @@ module Util.CsvFunctions where
     Parametros:
         path = caminho do arquivo no diretório
     -}
-    leConteudoGeralCsv :: FilePath -> IO([String]) 
-    leConteudoGeralCsv path = do
+    leConteudoGeral :: FilePath -> IO([String]) 
+    leConteudoGeral path = do
         arquivo <- openFile path ReadMode
         conteudo <- hGetContents arquivo
         evaluate (length conteudo)
@@ -51,7 +51,7 @@ module Util.CsvFunctions where
     -}
     removeLinhaCsv :: FilePath -> String -> IO ()
     removeLinhaCsv path id = do
-        conteudoArquivo <- leConteudoGeralCsv path
+        conteudoArquivo <- leConteudoGeral path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
         atualizaArquivo conteudoArquivo id "" arquivo

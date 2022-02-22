@@ -4,6 +4,6 @@ module Model.Monitor where
     data Monitor = Monitor {
         id :: Integer,
         aluno :: Aluno,
-        disciplina :: Disciplina,
+        disciplina :: String,
         horarios :: String
     }
