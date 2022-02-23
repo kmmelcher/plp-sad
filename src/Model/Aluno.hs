@@ -1,7 +1,7 @@
 module Model.Aluno where
     import Model.Disciplina (Disciplina)
     data Aluno = Aluno {
-        matricula :: Integer,
+        id :: Integer,
         nome :: String,
         disciplinas:: [String]
-    }
+    } deriving (Show, Read)
