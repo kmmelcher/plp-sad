@@ -20,6 +20,8 @@ module Src.Util.TxtFunctions where
 
     
     -- INSERIR AQUI: LER CONTEUDO ESPECIFICO
+    -- TODO: MENSAGENS DE ERRO DE LEITURA E ADIÇÃO (REPETIDO)
+    -- TODO: Editar remoção para exclusão de linha
 
     {- 
     Esta função adiciona uma linha no arquivo. Caso o arquivo já possua uma linha,
