@@ -1,6 +1,6 @@
 module Src.Model.Mensagem where
     data Mensagem = Mensagem {
-        id :: Integer,
+        id :: String,
         autor :: String,
         conteudo :: String,
         horario :: String
