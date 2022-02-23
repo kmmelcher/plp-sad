@@ -1,4 +1,4 @@
-module Util.TxtFunctions where
+module Src.Util.TxtFunctions where
     import System.IO
     import Control.Exception (evaluate)
     import Data.List as T
@@ -31,7 +31,7 @@ module Util.TxtFunctions where
     adicionaLinha :: String -> String -> IO()
     adicionaLinha nomeArquivo conteudo = do
         let mensagem = conteudo ++ "\n"
-        appendFile ("../../database/" ++ nomeArquivo ++ ".txt") mensagem
+        appendFile ("database/" ++ nomeArquivo ++ ".txt") mensagem
 
     {-
     Essa função atualiza uma linha do arquivo com base no seu id
@@ -42,7 +42,7 @@ module Util.TxtFunctions where
     -}
     atualizaLinhaById :: String -> String -> String -> IO()
     atualizaLinhaById nomeArquivo id novaLinha = do
-        let path = ("../../database/" ++ nomeArquivo ++ ".txt")
+        let path = "database/" ++ nomeArquivo ++ ".txt"
         conteudoArquivo <- fileToStringArray path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
@@ -60,7 +60,7 @@ module Util.TxtFunctions where
     atualizaLista :: [String] -> String -> String -> Handle  -> IO ()
     atualizaLista [] _ _ _= return ()
     atualizaLista (linhaAtual:linhasRestantes) id novaLinha arquivo = do
-        if (("id = " ++ id) `T.isInfixOf` linhaAtual)
+        if ("id = " ++ id) `T.isInfixOf` linhaAtual
             then do 
                 hPutStrLn arquivo novaLinha
                 atualizaLista linhasRestantes id novaLinha arquivo
@@ -76,7 +76,7 @@ module Util.TxtFunctions where
     -}
     removeLinha :: String -> String -> IO ()
     removeLinha nomeArquivo id = do
-        let path = "../../database/" ++ nomeArquivo ++ ".txt"
+        let path = "database/" ++ nomeArquivo ++ ".txt"
         conteudoArquivo <- fileToStringArray path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
