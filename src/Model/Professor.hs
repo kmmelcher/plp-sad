@@ -4,4 +4,4 @@ module Model.Professor where
         id :: Integer,
         nome :: String,
         disciplinas:: [String]
-    }
+    } deriving(Show, Read)
