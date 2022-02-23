@@ -1,5 +1,5 @@
-module Model.Aluno where
-    import Model.Disciplina (Disciplina)
+module Src.Model.Aluno where
+    import Src.Model.Disciplina (Disciplina)
     data Aluno = Aluno {
         id :: Integer,
         nome :: String,
