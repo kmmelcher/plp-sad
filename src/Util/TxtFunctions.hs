@@ -1,8 +1,8 @@
 module Util.TxtFunctions where
     import System.IO
     import Control.Exception (evaluate)
-    import Data.List as T
     import Prelude as P
+    import qualified Data.List as T
     
     
     {-
@@ -32,6 +32,30 @@ module Util.TxtFunctions where
     adicionaLinha nomeArquivo conteudo = do
         let mensagem = conteudo ++ "\n"
         appendFile ("../../database/" ++ nomeArquivo ++ ".txt") mensagem
+    
+
+    buscaNovoId :: String -> IO(String)
+    buscaNovoId nomeArquivo = buscaNovoIdRecursivo nomeArquivo 0
+
+    buscaNovoIdRecursivo :: String -> Int -> IO(String)
+    buscaNovoIdRecursivo nomeArquivo index = do
+        let path = ("../../database/" ++ nomeArquivo ++ ".txt")
+        conteudoEmLista <- fileToStringArray path
+        if (conteudoEmLista == [])
+            then return "1"
+            else do
+                let linha = conteudoEmLista!!index
+                if linha == last conteudoEmLista
+                    then return "-1"
+                    else do
+                        let objetoEmLista = P.words linha
+                        let idObjeto = read (P.take ((P.length (objetoEmLista!!3))-1) (objetoEmLista!!3)) :: Int
+                        proximo <- buscaNovoIdRecursivo nomeArquivo (index+1)
+                        if (proximo == "-1")
+                            then return (show (idObjeto+2))
+                            else return proximo
+
+
 
     {-
     Essa função atualiza uma linha do arquivo com base no seu id
