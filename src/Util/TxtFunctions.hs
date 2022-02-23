@@ -8,7 +8,7 @@ module Util.TxtFunctions where
     {-
     Esta função retorna um array de string com todo o conteúdo do arquivo tendo quebras de linha como separador.
     Parametros:
-        path = caminho do arquivo no diretório
+        path = caminho do arquivo no diretório database
     -}
     fileToStringArray :: FilePath -> IO([String]) 
     fileToStringArray path = do
@@ -26,22 +26,23 @@ module Util.TxtFunctions where
     a funcao irá adicionar na linha seguinte
     Parametros:
         conteudo = Precisa ser no formato string de um objeto 
-        path = caminho do arquivo no diretório
+        nomeArquivo = o nome do arquivo no diretório database
     -}
-    adicionaLinha :: FilePath -> String -> IO()
-    adicionaLinha path conteudo = do
+    adicionaLinha :: String -> String -> IO()
+    adicionaLinha nomeArquivo conteudo = do
         let mensagem = conteudo ++ "\n"
-        appendFile path mensagem
+        appendFile ("../../database/" ++ nomeArquivo ++ ".txt") mensagem
 
     {-
-    Essa funcao atualiza uma linha do arquivo com base no seu id
+    Essa função atualiza uma linha do arquivo com base no seu id
     Parametros:
-        path = caminho do arquivo no diretório
+        nomeArquivo = o nome do arquivo no diretório database
         id = id da linha 
         novaLinha = conteudo da nova linha a ser atualizada
     -}
-    atualizaLinhaById :: FilePath -> String -> String -> IO()
-    atualizaLinhaById path id novaLinha = do
+    atualizaLinhaById :: String -> String -> String -> IO()
+    atualizaLinhaById nomeArquivo id novaLinha = do
+        let path = ("../../database/" ++ nomeArquivo ++ ".txt")
         conteudoArquivo <- fileToStringArray path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
@@ -70,11 +71,12 @@ module Util.TxtFunctions where
     {-
     Essa funcao remove uma linha com base no id da linha
     Parametros:
-        path = caminho do arquivo no diretório
+        nomeArquivo = o nome do arquivo no diretório database
         id = id da linha 
     -}
-    removeLinha :: FilePath -> String -> IO ()
-    removeLinha path id = do
+    removeLinha :: String -> String -> IO ()
+    removeLinha nomeArquivo id = do
+        let path = "../../database/" ++ nomeArquivo ++ ".txt"
         conteudoArquivo <- fileToStringArray path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
