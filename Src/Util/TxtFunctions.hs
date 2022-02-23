@@ -100,7 +100,7 @@ module Src.Util.TxtFunctions where
     -}
     removeLinha :: String -> String -> IO ()
     removeLinha nomeArquivo id = do
-        let path = "database/" ++ nomeArquivo ++ ".txt"
+        let path = "../../database/" ++ nomeArquivo ++ ".txt"
         conteudoArquivo <- fileToStringArray path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
