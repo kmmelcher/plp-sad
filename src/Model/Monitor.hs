@@ -1,6 +1,6 @@
-module Model.Monitor where
-    import Model.Aluno (Aluno)
-    import Model.Disciplina (Disciplina)
+module Src.Model.Monitor where
+    import Src.Model.Aluno (Aluno)
+    import Src.Model.Disciplina (Disciplina)
     data Monitor = Monitor {
         id :: Integer,
         aluno :: Integer,

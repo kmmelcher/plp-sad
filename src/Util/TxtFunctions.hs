@@ -1,14 +1,14 @@
-module Util.TxtFunctions where
+module Src.Util.TxtFunctions where
     import System.IO
     import Control.Exception (evaluate)
-    import Data.List as T
     import Prelude as P
+    import qualified Data.List as T
     
     
     {-
     Esta função retorna um array de string com todo o conteúdo do arquivo tendo quebras de linha como separador.
     Parametros:
-        path = caminho do arquivo no diretório
+        path = caminho do arquivo no diretório database
     -}
     fileToStringArray :: FilePath -> IO([String]) 
     fileToStringArray path = do
@@ -26,22 +26,47 @@ module Util.TxtFunctions where
     a funcao irá adicionar na linha seguinte
     Parametros:
         conteudo = Precisa ser no formato string de um objeto 
-        path = caminho do arquivo no diretório
+        nomeArquivo = o nome do arquivo no diretório database
     -}
-    adicionaLinha :: FilePath -> String -> IO()
-    adicionaLinha path conteudo = do
+    adicionaLinha :: String -> String -> IO()
+    adicionaLinha nomeArquivo conteudo = do
         let mensagem = conteudo ++ "\n"
-        appendFile path mensagem
+        appendFile ("../../database/" ++ nomeArquivo ++ ".txt") mensagem
+    
+
+    buscaNovoId :: String -> IO(String)
+    buscaNovoId nomeArquivo = buscaNovoIdRecursivo nomeArquivo 0
+
+    buscaNovoIdRecursivo :: String -> Int -> IO(String)
+    buscaNovoIdRecursivo nomeArquivo index = do
+        let path = ("../../database/" ++ nomeArquivo ++ ".txt")
+        conteudoEmLista <- fileToStringArray path
+        if (conteudoEmLista == [])
+            then return "1"
+            else do
+                let linha = conteudoEmLista!!index
+                if linha == last conteudoEmLista
+                    then return "-1"
+                    else do
+                        let objetoEmLista = P.words linha
+                        let idObjeto = read (P.take ((P.length (objetoEmLista!!3))-1) (objetoEmLista!!3)) :: Int
+                        proximo <- buscaNovoIdRecursivo nomeArquivo (index+1)
+                        if (proximo == "-1")
+                            then return (show (idObjeto+2))
+                            else return proximo
+
+
 
     {-
-    Essa funcao atualiza uma linha do arquivo com base no seu id
+    Essa função atualiza uma linha do arquivo com base no seu id
     Parametros:
-        path = caminho do arquivo no diretório
+        nomeArquivo = o nome do arquivo no diretório database
         id = id da linha 
         novaLinha = conteudo da nova linha a ser atualizada
     -}
-    atualizaLinhaById :: FilePath -> String -> String -> IO()
-    atualizaLinhaById path id novaLinha = do
+    atualizaLinhaById :: String -> String -> String -> IO()
+    atualizaLinhaById nomeArquivo id novaLinha = do
+        let path = "database/" ++ nomeArquivo ++ ".txt"
         conteudoArquivo <- fileToStringArray path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
@@ -59,7 +84,7 @@ module Util.TxtFunctions where
     atualizaLista :: [String] -> String -> String -> Handle  -> IO ()
     atualizaLista [] _ _ _= return ()
     atualizaLista (linhaAtual:linhasRestantes) id novaLinha arquivo = do
-        if (("id = " ++ id) `T.isInfixOf` linhaAtual)
+        if ("id = " ++ id) `T.isInfixOf` linhaAtual
             then do 
                 hPutStrLn arquivo novaLinha
                 atualizaLista linhasRestantes id novaLinha arquivo
@@ -70,11 +95,12 @@ module Util.TxtFunctions where
     {-
     Essa funcao remove uma linha com base no id da linha
     Parametros:
-        path = caminho do arquivo no diretório
+        nomeArquivo = o nome do arquivo no diretório database
         id = id da linha 
     -}
-    removeLinha :: FilePath -> String -> IO ()
-    removeLinha path id = do
+    removeLinha :: String -> String -> IO ()
+    removeLinha nomeArquivo id = do
+        let path = "../../database/" ++ nomeArquivo ++ ".txt"
         conteudoArquivo <- fileToStringArray path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""

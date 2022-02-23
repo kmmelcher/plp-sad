@@ -1,11 +1,11 @@
-Professor{id = 1, nome = "Joseana", disciplinas = ["OAC", "LOAC"]}
-Professor{id = 2, nome = "Everton", disciplinas = ["Psoft", "PLP"]}
-Professor{id = 3, nome = "Fabio", disciplinas = ["Psoft"]}
-Professor{id = 4, nome = "Areli", disciplinas = ["IP"]}
-Professor{id = 5, nome = "Campelo", disciplinas = ["LEDA", "BD"]}
-Professor{id = 6, nome = "Fubica", disciplinas = ["SO"]}
-Professor{id = 7, nome = "Manel", disciplinas = ["SO"]}
-Professor{id = 8, nome = "Reinaldo", disciplinas = ["Redes"]}
-Professor{id = 9, nome = "Adalberto", disciplinas = ["EDA", "LEDA"]}
-Professor{id = 10, nome = "Gaudêncio", disciplinas = ["P2"]}
-Professor{id = 11, nome = "Eliana", disciplinas = ["AS"]}
+Professor {id = 1, nome = "Joseana", disciplinas = ["OAC", "LOAC"]}
+Professor {id = 2, nome = "Everton", disciplinas = ["Psoft", "PLP"]}
+Professor {id = 3, nome = "Fabio", disciplinas = ["Psoft"]}
+Professor {id = 4, nome = "Areli", disciplinas = ["IP"]}
+Professor {id = 5, nome = "Campelo", disciplinas = ["LEDA", "BD"]}
+Professor {id = 6, nome = "Fubica", disciplinas = ["SO"]}
+Professor {id = 7, nome = "Manel", disciplinas = ["SO"]}
+Professor {id = 8, nome = "Reinaldo", disciplinas = ["Redes"]}
+Professor {id = 9, nome = "Adalberto", disciplinas = ["EDA", "LEDA"]}
+Professor {id = 10, nome = "Gaudêncio", disciplinas = ["P2"]}
+Professor {id = 11, nome = "Eliana", disciplinas = ["AS"]}
