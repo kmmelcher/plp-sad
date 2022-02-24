@@ -1,6 +1,7 @@
 module Src.Model.Mensagem where
+    import Data.Time (UTCTime)
     data Mensagem = Mensagem {
-        id :: String,
+        id :: Int,
         autor :: String,
         conteudo :: String,
         horario :: String

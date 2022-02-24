@@ -2,10 +2,12 @@ module Src.Controller where
     import Src.Util.TxtFunctions
     import Src.Model.Aluno
     import Src.Model.Professor
+    import Data.Time (getCurrentTime, UTCTime)
+    import Src.Model.Mensagem
+    import Data.Time.Format
     import Src.Model.Ticket
     import Control.Monad (when)
     import Data.Char (GeneralCategory(Control))
-    import qualified Src.Model.Ticket as Src.Model
     
     adicionaProfessor :: IO()
     adicionaProfessor = do
@@ -15,7 +17,7 @@ module Src.Controller where
             listaDisciplinasStr <- getLine
             let disciplinas = read(listaDisciplinasStr) :: [String]
             id <- buscaNovoId "Professores"
-            let prof = Professor id nome disciplinas
+            let prof = Professor (read id :: Int) nome disciplinas
             let profToString = show (prof)
             adicionaLinha "Professores" profToString
 
@@ -46,5 +48,16 @@ module Src.Controller where
         resposta <- getLine
         Control.Monad.when (resposta == "y") $ do
                 adicionaTicket
-
-
+    
+    adicionaMensagem :: IO()
+    adicionaMensagem = do
+        putStrLn "Informe o id do ticket referente a essa mensagem"
+        ticketId <- getLine
+        putStrLn "Insira o id do autor da mensagem: "
+        autor <- getLine
+        putStrLn "Digite a mensagem:"
+        conteudo <- getLine
+        idMensagem <- buscaNovoId "Mensagens"
+        tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M") >>= putStrLn.show
+        let mensagem = Mensagem (read idMensagem :: Int) autor conteudo (show tempo) (read ticketId)
+        adicionaLinha "mensagens" $ show (mensagem)
