@@ -6,6 +6,7 @@ realizaOperacao operacao
     | operacao == "2" = adicionaProfessor 
     -- | operacao == "3" = adicionaMonitor
     | operacao == "4" = adicionaTicket 
+    | operacao == "5" = adicionaMensagem  
     | otherwise = putStrLn "Operação inválida!"
 
 main :: IO()
@@ -15,5 +16,6 @@ main = do
     putStrLn "2) Cadastrar Professor"
     putStrLn "3) Cadastrar Monitor"
     putStrLn "4) Adicionar um novo ticket"
+    putStrLn "5) Adicionar uma mensagem em ticket"
     operacao <- getLine 
     realizaOperacao operacao
