@@ -41,6 +41,3 @@ module Src.Controller where
         tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M") >>= putStrLn.show
         let mensagem = Mensagem (read idMensagem :: Int) autor conteudo (show tempo) (read ticketId)
         adicionaLinha "mensagens" $ show (mensagem)
-    
-    main :: IO()
-    main = adicionaMensagem

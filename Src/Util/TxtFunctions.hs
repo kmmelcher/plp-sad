@@ -18,11 +18,6 @@ module Src.Util.TxtFunctions where
         let conteudoEmLista = P.lines conteudo
         return conteudoEmLista
 
-
-    -- INSERIR AQUI: LER CONTEUDO ESPECIFICO
-    -- TODO: MENSAGENS DE ERRO DE LEITURA E ADIÇÃO (REPETIDO)
-    -- TODO: Editar remoção para exclusão de linha
-
     {- 
     Esta função adiciona uma linha no arquivo. Caso o arquivo já possua uma linha,
     a funcao irá adicionar na linha seguinte
@@ -35,6 +30,12 @@ module Src.Util.TxtFunctions where
         let mensagem = conteudo ++ "\n"
         appendFile ("database/" ++ nomeArquivo ++ ".txt") mensagem
 
+    {-
+    Esta função busca um valor de id atualizado para uma nova linha da database, sendo esse valor o id da ultima linha somado de 1.
+    Caso não haja nenhuma linha presente, será retornado o valor "1".
+    Parametros:
+        nomeArquivo: o nome do arquivo a ser buscado um novo id no diretório database
+    -}
     buscaNovoId :: String -> IO(String)
     buscaNovoId nomeArquivo = do
         let path = ("database/" ++ nomeArquivo ++ ".txt")
