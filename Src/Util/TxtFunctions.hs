@@ -21,6 +21,7 @@ module Src.Util.TxtFunctions where
     
     -- INSERIR AQUI: LER CONTEUDO ESPECIFICO
     -- TODO: MENSAGENS DE ERRO DE LEITURA E ADIÇÃO (REPETIDO)
+    -- TODO: Editar remoção para exclusão de linha
 
     {- 
     Esta função adiciona uma linha no arquivo. Caso o arquivo já possua uma linha,
@@ -36,27 +37,15 @@ module Src.Util.TxtFunctions where
     
 
     buscaNovoId :: String -> IO(String)
-    buscaNovoId nomeArquivo = buscaNovoIdRecursivo nomeArquivo 0
-
-    buscaNovoIdRecursivo :: String -> Int -> IO(String)
-    buscaNovoIdRecursivo nomeArquivo index = do
+    buscaNovoId nomeArquivo = do
         let path = ("database/" ++ nomeArquivo ++ ".txt")
         conteudoEmLista <- fileToStringArray path
         if (conteudoEmLista == [])
             then return "1"
             else do
-                let linha = conteudoEmLista!!index
-                if linha == last conteudoEmLista
-                    then return "-1"
-                    else do
-                        let objetoEmLista = P.words linha
-                        let idObjeto = read (P.take ((P.length (objetoEmLista!!3))-1) (objetoEmLista!!3)) :: Int
-                        proximo <- buscaNovoIdRecursivo nomeArquivo (index+1)
-                        if (proximo == "-1")
-                            then return (show (idObjeto+2))
-                            else return proximo
-
-
+                let ultimaLinhaEmLista = P.words (last conteudoEmLista)
+                let ultimoId = read (P.take ((P.length (ultimaLinhaEmLista!!3))-1) (ultimaLinhaEmLista!!3)) :: Int 
+                return (show (ultimoId+1))
 
     {-
     Essa função atualiza uma linha do arquivo com base no seu id
@@ -85,7 +74,7 @@ module Src.Util.TxtFunctions where
     atualizaLista :: [String] -> String -> String -> Handle  -> IO ()
     atualizaLista [] _ _ _= return ()
     atualizaLista (linhaAtual:linhasRestantes) id novaLinha arquivo = do
-        if ("id = " ++ id) `T.isInfixOf` linhaAtual
+        if ("id = " ++ id ++ ",") `T.isInfixOf` linhaAtual
             then do 
                 hPutStrLn arquivo novaLinha
                 atualizaLista linhasRestantes id novaLinha arquivo
@@ -108,3 +97,9 @@ module Src.Util.TxtFunctions where
         atualizaLista conteudoArquivo id "" arquivo
         hFlush arquivo
         hClose arquivo
+
+    main :: IO ()
+    main = do
+        removeLinha "Disciplinas" "5"
+        a <- buscaNovoId "Disciplinas"
+        putStrLn a
