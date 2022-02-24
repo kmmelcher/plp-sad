@@ -2,7 +2,7 @@ module Src.Model.Mensagem where
     import Data.Time (UTCTime)
     data Mensagem = Mensagem {
         id :: Int,
-        autor :: String,
+        autor :: Int,
         conteudo :: String,
         horario :: String
     } deriving (Show, Read)

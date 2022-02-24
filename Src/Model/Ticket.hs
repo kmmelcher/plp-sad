@@ -2,8 +2,8 @@ module Src.Model.Ticket where
     import Src.Model.Mensagem (Mensagem)
     data Ticket = Ticket {
         id :: Int,
-        mensagens :: [Integer],
+        mensagens :: [Int],
         status :: String,
-        autor :: String,
+        autor :: Int,
         disciplina :: String
     } deriving (Show, Read)
