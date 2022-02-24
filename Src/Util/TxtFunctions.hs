@@ -97,9 +97,3 @@ module Src.Util.TxtFunctions where
         atualizaLista conteudoArquivo id "" arquivo
         hFlush arquivo
         hClose arquivo
-
-    main :: IO ()
-    main = do
-        removeLinha "Disciplinas" "5"
-        a <- buscaNovoId "Disciplinas"
-        putStrLn a
