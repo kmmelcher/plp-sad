@@ -4,4 +4,4 @@ module Src.Model.Mensagem where
         autor :: String,
         conteudo :: String,
         horario :: String
-    }
+    } deriving (Show, Read)
