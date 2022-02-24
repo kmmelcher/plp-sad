@@ -3,14 +3,14 @@ module Src.Util.TxtFunctions where
     import Control.Exception (evaluate)
     import Prelude as P
     import qualified Data.List as T
-    
-    
+
+
     {-
     Esta função retorna um array de string com todo o conteúdo do arquivo tendo quebras de linha como separador.
     Parametros:
         path = caminho do arquivo no diretório database
     -}
-    fileToStringArray :: FilePath -> IO([String]) 
+    fileToStringArray :: FilePath -> IO([String])
     fileToStringArray path = do
         arquivo <- openFile path ReadMode
         conteudo <- hGetContents arquivo
@@ -18,7 +18,7 @@ module Src.Util.TxtFunctions where
         let conteudoEmLista = P.lines conteudo
         return conteudoEmLista
 
-    
+
     -- INSERIR AQUI: LER CONTEUDO ESPECIFICO
     -- TODO: MENSAGENS DE ERRO DE LEITURA E ADIÇÃO (REPETIDO)
     -- TODO: Editar remoção para exclusão de linha
@@ -34,7 +34,6 @@ module Src.Util.TxtFunctions where
     adicionaLinha nomeArquivo conteudo = do
         let mensagem = conteudo ++ "\n"
         appendFile ("database/" ++ nomeArquivo ++ ".txt") mensagem
-    
 
     buscaNovoId :: String -> IO(String)
     buscaNovoId nomeArquivo = do
@@ -63,7 +62,7 @@ module Src.Util.TxtFunctions where
         atualizaLista conteudoArquivo id novaLinha arquivo
         hFlush arquivo
         hClose arquivo
-    
+
     {-
     Esta funcao atualiza uma linha que contem um id declarado . Somente remover a linha, ou atualizar uma linha do arquivo.
     Parametros:
@@ -81,7 +80,7 @@ module Src.Util.TxtFunctions where
             else do
                 hPutStrLn arquivo linhaAtual
                 atualizaLista linhasRestantes id novaLinha arquivo
-    
+
     {-
     Essa funcao remove uma linha com base no id da linha
     Parametros:
@@ -97,9 +96,3 @@ module Src.Util.TxtFunctions where
         atualizaLista conteudoArquivo id "" arquivo
         hFlush arquivo
         hClose arquivo
-
-    main :: IO ()
-    main = do
-        removeLinha "Disciplinas" "5"
-        a <- buscaNovoId "Disciplinas"
-        putStrLn a
