@@ -4,6 +4,5 @@ module Src.Model.Mensagem where
         id :: Int,
         autor :: String,
         conteudo :: String,
-        horario :: String,
-        ticketId :: Int
+        horario :: String
     } deriving (Show, Read)

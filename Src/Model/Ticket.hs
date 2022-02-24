@@ -4,5 +4,6 @@ module Src.Model.Ticket where
         id :: Int,
         mensagens :: [Integer],
         status :: String,
-        autor :: String
-    }
+        autor :: String,
+        disciplina :: String
+    } deriving (Show, Read)

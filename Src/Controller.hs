@@ -5,9 +5,12 @@ module Src.Controller where
     import Data.Time (getCurrentTime, UTCTime)
     import Src.Model.Mensagem
     import Data.Time.Format
+    import Src.Model.Ticket
+    import Control.Monad (when)
+    import Data.Char (GeneralCategory(Control))
     
-    addProfessor :: IO()
-    addProfessor = do
+    adicionaProfessor :: IO()
+    adicionaProfessor = do
             putStrLn "Insira o nome do professor: "
             nome <- getLine
             putStrLn "Insira o nome das disciplinas do professor: "
@@ -16,18 +19,35 @@ module Src.Controller where
             id <- buscaNovoId "Professores"
             let prof = Professor (read id :: Int) nome disciplinas
             let profToString = show (prof)
-            adicionaLinha "../database/Professores.txt" profToString
+            adicionaLinha "Professores" profToString
 
-    createAluno :: IO()
-    createAluno = do
+    adicionaAluno :: IO()
+    adicionaAluno = do
         putStrLn "Insira o nome do aluno: "
         nome <- getLine
         putStrLn "Insira a matricula do aluno"
-        matricula <- readLn  
+        matricula <- readLn
         putStrLn "Insira as disciplinas do aluno"
-        disciplinas <- readLn 
+        disciplinas <- readLn
         let aluno = Aluno matricula nome disciplinas
         adicionaLinha "alunos" $ show aluno
+
+    adicionaTicket :: IO()
+    adicionaTicket = do
+        putStrLn "\nInsira o nome do solicitante: "
+        autor <- getLine
+        putStrLn "Insira o nome da disciplina que você tem dúvida:"
+        disciplinaTicket <-  getLine
+
+        id <- buscaNovoId "Tickets"
+        let intId = read id :: Integer
+        let ticket = Ticket intId [] "Em progresso" autor disciplinaTicket
+        adicionaLinha "Tickets" $ show ticket
+
+        putStrLn "Deseja adicionar mais um ticket? (y/n)"
+        resposta <- getLine
+        Control.Monad.when (resposta == "y") $ do
+                adicionaTicket
     
     adicionaMensagem :: IO()
     adicionaMensagem = do
@@ -41,6 +61,3 @@ module Src.Controller where
         tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M") >>= putStrLn.show
         let mensagem = Mensagem (read idMensagem :: Int) autor conteudo (show tempo) (read ticketId)
         adicionaLinha "mensagens" $ show (mensagem)
-    
-    main :: IO()
-    main = adicionaMensagem
