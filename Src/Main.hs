@@ -4,6 +4,7 @@ realizaOperacao:: String -> IO()
 realizaOperacao operacao
     | operacao == "1" = adicionaAluno
     | operacao == "2" = adicionaProfessor 
+    -- | operacao == "3" = adicionaMonitor
     | operacao == "4" = adicionaTicket 
     | otherwise = putStrLn "Operação inválida!"
 
