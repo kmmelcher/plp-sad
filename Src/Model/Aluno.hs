@@ -1,7 +1,6 @@
 module Src.Model.Aluno where
-    import Src.Model.Disciplina (Disciplina)
     data Aluno = Aluno {
-        id :: String,
+        id :: Int,
         nome :: String,
         disciplinas:: [String]
     } deriving (Show, Read)

@@ -32,7 +32,7 @@ module Src.Util.TxtFunctions where
     adicionaLinha :: String -> String -> IO()
     adicionaLinha nomeArquivo conteudo = do
         let mensagem = conteudo ++ "\n"
-        appendFile ("../../database/" ++ nomeArquivo ++ ".txt") mensagem
+        appendFile ("database/" ++ nomeArquivo ++ ".txt") mensagem
     
 
     buscaNovoId :: String -> IO(String)
@@ -40,7 +40,7 @@ module Src.Util.TxtFunctions where
 
     buscaNovoIdRecursivo :: String -> Int -> IO(String)
     buscaNovoIdRecursivo nomeArquivo index = do
-        let path = ("../../database/" ++ nomeArquivo ++ ".txt")
+        let path = ("database/" ++ nomeArquivo ++ ".txt")
         conteudoEmLista <- fileToStringArray path
         if (conteudoEmLista == [])
             then return "1"
@@ -101,7 +101,7 @@ module Src.Util.TxtFunctions where
     -}
     removeLinha :: String -> String -> IO ()
     removeLinha nomeArquivo id = do
-        let path = "../../database/" ++ nomeArquivo ++ ".txt"
+        let path = "database/" ++ nomeArquivo ++ ".txt"
         conteudoArquivo <- fileToStringArray path
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
