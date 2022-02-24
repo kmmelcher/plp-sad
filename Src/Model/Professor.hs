@@ -1,7 +1,7 @@
-module Model.Professor where
-    import Model.Disciplina (Disciplina)
+module Src.Model.Professor where
+    import GHC.Read (Read)
     data Professor = Professor {
-        id :: Integer,
+        id :: Int,
         nome :: String,
         disciplinas:: [String]
-    }
+    } deriving (Show, Read)

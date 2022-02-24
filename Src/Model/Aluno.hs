@@ -1,7 +1,6 @@
-module Model.Aluno where
-    import Model.Disciplina (Disciplina)
+module Src.Model.Aluno where
     data Aluno = Aluno {
-        matricula :: Integer,
+        id :: Int,
         nome :: String,
         disciplinas:: [String]
-    }
+    } deriving (Show, Read)

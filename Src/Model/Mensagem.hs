@@ -1,7 +1,9 @@
-module Model.Mensagem where
+module Src.Model.Mensagem where
+    import Data.Time (UTCTime)
     data Mensagem = Mensagem {
-        id :: Integer,
+        id :: Int,
         autor :: String,
         conteudo :: String,
-        horario :: String
-    }
+        horario :: String,
+        ticketId :: Int
+    } deriving (Show, Read)
