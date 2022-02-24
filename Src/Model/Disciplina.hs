@@ -1,6 +1,6 @@
 module Src.Model.Disciplina where
     data Disciplina = Disciplina {
-        id :: Integer,
+        id :: Int,
         sigla :: String,
         nome :: String
-    }
+    } deriving (Show, Read)
