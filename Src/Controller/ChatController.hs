@@ -12,11 +12,11 @@ module Src.Controller.ChatController where
         autor <- getLine
         putStrLn "Insira o nome da disciplina que você tem dúvida:"
         disciplinaTicket <-  getLine
-
+        putStrLn "Insira um título para sua dúvida:"
+        titulo <- getLine
         id <- buscaNovoId "Tickets"
-        let ticket = Ticket.Ticket (read id) [] "Em progresso" (read autor) disciplinaTicket
+        let ticket = Ticket.Ticket (read id) (titulo) [] "Em progresso" (read autor) disciplinaTicket
         adicionaLinha "Tickets" $ show ticket
-
         putStrLn "Deseja adicionar mais um ticket? (s/n)"
         resposta <- getLine
         Control.Monad.when (resposta == "s") $ do
@@ -30,13 +30,13 @@ module Src.Controller.ChatController where
         tickets <- pegaTicketsDoAluno autor
         print(tickets)
         putStrLn "Escolha o ticket no qual deseja inserir a mensagem: "
-        idTicket <- getLine
+        idTicket <- readLn
         putStrLn "Digite a mensagem:"
         conteudo <- getLine
         idMensagem <- buscaNovoId "Mensagens"
         tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M")
         let mensagem = Mensagem (read idMensagem) autor conteudo tempo
-        --TODO: Falta Repercutir a inclusao da mensagem dentro do ticket
+        inserirMensagemNoTicket tickets idTicket autor (read idMensagem)
         adicionaLinha "Mensagens" $ show (mensagem)
     
     pegaTicketsDoAluno :: Int -> IO[Int]
@@ -60,5 +60,17 @@ module Src.Controller.ChatController where
         let ticket = read(t) :: Ticket.Ticket 
         Ticket.id(ticket)
     
-    --inserirMensagemNoTicket :: [Int] -> Int -> Int -> IO()
+    -- Parametros
+    -- ticketsAutor : tickets aberto pelo autor, lembrando que somente alunos podem abrir ticket. 
+    -- idTicket : ticket no qual voce quer inserir a mensagem. Caso vc seja aluno, o id deve se encontrar entre os valores
+    -- descritos em ticketsAutor. Caso vc seja monitor ou professor não tem restrições desde que vc esteja vinculado a disciplina.
+    -- idAutor : matricula no caso de aluno, ou então idProfessor
+    -- idMensagem
+    inserirMensagemNoTicket :: [Int] -> Int -> Int -> Int -> IO()
+    inserirMensagemNoTicket ticketsAutor idTicket idAutor idMensagem = do 
+        ticketStr <- buscaObjetoById "Tickets" idTicket
+        let ticket = read (ticketStr) :: Ticket.Ticket
+        let ticketAtualizado = Ticket.Ticket idTicket (Ticket.titulo(ticket)) (idMensagem:(Ticket.mensagens(ticket))) (Ticket.status(ticket))(Ticket.autor(ticket)) (Ticket.disciplina(ticket))
+        atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
+
     
