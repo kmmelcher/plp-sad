@@ -1,4 +1,7 @@
-import Src.Controller
+import Src.Controller.AlunoController
+import Src.Controller.ChatController
+import Src.Controller.MonitorController
+import Src.Controller.ProfessorController
 
 realizaOperacao:: String -> IO()
 realizaOperacao operacao
