@@ -8,7 +8,7 @@ module Src.Util.TxtFunctions where
     {-
     Esta função retorna um array de string com todo o conteúdo do arquivo tendo quebras de linha como separador.
     Parametros:
-        path = caminho do arquivo no diretório database
+        nomeArquivo = nome do arquivo no diretório database
     -}
     fileToStringArray :: String -> IO([String])
     fileToStringArray nomeArquivo = do
