@@ -42,18 +42,18 @@ module Src.Controller.ChatController where
     pegaTicketsDoAluno :: Int -> IO[Int]
     pegaTicketsDoAluno matricula = do
         tickets <- fileToStringArray "Tickets"
-        return(comparaTodosTickets tickets matricula) 
+        return(comparaAutorDeTodosTickets tickets matricula) 
         
-    comparaUmTicket :: String -> Int -> Bool
-    comparaUmTicket str i = do 
+    comparaAutorDeUmTicket :: String -> Int -> Bool
+    comparaAutorDeUmTicket str i = do 
         let ticket = read(str) :: Ticket.Ticket
         if Ticket.autor(ticket) == i then True else False
     
-    comparaTodosTickets :: [String] -> Int -> [Int]
-    comparaTodosTickets [] i = []
-    comparaTodosTickets (x:xs) i = if ( comparaUmTicket x i ) 
-        then retornaIdTicket x : (comparaTodosTickets xs i) 
-        else [] ++ (comparaTodosTickets xs i)
+    comparaAutorDeTodosTickets :: [String] -> Int -> [Int]
+    comparaAutorDeTodosTickets [] i = []
+    comparaAutorDeTodosTickets (x:xs) i = if ( comparaAutorDeUmTicket x i ) 
+        then retornaIdTicket x : (comparaAutorDeTodosTickets xs i) 
+        else [] ++ (comparaAutorDeTodosTickets xs i)
 
     retornaIdTicket :: String -> Int 
     retornaIdTicket t = do 
@@ -73,4 +73,18 @@ module Src.Controller.ChatController where
         let ticketAtualizado = Ticket.Ticket idTicket (Ticket.titulo(ticket)) (idMensagem:(Ticket.mensagens(ticket))) (Ticket.status(ticket))(Ticket.autor(ticket)) (Ticket.disciplina(ticket))
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
+    pegaTicketsDeUmaDisciplina :: String -> IO[Int]
+    pegaTicketsDeUmaDisciplina disciplina = do 
+        tickets <- fileToStringArray "Tickets"
+        return(comparaDisciplinaDeTodosTickets tickets disciplina) 
     
+    comparaDisciplinaDeUmTicket :: String -> String -> Bool
+    comparaDisciplinaDeUmTicket str disciplina = do 
+        let ticket = read(str) :: Ticket.Ticket
+        if Ticket.disciplina(ticket) == disciplina then True else False
+    
+    comparaDisciplinaDeTodosTickets :: [String] -> String -> [Int]
+    comparaDisciplinaDeTodosTickets [] disciplina = []
+    comparaDisciplinaDeTodosTickets (x:xs) disciplina = if ( comparaDisciplinaDeUmTicket x disciplina ) 
+        then retornaIdTicket x : (comparaDisciplinaDeTodosTickets xs disciplina) 
+        else [] ++ (comparaDisciplinaDeTodosTickets xs disciplina)        
