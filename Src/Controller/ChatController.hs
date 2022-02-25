@@ -1,6 +1,6 @@
 module Src.Controller.ChatController where
     import Src.Model.Mensagem
-    import Src.Model.Ticket
+    import qualified Src.Model.Ticket as Ticket 
     import Control.Monad (when)
     import Src.Util.TxtFunctions
     import Data.Time (getCurrentTime, UTCTime)
@@ -14,7 +14,7 @@ module Src.Controller.ChatController where
         disciplinaTicket <-  getLine
 
         id <- buscaNovoId "Tickets"
-        let ticket = Ticket (read id) [] "Em progresso" (read autor) disciplinaTicket
+        let ticket = Ticket.Ticket (read id) [] "Em progresso" (read autor) disciplinaTicket
         adicionaLinha "Tickets" $ show ticket
 
         putStrLn "Deseja adicionar mais um ticket? (s/n)"
@@ -24,15 +24,41 @@ module Src.Controller.ChatController where
     
     adicionaMensagem :: IO()
     adicionaMensagem = do
-        putStrLn "Informe o id do ticket referente a essa mensagem"
-        ticketId <- getLine
-
         putStrLn "Insira o id do autor da mensagem: "
-        autor <- getLine
+        autor <- readLn
+        putStrLn "Foram identificados os seguintes tickets desse autor: "
+        tickets <- pegaTicketsDoAluno autor
+        print(tickets)
+        putStrLn "Escolha o ticket no qual deseja inserir a mensagem: "
+        idTicket <- getLine
         putStrLn "Digite a mensagem:"
         conteudo <- getLine
         idMensagem <- buscaNovoId "Mensagens"
         tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M")
-        let mensagem = Mensagem (read idMensagem) (read autor) conteudo tempo
-        -- TODO: INCLUIR MENSAGEM NO ARRAY DE TICKET
-        adicionaLinha "mensagens" $ show (mensagem)
+        let mensagem = Mensagem (read idMensagem) autor conteudo tempo
+        --TODO: Falta Repercutir a inclusao da mensagem dentro do ticket
+        adicionaLinha "Mensagens" $ show (mensagem)
+    
+    pegaTicketsDoAluno :: Int -> IO[Int]
+    pegaTicketsDoAluno matricula = do
+        tickets <- fileToStringArray "./database/Tickets.txt"
+        return(comparaTodosTickets tickets matricula) 
+        
+    comparaUmTicket :: String -> Int -> Bool
+    comparaUmTicket str i = do 
+        let ticket = read(str) :: Ticket.Ticket
+        if Ticket.autor(ticket) == i then True else False
+    
+    comparaTodosTickets :: [String] -> Int -> [Int]
+    comparaTodosTickets [] i = []
+    comparaTodosTickets (x:xs) i = if ( comparaUmTicket x i ) 
+        then retornaIdTicket x : (comparaTodosTickets xs i) 
+        else [] ++ (comparaTodosTickets xs i)
+
+    retornaIdTicket :: String -> Int 
+    retornaIdTicket t = do 
+        let ticket = read(t) :: Ticket.Ticket 
+        Ticket.id(ticket)
+    
+    --inserirMensagemNoTicket :: [Int] -> Int -> Int -> IO()
+    
