@@ -18,6 +18,31 @@ module Src.Util.TxtFunctions where
         let conteudoEmLista = P.lines conteudo
         return conteudoEmLista
 
+    {-
+    Esta função retorna o formato em string de um objeto identificado pelo seu id. Caso não seja encontrado o objeto, uma string vazia é retornada.
+    Parametros:
+        nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
+        idObejto = O id do objeto que deseja ser buscado
+    -}
+    buscaObjetoById :: String -> Int -> IO(String)
+    buscaObjetoById nomeArquivo idObjeto = do
+        conteudoEmLista <- fileToStringArray nomeArquivo
+        buscaObjetoByIdRecursivo conteudoEmLista idObjeto
+    
+    {-
+    Esta função trabalha em conjunto com buscaObjetoById de forma recursiva, buscando o objeto numa lista de todas as linhas do arquivo. Caso não seja encontrado o objeto, uma string vazia é retornada.
+    Parametros:
+        (objetoAtual:objetosRestantes) = é o array de string que representa o objeto, tendo como primeiro elemento o objetoAtual e tendo como os próximos objetos o array ObjetosRestantes
+        idObjeto = O id do objeto que deseja ser buscado
+    -}
+    buscaObjetoByIdRecursivo :: [String] -> Int -> IO(String)
+    buscaObjetoByIdRecursivo [] _ = return ""
+    buscaObjetoByIdRecursivo (objetoAtual:objetosRestantes) idObjeto = 
+        if ("id = " ++ (show idObjeto :: String) ++ ",") `T.isInfixOf` objetoAtual
+            then return objetoAtual
+            else buscaObjetoByIdRecursivo objetosRestantes idObjeto
+
+
     {- 
     Esta função adiciona uma linha no arquivo. Caso o arquivo já possua uma linha,
     a funcao irá adicionar na linha seguinte
