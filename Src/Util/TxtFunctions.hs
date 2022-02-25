@@ -38,7 +38,7 @@ module Src.Util.TxtFunctions where
     buscaObjetoByIdRecursivo :: [String] -> Int -> IO(String)
     buscaObjetoByIdRecursivo [] _ = return ""
     buscaObjetoByIdRecursivo (objetoAtual:objetosRestantes) idObjeto = 
-        if ("id = " ++ (show idObjeto) ++ ",") `T.isInfixOf` objetoAtual
+        if ("id = " ++ (show idObjeto :: String) ++ ",") `T.isInfixOf` objetoAtual
             then return objetoAtual
             else buscaObjetoByIdRecursivo objetosRestantes idObjeto
 
