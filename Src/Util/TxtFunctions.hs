@@ -10,9 +10,9 @@ module Src.Util.TxtFunctions where
     Parametros:
         path = caminho do arquivo no diretório database
     -}
-    fileToStringArray :: FilePath -> IO([String])
-    fileToStringArray path = do
-        arquivo <- openFile path ReadMode
+    fileToStringArray :: String -> IO([String])
+    fileToStringArray nomeArquivo = do
+        arquivo <- openFile ("database/" ++ nomeArquivo ++ ".txt") ReadMode
         conteudo <- hGetContents arquivo
         evaluate (P.length conteudo)
         let conteudoEmLista = P.lines conteudo
@@ -38,8 +38,7 @@ module Src.Util.TxtFunctions where
     -}
     buscaNovoId :: String -> IO(String)
     buscaNovoId nomeArquivo = do
-        let path = ("database/" ++ nomeArquivo ++ ".txt")
-        conteudoEmLista <- fileToStringArray path
+        conteudoEmLista <- fileToStringArray nomeArquivo
         if (conteudoEmLista == [])
             then return "1"
             else do
@@ -57,7 +56,7 @@ module Src.Util.TxtFunctions where
     atualizaLinhaById :: String -> String -> String -> IO()
     atualizaLinhaById nomeArquivo id novaLinha = do
         let path = "database/" ++ nomeArquivo ++ ".txt"
-        conteudoArquivo <- fileToStringArray path
+        conteudoArquivo <- fileToStringArray nomeArquivo
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
         atualizaLista conteudoArquivo id novaLinha arquivo
@@ -91,7 +90,7 @@ module Src.Util.TxtFunctions where
     removeLinha :: String -> String -> IO ()
     removeLinha nomeArquivo id = do
         let path = "database/" ++ nomeArquivo ++ ".txt"
-        conteudoArquivo <- fileToStringArray path
+        conteudoArquivo <- fileToStringArray nomeArquivo
         arquivo <- openFile path WriteMode
         hPutStr arquivo ""
         atualizaLista conteudoArquivo id "" arquivo

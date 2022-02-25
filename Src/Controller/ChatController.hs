@@ -41,7 +41,7 @@ module Src.Controller.ChatController where
     
     pegaTicketsDoAluno :: Int -> IO[Int]
     pegaTicketsDoAluno matricula = do
-        tickets <- fileToStringArray "./database/Tickets.txt"
+        tickets <- fileToStringArray "Tickets"
         return(comparaTodosTickets tickets matricula) 
         
     comparaUmTicket :: String -> Int -> Bool
