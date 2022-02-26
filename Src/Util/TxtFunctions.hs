@@ -100,8 +100,12 @@ module Src.Util.TxtFunctions where
     atualizaLista (linhaAtual:linhasRestantes) id novaLinha arquivo = do
         if ("id = " ++ id ++ ",") `T.isInfixOf` linhaAtual
             then do 
-                hPutStrLn arquivo novaLinha
-                atualizaLista linhasRestantes id novaLinha arquivo
+                if novaLinha == ""
+                    then do
+                        atualizaLista linhasRestantes id novaLinha arquivo
+                else do
+                    hPutStrLn arquivo novaLinha
+                    atualizaLista linhasRestantes id novaLinha arquivo
             else do
                 hPutStrLn arquivo linhaAtual
                 atualizaLista linhasRestantes id novaLinha arquivo
