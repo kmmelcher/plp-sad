@@ -13,3 +13,4 @@ module Src.Controller.ProfessorController where
             let prof = Professor (read id :: Int) nome disciplinas
             let profToString = show (prof)
             adicionaLinha "Professores" profToString
+            putStrLn ("Professor cadastrado com sucesso no id " ++ id ++ ". Decore seu id para utilizar o sistema!\n")

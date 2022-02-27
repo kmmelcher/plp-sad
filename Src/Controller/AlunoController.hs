@@ -11,4 +11,5 @@ module Src.Controller.AlunoController where
         putStrLn "Insira as disciplinas do aluno"
         disciplinas <- readLn
         let aluno = Aluno matricula nome disciplinas
-        adicionaLinha "alunos" $ show aluno
+        adicionaLinha "Alunos" $ show aluno
+        putStrLn "Aluno cadastrado com sucesso.\n"

@@ -42,6 +42,16 @@ module Src.Util.TxtFunctions where
             then return objetoAtual
             else buscaObjetoByIdRecursivo objetosRestantes idObjeto
 
+    {-
+    Esta função checa se um objeto existe na database, retornando True, caso exista, e False, caso contrário.
+    Parametros:
+        nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
+        idObejto = O id do objeto que deseja ser buscado
+    -}
+    checaExistencia :: String -> Int -> IO(Bool)
+    checaExistencia nomeArquivo idObjeto = do
+        existeObjeto <- buscaObjetoById nomeArquivo idObjeto
+        return (existeObjeto /= "")
 
     {- 
     Esta função adiciona uma linha no arquivo. Caso o arquivo já possua uma linha,
