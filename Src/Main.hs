@@ -86,7 +86,7 @@ exibeMenuMonitor idMonitor = do
     putStrLn "== SAD: MENU MONITOR ==\n Digite o número da ação que deseja executar!\n\n"
     instanciaMonitor <- buscaObjetoById "Monitores" idMonitor
     let monitor = read instanciaMonitor :: Monitor
-    putStrLn "1) Exibir todos os tickets\n Responder tickets em progresso"
+    putStrLn "1) Exibir todos os tickets\n 2) Responder tickets em progresso"
 
 exibeMenuAluno :: Int -> IO()
 exibeMenuAluno idAluno = do
