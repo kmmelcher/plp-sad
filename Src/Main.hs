@@ -29,12 +29,13 @@ menuCadastro = do
     putStrLn "Como deseja se cadastrar?"
     putStrLn "1) Cadastrar como aluno\n2) Cadastrar como monitor\n3) Cadastrar como professor\n4) Voltar para o menu principal"
     opcao <- getLine
+    putStr "\n"
     if opcao == "1" then adicionaAluno else
         if opcao == "2" then adicionaMonitor else
             if opcao == "3" then adicionaProfessor else
                 if opcao == "4" then main else do
                 putStrLn "Insira um valor válido!\n"
-                main
+                menuCadastro
 
 menuLogin :: IO()
 menuLogin = do
@@ -74,18 +75,21 @@ decideMenuAlunoMonitor idPerfil = do
 
 exibeMenuProfessor :: Int -> IO()
 exibeMenuProfessor idProfessor = do
+    putStrLn "== SAD: MENU PROFESSOR ==\n Digite o número da ação que deseja executar!\n\n"
     instanciaProfessor <- buscaObjetoById "Professores" idProfessor
     let professor = read instanciaProfessor :: Professor
-    putStrLn "Menu do professor ser construido..."
+    putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Desvincular Monitor"
 
 exibeMenuMonitor :: Int -> IO()
 exibeMenuMonitor idMonitor = do
+    putStrLn "== SAD: MENU MONITOR ==\n Digite o número da ação que deseja executar!\n\n"
     instanciaMonitor <- buscaObjetoById "Monitores" idMonitor
     let monitor = read instanciaMonitor :: Monitor
-    putStrLn "Menu do monitor a ser construido..."
+    putStrLn "1) Exibir todos os tickets\n Responder tickets em progresso"
 
 exibeMenuAluno :: Int -> IO()
 exibeMenuAluno idAluno = do
+    putStrLn "== SAD: MENU ALUNO ==\n Digite o número da ação que deseja executar!\n\n"
     instanciaAluno <- buscaObjetoById "Alunos" idAluno
     let aluno = read instanciaAluno :: Aluno
-    print "Menu do aluno a ser construido..."
+    putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido"
