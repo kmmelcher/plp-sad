@@ -68,6 +68,7 @@ decideMenuAlunoMonitor idPerfil = do
     putStrLn ("Foi identificado que você é monitor da disciplina: " ++ disciplina monitor)
     putStrLn ("Como deseja entrar no sistema?\n\n 1) Entrar como Aluno\n 2) Entrar como Monitor de " ++ disciplina monitor)
     escolha <- getLine
+    putStr "\n"
     if escolha == "1" then exibeMenuAluno idPerfil else 
         if escolha == "2" then exibeMenuMonitor idPerfil else do
             putStrLn "Insira um valor válido!"
