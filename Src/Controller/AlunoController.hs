@@ -20,6 +20,7 @@ module Src.Controller.AlunoController where
         exibeDisciplinas aluno
         putStrLn "\nInforme a sigla da disciplina na qual deseja se matricular:"
         sigla <- getLine 
+        -- CHECA SE SIGLA EXISTE
         let alunoAtualizado = Aluno (A.id aluno) (nome aluno) ([sigla] ++ disciplinas aluno)
         atualizaLinhaById "Alunos" (show (A.id aluno)) (show aluno)
         putStrLn "Matricula realizada com sucesso!"
