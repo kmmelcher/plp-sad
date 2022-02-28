@@ -2,7 +2,7 @@ import Src.Controller.AlunoController
 import Src.Controller.ChatController
 import Src.Controller.MonitorController
 import Src.Controller.ProfessorController
-import Src.Util.TxtFunctions (checaExistencia, buscaObjetoById)
+import Src.Util.TxtFunctions ( buscaObjetoById, checaExistenciaById)
 import Src.Model.Monitor
 import Src.Model.Professor
 import Src.Model.Aluno
@@ -26,8 +26,8 @@ main = do
 
 menuCadastro :: IO ()
 menuCadastro = do
-    putStrLn "Como deseja se cadastrar?"
-    putStrLn "1) Cadastrar como aluno\n2) Cadastrar como monitor\n3) Cadastrar como professor\n4) Voltar para o menu principal"
+    putStrLn "Quem você deseja cadastrar?"
+    putStrLn "1) Cadastrar aluno\n2) Cadastrar monitor\n3) Cadastrar professor\n4) Voltar para o menu principal"
     opcao <- getLine
     putStr "\n"
     if opcao == "1" then adicionaAluno else
@@ -47,9 +47,9 @@ menuLogin = do
     if input == "VOLTAR" then main else do
         let idPerfil = read input :: Int
 
-        ehMonitor <- checaExistencia "Monitores" idPerfil
-        ehProfessor <- checaExistencia "Professores" idPerfil
-        ehAluno <- checaExistencia "Alunos" idPerfil
+        ehMonitor <- checaExistenciaById "Monitores" idPerfil
+        ehProfessor <- checaExistenciaById "Professores" idPerfil
+        ehAluno <- checaExistenciaById "Alunos" idPerfil
 
         decideMenu idPerfil ehMonitor ehProfessor ehAluno
 
