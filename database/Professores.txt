@@ -8,4 +8,3 @@ Professor {id = 7, nome = "Manel", disciplinas = ["SO"]}
 Professor {id = 8, nome = "Reinaldo", disciplinas = ["Redes"]}
 Professor {id = 9, nome = "Adalberto", disciplinas = ["EDA", "LEDA"]}
 Professor {id = 10, nome = "Gaudêncio", disciplinas = ["P2"]}
-Professor {id = 11, nome = "Eliana", disciplinas = ["AS"]}
