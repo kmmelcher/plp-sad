@@ -27,7 +27,7 @@ module Src.Util.TxtFunctions where
         idObjeto = O id do objeto que deseja ser buscado
     -}
     buscaObjetoById :: String -> Int -> IO(String)
-    buscaObjetoById nomeArquivo objetoId = buscaObjetoByAtributo nomeArquivo "id" (show objetoId)
+    buscaObjetoById nomeArquivo objetoId = buscaObjetoByAtributo nomeArquivo "id" (show objetoId ++ ",")
 
     {- 
     Esta função retorna o formato em string de um objeto identificado pelo seu atributo. 
