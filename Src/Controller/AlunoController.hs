@@ -19,18 +19,22 @@ module Src.Controller.AlunoController where
     excluirTicket :: Int -> IO()
     excluirTicket matAluno = do
         putStrLn "Escolha entre os seus Tickets qual será excluido :"
-        mostraTickets matAluno
-        sel <- getLine
-        removeLinha "Tickets" sel
+        ticketsIds <- pegaTicketsDoAluno matAluno
+        mostraTickets ticketsIds
+        sel <- getLine 
+        if verificaTicket ticketsIds (read sel)
+            then removeLinha "Tickets" sel
+            else print "Ticket invalido"
 
-    mostraTickets :: Int -> IO()
-    mostraTickets mat = do
-        ticketsIds <- pegaTicketsDoAluno mat
-        mostraTicketsRec ticketsIds
-
-    mostraTicketsRec :: [Int] -> IO()
-    mostraTicketsRec [] = print " "
-    mostraTicketsRec (head:tail) = do
+    mostraTickets :: [Int] -> IO()
+    mostraTickets [] = print "end"
+    mostraTickets (head:tail) = do
         ticketStr <- buscaObjetoById "Tickets" head
         let ticket = read ticketStr :: Ticket
         putStrLn $ show (Src.Model.Ticket.id ticket) ++ ": " ++ titulo ticket
+        mostraTickets tail
+
+    verificaTicket :: [Int] -> Int -> Bool
+    verificaTicket [] x = False
+    verificaTicket (head:tail) x = do
+        (head == x) || verificaTicket tail x
