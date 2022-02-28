@@ -24,9 +24,9 @@ module Src.Controller.AlunoController where
 
     excluirTicket :: Int -> IO()
     excluirTicket matAluno = do
-        putStrLn "Escolha entre os seus Tickets qual será excluido :"
         ticketsIds <- pegaTicketsDoAluno matAluno
         mostraTickets ticketsIds
+        putStrLn "Escolha entre os seus Tickets qual será excluido: "
         sel <- getLine 
         if verificaTicket ticketsIds (read sel)
             then removeLinha "Tickets" sel
@@ -51,7 +51,11 @@ module Src.Controller.AlunoController where
         exibeDisciplinas aluno
         putStrLn "\nInforme a sigla da disciplina na qual deseja se matricular:"
         sigla <- getLine 
-        -- CHECA SE SIGLA EXISTE
-        let alunoAtualizado = Aluno (A.id aluno) (nome aluno) ([sigla] ++ disciplinas aluno)
-        atualizaLinhaById "Alunos" (show (A.id aluno)) (show aluno)
-        putStrLn "Matricula realizada com sucesso!"
+        t <- checaExistenciaByAtributo "Disciplinas" "sigla" sigla
+        if t
+            then do
+                let alunoAtualizado = Aluno (A.id aluno) (nome aluno) ([sigla] ++ disciplinas aluno)
+                atualizaLinhaById "Alunos" (show (A.id aluno)) (show aluno)
+                putStrLn "Matricula realizada com sucesso!"
+            else
+                print "Sigla inexistente"
