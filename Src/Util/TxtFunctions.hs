@@ -55,7 +55,7 @@ module Src.Util.TxtFunctions where
     buscaObjetoByAtributoRecursivo :: [String] -> String -> String -> IO(String)
     buscaObjetoByAtributoRecursivo [] _ _ = return ""
     buscaObjetoByAtributoRecursivo (objetoAtual:objetosRestantes) atributo valorAtributo =
-        if (atributo ++ " = " ++ valorAtributo ++ ",") `T.isInfixOf` objetoAtual
+        if (atributo ++ " = " ++ valorAtributo) `T.isInfixOf` objetoAtual
             then return objetoAtual
             else buscaObjetoByAtributoRecursivo objetosRestantes atributo valorAtributo
  
