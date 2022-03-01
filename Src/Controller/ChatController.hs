@@ -1,27 +1,28 @@
 module Src.Controller.ChatController where
     import Src.Model.Mensagem
+    import Src.Model.Aluno
     import qualified Src.Model.Ticket as T
     import Control.Monad (when)
     import Src.Util.TxtFunctions
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
-    import qualified Src.Model.Ticket as T
-    
-    adicionaTicket :: IO()
-    adicionaTicket = do
-        putStrLn "\nInsira o id do solicitante: "
-        autor <- getLine
+
+    adicionaTicket :: Aluno -> IO()
+    adicionaTicket aluno = do
         putStrLn "Insira o nome da disciplina que você tem dúvida:"
         disciplinaTicket <-  getLine
-        putStrLn "Insira um título para sua dúvida:"
-        titulo <- getLine
-        id <- buscaNovoId "Tickets"
-        let ticket = T.Ticket (read id) (titulo) [] "Em Andamento" (read autor) disciplinaTicket
-        adicionaLinha "Tickets" $ show ticket
-        putStrLn "Deseja adicionar mais um ticket? (s/n)"
-        resposta <- getLine
-        Control.Monad.when (resposta == "s") $ do
-                adicionaTicket
+        if disciplinaTicket `elem` (disciplinas aluno) then do
+            putStrLn "Insira um título para sua dúvida:"
+            titulo <- getLine
+            id <- buscaNovoId "Tickets"
+            let ticket = T.Ticket (read id) (titulo) [] "Em Andamento" () disciplinaTicket
+            adicionaLinha "Tickets" $ show ticket
+            putStrLn "Deseja adicionar mais um ticket? (s/n)"
+            resposta <- getLine
+            Control.Monad.when (resposta == "s") $ do
+                    adicionaTicket
+        else do 
+            putStrLn ("Você não está matriculado na disciplina " ++ disciplinaTicket) 
     
     adicionaMensagem :: Int -> IO()
     adicionaMensagem id = do
@@ -70,7 +71,11 @@ module Src.Controller.ChatController where
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
 
-    -- Funcao para retornar todos os tickets de uma disciplina
+    {- 
+    Retorna todos os tickets de uma disciplina
+    Parametros
+        disciplina: qual o nome da disciplina dos tickets que queremos retornar
+    -}
     getTicketsDisciplina :: String -> IO[Int]
     getTicketsDisciplina disciplina = do 
         tickets <- fileToStringArray "Tickets"
@@ -86,7 +91,7 @@ module Src.Controller.ChatController where
     comparaDisciplinaDeTodosTickets (x:xs) disciplina = if ( comparaDisciplinaDeUmTicket x disciplina ) 
         then retornaIdTicket x : (comparaDisciplinaDeTodosTickets xs disciplina) 
         else [] ++ (comparaDisciplinaDeTodosTickets xs disciplina)
-    ------
+    
 
     {- 
     Exibe todos os tickets de uma disciplina.

@@ -3,3 +3,4 @@ Monitor {id = 120110456, disciplina = "P2", horarios = "SEG 08-10 QUI 10-12"}
 Monitor {id = 120110258, disciplina = "PLP", horarios = "QUA 14-16 SEX 14-16"}
 Monitor {id = 119111321, disciplina = "OAC", horarios = "SEG 14-16 QUA 16-18"}
 Monitor {id = 119231444, disciplina = "Psoft", horarios = "SEG 10-12 QUI 14-16"}
+Monitor {id = 119232555, disciplina = "BD", horarios = "TER 16-18 SEX 10-12"}

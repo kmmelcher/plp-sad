@@ -141,4 +141,34 @@ module Src.Menu where
         putStrLn "\n== SAD: MENU ALUNO ==\nDigite o número da ação que deseja executar!\n\n"
         instanciaAluno <- buscaObjetoById "Alunos" idAluno
         let aluno = read instanciaAluno :: Aluno
-        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido"
+        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido\n7)Deslogar"
+        opcao <- getLine 
+        decideMenuAluno aluno opcao
+    
+    decideMenuAluno :: Aluno -> String -> IO()
+    decideMenuAluno aluno opcao
+        | opcao == "1" = do
+            matriculaAlunoEmDisciplina aluno
+            exibeMenuAluno (A.id aluno)
+        | opcao == "2" = do
+            desmatriculaAlunoDeDisciplina aluno
+            exibeMenuAluno (A.id aluno)
+        | opcao == "3" = do
+            adicionaTicket aluno
+            exibeMenuAluno (A.id aluno)
+        | opcao == "4" = do
+            adicionaMensagemAluno aluno
+            menuPrincipal
+        | opcao == "5" = do
+            -- Falta funcao para ler tickets de uma disciplina?
+            putStrLn "Deslogando...\n"
+            menuPrincipal
+        | opcao == "6" = do
+            resolveTicket aluno
+            menuPrincipal
+        | opcao == "7" = do
+            putStrLn "Deslogando...\n"
+            menuPrincipal
+        | otherwise  = do
+            putStrLn "Opção inválida!\n"
+            exibeMenuMonitor (M.id monitor)
