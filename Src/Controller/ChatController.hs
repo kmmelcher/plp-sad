@@ -104,11 +104,11 @@ module Src.Controller.ChatController where
     checaIdDeTicketEmAndamento id = do
         instanciaTicket <- buscaObjetoById "Tickets" id
         let ticket = read instanciaTicket :: T.Ticket
-        return ((T.status ticket) == "Em Andamento")
+        return (T.status ticket == "Em Andamento")
     
     marcaTicketComoConcluido :: Int -> IO()
     marcaTicketComoConcluido id = do
         instanciaTicket <- buscaObjetoById "Tickets" id
         let ticket = read instanciaTicket :: T.Ticket
-        let novoTicket = T.Ticket (T.id ticket) (T.titulo ticket) (T.mensagens ticket) ("Resolvido") (T.autor ticket) (T.disciplina ticket)
+        let novoTicket = T.Ticket (T.id ticket) (T.titulo ticket) (T.mensagens ticket) "Resolvido" (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show id) (show novoTicket)
