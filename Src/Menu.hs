@@ -111,7 +111,24 @@ module Src.Menu where
         putStrLn "== SAD: MENU MONITOR ==\n Digite o número da ação que deseja executar!\n\n"
         instanciaMonitor <- buscaObjetoById "Monitores" idMonitor
         let monitor = read instanciaMonitor :: Monitor
-        putStrLn "1) Exibir todos os tickets\n 2) Responder tickets em progresso"
+        putStrLn "1) Exibir todos os tickets\n2) Responder tickets em progresso\n3) Deslogar"
+        opcao <- getLine 
+        decideMenuMonitor idMonitor monitor opcao
+
+    decideMenuMonitor :: Int -> Monitor -> String -> IO()
+    decideMenuMonitor idMonitor monitor opcao
+        | opcao == "1" = do
+            exibeTicketsDaDisciplina monitor
+            exibeMenuMonitor idMonitor
+        | opcao == "2" = do
+            respondeTicket monitor
+            exibeMenuMonitor idMonitor
+        | opcao == "3" = do
+            putStrLn "Deslogando...\n"
+            menuPrincipal
+        | otherwise  = do
+            putStrLn "Opção inválida!\n"
+            exibeMenuMonitor idMonitor
 
     exibeMenuAluno :: Int -> IO()
     exibeMenuAluno idAluno = do

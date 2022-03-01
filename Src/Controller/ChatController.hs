@@ -23,22 +23,17 @@ module Src.Controller.ChatController where
         Control.Monad.when (resposta == "s") $ do
                 adicionaTicket
     
-    adicionaMensagem :: IO()
-    adicionaMensagem = do
-        putStrLn "Insira o id do autor da mensagem: "
-        autor <- readLn
-        putStrLn "Foram identificados os seguintes tickets desse autor: "
-        tickets <- pegaTicketsDoAluno autor
-        print(tickets)
+    adicionaMensagem :: Int -> IO()
+    adicionaMensagem id = do
         putStrLn "Escolha o ticket no qual deseja inserir a mensagem: "
         idTicket <- readLn
         putStrLn "Digite a mensagem:"
         conteudo <- getLine
         idMensagem <- buscaNovoId "Mensagens"
         tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M")
-        let mensagem = Mensagem (read idMensagem) autor conteudo tempo
-        inserirMensagemNoTicket tickets idTicket autor (read idMensagem)
-        adicionaLinha "Mensagens" $ show (mensagem)
+        let mensagem = Mensagem (read idMensagem) id conteudo tempo
+        inserirMensagemNoTicket idTicket id (read idMensagem)
+        adicionaLinha "Mensagens" $ show mensagem
     
     pegaTicketsDoAluno :: Int -> IO[Int]
     pegaTicketsDoAluno matricula = do
@@ -61,17 +56,18 @@ module Src.Controller.ChatController where
         let ticket = read(t) :: T.Ticket 
         T.id(ticket)
     
-    -- Parametros
-    -- ticketsAutor : tickets aberto pelo autor, lembrando que somente alunos podem abrir ticket. 
-    -- idTicket : ticket no qual voce quer inserir a mensagem. Caso vc seja aluno, o id deve se encontrar entre os valores
-    -- descritos em ticketsAutor. Caso vc seja monitor ou professor não tem restrições desde que vc esteja vinculado a disciplina.
-    -- idAutor : matricula no caso de aluno, ou então idProfessor
-    -- idMensagem
-    inserirMensagemNoTicket :: [Int] -> Int -> Int -> Int -> IO()
-    inserirMensagemNoTicket ticketsAutor idTicket idAutor idMensagem = do 
+    {- 
+    Insere uma mensagem em um Ticket.
+    Parametros
+        idTicket : ticket no qual voce quer inserir a mensagem.
+        idAutor : id do autor, seja ele um monitor, professor ou aluno.
+        idMensagem: Mensagem a ser inserida no Ticket.
+    -}
+    inserirMensagemNoTicket :: Int -> Int -> Int -> IO()
+    inserirMensagemNoTicket idTicket idAutor idMensagem = do 
         ticketStr <- buscaObjetoById "Tickets" idTicket
-        let ticket = read (ticketStr) :: T.Ticket
-        let ticketAtualizado = T.Ticket idTicket (T.titulo(ticket)) (idMensagem:(T.mensagens(ticket))) (T.status(ticket))(T.autor(ticket)) (T.disciplina(ticket))
+        let ticket = read ticketStr :: T.Ticket
+        let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (idMensagem: T.mensagens ticket) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
     pegaTicketsDeUmaDisciplina :: String -> IO[Int]
@@ -90,8 +86,37 @@ module Src.Controller.ChatController where
         then retornaIdTicket x : (comparaDisciplinaDeTodosTickets xs disciplina) 
         else [] ++ (comparaDisciplinaDeTodosTickets xs disciplina)
     
+    {- 
+    Exibe todos os tickets de uma disciplina.
+    Parâmetros:
+        nomeDisciplina: Nome da disciplina a ser exibida.
+    -}
+    exibeTicketsDisciplina :: String -> IO()
+    exibeTicketsDisciplina nomeDisciplina = do
+        tickets <- pegaTicketsDeUmaDisciplina nomeDisciplina
+        if null tickets 
+            then putStrLn "\nAinda não há tickets nesta disciplina.\n" 
+        else do
+            putStrLn ("\nEstes são os tickets existentes da disciplina: " ++ nomeDisciplina)
+            exibeTicketsDisciplinaRecursivo tickets
+    
+    {-
+    Itera recursivamente sobre todos os tickets da disciplina exibindo cada um.
+    -}
+    exibeTicketsDisciplinaRecursivo :: [Int] -> IO()
+    exibeTicketsDisciplinaRecursivo [] = do
+        putStr "\n"
+        return ()
+    exibeTicketsDisciplinaRecursivo (idTicketAtual:idsTicketsRestantes) = do
+        instanciaTicket <- buscaObjetoById "Tickets" idTicketAtual
+        let ticket = read instanciaTicket :: T.Ticket
+        putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")")
+        exibeTicketsDisciplinaRecursivo idsTicketsRestantes
+
     exibeTicketsEmAndamento :: [Int] -> IO()
-    exibeTicketsEmAndamento [] = return ()
+    exibeTicketsEmAndamento [] = do
+        putStr "\n"
+        return ()
     exibeTicketsEmAndamento (ticketAtual:ticketsRestantes) = do
         instanciaTicket <- buscaObjetoById "Tickets" ticketAtual
         let ticket = read instanciaTicket :: T.Ticket

@@ -92,3 +92,10 @@ module Src.Controller.AlunoController where
              else do
             putStrLn "Insira um id válido!"
             resolveTicket aluno
+
+    adicionaMensagemAluno :: Aluno -> IO()
+    adicionaMensagemAluno aluno = do
+        putStrLn "Foram identificados os seguintes tickets desse autor: "
+        tickets <- pegaTicketsDoAluno (A.id aluno)
+        print tickets
+        adicionaMensagem (A.id aluno)

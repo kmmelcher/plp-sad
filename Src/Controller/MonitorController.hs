@@ -48,19 +48,15 @@ module Src.Controller.MonitorController where
         removeLinha "Monitores" (show id)
         putStrLn "Monitor removido com sucesso!\n"
 
-    exibeTicketsDisciplina :: Monitor -> IO()
-    exibeTicketsDisciplina monitor = do
-        tickets <- pegaTicketsDeUmaDisciplina (M.disciplina monitor)
-        if tickets == [] then putStrLn "\nAinda não há tickets nesta disciplina.\n" else do
-            putStrLn ("\nEstes são os tickets existentes da disciplina: " ++ M.disciplina monitor)
-            exibeTicketsDisciplinaRecursivo tickets
-    
-    exibeTicketsDisciplinaRecursivo :: [Int] -> IO()
-    exibeTicketsDisciplinaRecursivo [] = do
-        putStr "\n"
-        return ()
-    exibeTicketsDisciplinaRecursivo (idTicketAtual:idsTicketsRestantes) = do
-        instanciaTicket <- buscaObjetoById "Tickets" idTicketAtual
-        let ticket = read instanciaTicket :: Ticket
-        putStrLn (show (T.id ticket) ++ ") " ++ titulo ticket ++ " (" ++ status ticket ++ ")")
-        exibeTicketsDisciplinaRecursivo idsTicketsRestantes
+    getTicketsDaDisciplina :: Monitor -> IO [Int]
+    getTicketsDaDisciplina monitor = pegaTicketsDeUmaDisciplina (M.disciplina monitor)
+
+    exibeTicketsDaDisciplina :: Monitor -> IO()
+    exibeTicketsDaDisciplina monitor = exibeTicketsDisciplina (M.disciplina monitor)
+
+    respondeTicket :: Monitor -> IO()
+    respondeTicket monitor = do
+        tickets <- getTicketsDaDisciplina monitor
+        putStrLn "\nTickets em andamento da sua disciplina:"
+        exibeTicketsEmAndamento tickets
+        adicionaMensagem (M.id monitor)
