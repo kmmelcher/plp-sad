@@ -1,1 +1,2 @@
 Ticket {id = 1, titulo = "lendo lista da entrada", mensagens = [1, 2, 3, 4], status = "Resolvido", autor = 120110123, disciplina = "PLP"}
+Ticket {id = 2, titulo = "Como converter tipo IO?", mensagens = [6,5], status = "Em Andamento", autor = 120110123, disciplina = "PLP"}

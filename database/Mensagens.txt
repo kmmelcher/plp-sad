@@ -2,3 +2,5 @@ Mensagem {id = 1, autor = 120110123, conteudo = "Boa tarde, Estou com duvida na 
 Mensagem {id = 2, autor = 120110123, conteudo = "Como faco para ler uma lista de inteiros da entrada?", horario = "02/24/22 14h03"}
 Mensagem {id = 3, autor = 120110369, conteudo = "Oi, É só fazer o input <- getLine e depois  read input :: [[Int]]", horario = "02/24/22 14h05"}
 Mensagem {id = 4, autor = 120110123, conteudo = "Obrigado , deu certo aqui", horario = "02/24/22 14h55"}
+Mensagem {id = 5, autor = 120110123, conteudo = "Como converto IO Int para Int?", horario = "04/24/22 13h50"}
+Mensagem {id = 6, autor = 120110258, conteudo = "E SIMPLES BASTA DESISTIR", horario = "03/01/22 18h01"}
