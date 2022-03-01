@@ -1,11 +1,12 @@
 module Src.Controller.ChatController where
     import Src.Model.Mensagem
-    import qualified Src.Model.Ticket as Ticket 
+    import qualified Src.Model.Ticket as T
     import Control.Monad (when)
     import Src.Util.TxtFunctions
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
-
+    import qualified Src.Model.Ticket as T
+    
     adicionaTicket :: IO()
     adicionaTicket = do
         putStrLn "\nInsira o id do solicitante: "
@@ -15,7 +16,7 @@ module Src.Controller.ChatController where
         putStrLn "Insira um título para sua dúvida:"
         titulo <- getLine
         id <- buscaNovoId "Tickets"
-        let ticket = Ticket.Ticket (read id) (titulo) [] "Em progresso" (read autor) disciplinaTicket
+        let ticket = T.Ticket (read id) (titulo) [] "Em Andamento" (read autor) disciplinaTicket
         adicionaLinha "Tickets" $ show ticket
         putStrLn "Deseja adicionar mais um ticket? (s/n)"
         resposta <- getLine
@@ -46,8 +47,8 @@ module Src.Controller.ChatController where
         
     comparaAutorDeUmTicket :: String -> Int -> Bool
     comparaAutorDeUmTicket str i = do 
-        let ticket = read(str) :: Ticket.Ticket
-        if Ticket.autor(ticket) == i then True else False
+        let ticket = read(str) :: T.Ticket
+        if T.autor(ticket) == i then True else False
     
     comparaAutorDeTodosTickets :: [String] -> Int -> [Int]
     comparaAutorDeTodosTickets [] i = []
@@ -57,8 +58,8 @@ module Src.Controller.ChatController where
 
     retornaIdTicket :: String -> Int 
     retornaIdTicket t = do 
-        let ticket = read(t) :: Ticket.Ticket 
-        Ticket.id(ticket)
+        let ticket = read(t) :: T.Ticket 
+        T.id(ticket)
     
     -- Parametros
     -- ticketsAutor : tickets aberto pelo autor, lembrando que somente alunos podem abrir ticket. 
@@ -69,8 +70,8 @@ module Src.Controller.ChatController where
     inserirMensagemNoTicket :: [Int] -> Int -> Int -> Int -> IO()
     inserirMensagemNoTicket ticketsAutor idTicket idAutor idMensagem = do 
         ticketStr <- buscaObjetoById "Tickets" idTicket
-        let ticket = read (ticketStr) :: Ticket.Ticket
-        let ticketAtualizado = Ticket.Ticket idTicket (Ticket.titulo(ticket)) (idMensagem:(Ticket.mensagens(ticket))) (Ticket.status(ticket))(Ticket.autor(ticket)) (Ticket.disciplina(ticket))
+        let ticket = read (ticketStr) :: T.Ticket
+        let ticketAtualizado = T.Ticket idTicket (T.titulo(ticket)) (idMensagem:(T.mensagens(ticket))) (T.status(ticket))(T.autor(ticket)) (T.disciplina(ticket))
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
     pegaTicketsDeUmaDisciplina :: String -> IO[Int]
@@ -80,11 +81,34 @@ module Src.Controller.ChatController where
     
     comparaDisciplinaDeUmTicket :: String -> String -> Bool
     comparaDisciplinaDeUmTicket str disciplina = do 
-        let ticket = read(str) :: Ticket.Ticket
-        if Ticket.disciplina(ticket) == disciplina then True else False
+        let ticket = read(str) :: T.Ticket
+        if T.disciplina(ticket) == disciplina then True else False
     
     comparaDisciplinaDeTodosTickets :: [String] -> String -> [Int]
     comparaDisciplinaDeTodosTickets [] disciplina = []
     comparaDisciplinaDeTodosTickets (x:xs) disciplina = if ( comparaDisciplinaDeUmTicket x disciplina ) 
         then retornaIdTicket x : (comparaDisciplinaDeTodosTickets xs disciplina) 
-        else [] ++ (comparaDisciplinaDeTodosTickets xs disciplina)        
+        else [] ++ (comparaDisciplinaDeTodosTickets xs disciplina)
+    
+    exibeTicketsEmAndamento :: [Int] -> IO()
+    exibeTicketsEmAndamento [] = return ()
+    exibeTicketsEmAndamento (ticketAtual:ticketsRestantes) = do
+        instanciaTicket <- buscaObjetoById "Tickets" ticketAtual
+        let ticket = read instanciaTicket :: T.Ticket
+        if T.status ticket == "Em Andamento" then do 
+            putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " - " ++ T.disciplina ticket)
+            exibeTicketsEmAndamento ticketsRestantes
+        else exibeTicketsEmAndamento ticketsRestantes
+    
+    checaIdDeTicketEmAndamento :: Int -> IO(Bool)
+    checaIdDeTicketEmAndamento id = do
+        instanciaTicket <- buscaObjetoById "Tickets" id
+        let ticket = read instanciaTicket :: T.Ticket
+        return ((T.status ticket) == "Em Andamento")
+    
+    marcaTicketComoConcluido :: Int -> IO()
+    marcaTicketComoConcluido id = do
+        instanciaTicket <- buscaObjetoById "Tickets" id
+        let ticket = read instanciaTicket :: T.Ticket
+        let novoTicket = T.Ticket (T.id ticket) (T.titulo ticket) (T.mensagens ticket) ("Resolvido") (T.autor ticket) (T.disciplina ticket)
+        atualizaLinhaById "Tickets" (show id) (show novoTicket)
