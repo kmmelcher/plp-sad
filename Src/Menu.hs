@@ -97,7 +97,7 @@ module Src.Menu where
             putStrLn "Respondendo tickets...\n"
             exibeMenuProfessor idProfessor
         | opcao == "3" = do
-            putStrLn "Desvinculando monitor...\n"
+            removeMonitor
             exibeMenuProfessor idProfessor
         | opcao == "4" = do
             putStrLn "Deslogando...\n"

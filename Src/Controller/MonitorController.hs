@@ -39,3 +39,9 @@ module Src.Controller.MonitorController where
             else do
                 putStrLn "Disciplina não cadastrada!\n(Digite \"VOLTAR\" para voltar ao menu principal)\n"
                 insereDisciplina id
+
+    removeMonitor :: IO()
+    removeMonitor = do
+        id <- insereMatricula
+        removeLinha "Monitores" (show id)
+        putStrLn "Monitor removido com sucesso!\n"
