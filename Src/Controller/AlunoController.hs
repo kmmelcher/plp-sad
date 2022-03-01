@@ -2,7 +2,7 @@ module Src.Controller.AlunoController where
     import Src.Model.Aluno as A
     import Src.Util.TxtFunctions
     import Src.Controller.ChatController
-    import Src.Model.Ticket
+    import Src.Model.Ticket as T
     import Src.Controller.DisciplinaController as DC
     
 
@@ -33,7 +33,7 @@ module Src.Controller.AlunoController where
     mostraTickets (head:tail) = do
         ticketStr <- buscaObjetoById "Tickets" head
         let ticket = read ticketStr :: Ticket
-        putStrLn $ show (Src.Model.Ticket.id ticket) ++ ": " ++ titulo ticket
+        putStrLn $ show (T.id ticket) ++ ") " ++ titulo ticket ++ " (" ++ status ticket ++ ")"
         mostraTickets tail
 
     verificaTicket :: [Int] -> Int -> Bool

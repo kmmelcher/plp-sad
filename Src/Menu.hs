@@ -6,7 +6,7 @@ module Src.Menu where
     import Src.Controller.ProfessorController
     import Src.Util.TxtFunctions
     import Src.Model.Monitor
-    import Src.Model.Professor
+    import Src.Model.Professor as P
     import Src.Model.Aluno
 
     menuPrincipal :: IO()
@@ -81,34 +81,36 @@ module Src.Menu where
 
     exibeMenuProfessor :: Int -> IO()
     exibeMenuProfessor idProfessor = do
-        putStrLn "== SAD: MENU PROFESSOR ==\n Digite o número da ação que deseja executar!\n\n"
         instanciaProfessor <- buscaObjetoById "Professores" idProfessor
         let professor = read instanciaProfessor :: Professor
+        putStrLn "== SAD: MENU PROFESSOR =="
+        putStrLn ("ID: " ++ show (P.id professor) ++ " | " ++ "Nome: " ++ P.nome professor ++ " | " ++ "Disciplinas: " ++ show (P.disciplinas professor))
+        putStrLn "Digite o número da ação que deseja executar!\n"
         putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Desvincular Monitor\n4) Deslogar"
-        opcao <- getLine 
-        decideMenuProfessor idProfessor opcao
+        opcao <- getLine
+        decideMenuProfessor professor opcao
 
-    decideMenuProfessor :: Int -> String -> IO()
-    decideMenuProfessor idProfessor opcao
+    decideMenuProfessor :: Professor -> String -> IO()
+    decideMenuProfessor professor opcao
         | opcao == "1" = do
-            putStrLn "Exibindo tickets...\n"
-            exibeMenuProfessor idProfessor
+            lerTicketsDisciplina professor
+            exibeMenuProfessor (P.id professor)
         | opcao == "2" = do
             putStrLn "Respondendo tickets...\n"
-            exibeMenuProfessor idProfessor
+            exibeMenuProfessor (P.id professor)
         | opcao == "3" = do
-            removeMonitor
-            exibeMenuProfessor idProfessor
+            removeMonitor (P.disciplinas professor)
+            exibeMenuProfessor (P.id professor)
         | opcao == "4" = do
             putStrLn "Deslogando...\n"
             menuPrincipal
         | otherwise = do 
             putStrLn "Opção inválida!"
-            exibeMenuProfessor idProfessor
+            exibeMenuProfessor (P.id professor)
 
     exibeMenuMonitor :: Int -> IO()
     exibeMenuMonitor idMonitor = do
-        putStrLn "== SAD: MENU MONITOR ==\n Digite o número da ação que deseja executar!\n\n"
+        putStrLn "== SAD: MENU MONITOR ==\nDigite o número da ação que deseja executar!\n\n"
         instanciaMonitor <- buscaObjetoById "Monitores" idMonitor
         let monitor = read instanciaMonitor :: Monitor
         putStrLn "1) Exibir todos os tickets\n2) Responder tickets em progresso\n3) Deslogar"
@@ -132,7 +134,7 @@ module Src.Menu where
 
     exibeMenuAluno :: Int -> IO()
     exibeMenuAluno idAluno = do
-        putStrLn "== SAD: MENU ALUNO ==\n Digite o número da ação que deseja executar!\n\n"
+        putStrLn "== SAD: MENU ALUNO ==\nDigite o número da ação que deseja executar!\n\n"
         instanciaAluno <- buscaObjetoById "Alunos" idAluno
         let aluno = read instanciaAluno :: Aluno
         putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido"

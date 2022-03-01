@@ -19,13 +19,13 @@ module Src.Controller.MonitorController where
 
     insereMatricula :: IO(Int)
     insereMatricula = do
-        putStrLn "Insira a matricula do monitor"
+        putStrLn "\nInsira a matricula do monitor"
         id <- readLn 
         alunoCadastrado <- checaExistenciaById "Alunos" id
         if alunoCadastrado || id == 0
             then return id
         else do
-            putStrLn "Aluno não cadastrado!\n(Digite 0 para voltar ao menu principal)\n"
+            putStrLn "\nAluno não cadastrado!\n(Digite 0 para voltar ao menu principal)\n"
             insereMatricula
 
     insereDisciplina :: Int -> IO(String)
@@ -42,11 +42,18 @@ module Src.Controller.MonitorController where
                 putStrLn "Disciplina não cadastrada!\n(Digite \"VOLTAR\" para voltar ao menu principal)\n"
                 insereDisciplina id
 
-    removeMonitor :: IO()
-    removeMonitor = do
+    removeMonitor :: [String] -> IO()
+    removeMonitor disciplinas = do
         id <- insereMatricula
-        removeLinha "Monitores" (show id)
-        putStrLn "Monitor removido com sucesso!\n"
+        monitorToString <- buscaObjetoById "Monitores" id
+        let monitor = read monitorToString :: Monitor
+
+        if (M.disciplina monitor) `elem` disciplinas then do
+            removeLinha "Monitores" (show id)
+            putStrLn "Monitor removido com sucesso!\n"
+            else do
+                putStrLn "Este monitor não é de uma disciplina sua! Tente novamente."
+                removeMonitor disciplinas
 
     getTicketsDaDisciplina :: Monitor -> IO [Int]
     getTicketsDaDisciplina monitor = pegaTicketsDeUmaDisciplina (M.disciplina monitor)
