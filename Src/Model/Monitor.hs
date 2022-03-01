@@ -5,4 +5,4 @@ module Src.Model.Monitor where
         id :: Int,
         disciplina :: String,
         horarios :: String
-    }
+    } deriving (Read, Show)

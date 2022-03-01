@@ -6,7 +6,8 @@ module Src.Util.TxtFunctions where
 
 
     {-
-    Esta função retorna um array de string com todo o conteúdo do arquivo tendo quebras de linha como separador.
+    Esta função retorna um array de string com todo o conteúdo do arquivo tendo quebras de linha 
+    como separador.
     Parametros:
         nomeArquivo = nome do arquivo no diretório database
     -}
@@ -18,30 +19,74 @@ module Src.Util.TxtFunctions where
         let conteudoEmLista = P.lines conteudo
         return conteudoEmLista
 
-    {-
-    Esta função retorna o formato em string de um objeto identificado pelo seu id. Caso não seja encontrado o objeto, uma string vazia é retornada.
+    {- 
+    Esta função retorna o formato em string de um objeto identificado pelo seu id. 
+    Caso não seja encontrado o objeto, uma string vazia é retornada.
     Parametros:
         nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
-        idObejto = O id do objeto que deseja ser buscado
-    -}
-    buscaObjetoById :: String -> Int -> IO(String)
-    buscaObjetoById nomeArquivo idObjeto = do
-        conteudoEmLista <- fileToStringArray nomeArquivo
-        buscaObjetoByIdRecursivo conteudoEmLista idObjeto
-    
-    {-
-    Esta função trabalha em conjunto com buscaObjetoById de forma recursiva, buscando o objeto numa lista de todas as linhas do arquivo. Caso não seja encontrado o objeto, uma string vazia é retornada.
-    Parametros:
-        (objetoAtual:objetosRestantes) = é o array de string que representa o objeto, tendo como primeiro elemento o objetoAtual e tendo como os próximos objetos o array ObjetosRestantes
         idObjeto = O id do objeto que deseja ser buscado
     -}
-    buscaObjetoByIdRecursivo :: [String] -> Int -> IO(String)
-    buscaObjetoByIdRecursivo [] _ = return ""
-    buscaObjetoByIdRecursivo (objetoAtual:objetosRestantes) idObjeto = 
-        if ("id = " ++ (show idObjeto :: String) ++ ",") `T.isInfixOf` objetoAtual
-            then return objetoAtual
-            else buscaObjetoByIdRecursivo objetosRestantes idObjeto
+    buscaObjetoById :: String -> Int -> IO(String)
+    buscaObjetoById nomeArquivo objetoId = buscaObjetoByAtributo nomeArquivo "id" (show objetoId ++ ",")
 
+    {- 
+    Esta função retorna o formato em string de um objeto identificado pelo seu atributo. 
+    Caso não seja encontrado o objeto, uma string vazia é retornada.
+    
+    Forma de uso:
+        - Você deve usar delimitadores no valor do atributo. Se for uma String ela deve
+        estar envolta em aspas, se for um inteiro deve ter uma vírgula ou uma chave indicando
+        seu final.
+    
+    Parametros:
+        nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
+        atributo = O atributo do objeto que deseja ser buscado
+        valorAtributo = O valor do atributo do objeto que deseja ser buscado
+    -}
+    buscaObjetoByAtributo :: String -> String -> String -> IO(String)
+    buscaObjetoByAtributo nomeArquivo atributo valorAtributo = do
+        conteudoEmLista <- fileToStringArray nomeArquivo
+        buscaObjetoByAtributoRecursivo conteudoEmLista atributo valorAtributo
+
+    {-
+    Esta função trabalha em conjunto com buscaObjetoByAtributo de forma recursiva, buscando o 
+    objeto numa lista de todas as linhas do arquivo.
+    Caso não seja encontrado o objeto, uma string vazia é retornada.
+    Parametros:
+        (objetoAtual:objetosRestantes) = é o array de string que representa o objeto, tendo como 
+        primeiro elemento o objetoAtual e tendo como os próximos objetos o array ObjetosRestantes.
+        atributo = O atributo do objeto que deseja ser buscado
+        valorAtributo = O valor do atributo do objeto que deseja ser buscado
+    -}
+    buscaObjetoByAtributoRecursivo :: [String] -> String -> String -> IO(String)
+    buscaObjetoByAtributoRecursivo [] _ _ = return ""
+    buscaObjetoByAtributoRecursivo (objetoAtual:objetosRestantes) atributo valorAtributo =
+        if (atributo ++ " = " ++ valorAtributo) `T.isInfixOf` objetoAtual
+            then return objetoAtual
+            else buscaObjetoByAtributoRecursivo objetosRestantes atributo valorAtributo
+ 
+    {-
+    Checa se um objeto existe na database, retornando True, caso exista, e False, caso contrário.
+    Parametros:
+        nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
+        idObjeto = O id do objeto que deseja ser buscado
+    -}
+    checaExistenciaById :: String -> Int -> IO(Bool)
+    checaExistenciaById nomeArquivo idObjeto = do
+        existeObjeto <- buscaObjetoById nomeArquivo idObjeto
+        return (existeObjeto /= "")
+
+    {-
+    Checa se um objeto existe na database, retornando True, caso exista, e False, caso contrário.
+    Parametros:
+        nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
+        atributo = O atributo do objeto que deseja ser buscado
+        valorAtributo = O valor do atributo do objeto que deseja ser buscado
+    -}
+    checaExistenciaByAtributo :: String -> String -> String -> IO(Bool)
+    checaExistenciaByAtributo nomeArquivo atributo valorAtributo = do
+        existeObjeto <- buscaObjetoByAtributo nomeArquivo atributo valorAtributo
+        return (existeObjeto /= "")
 
     {- 
     Esta função adiciona uma linha no arquivo. Caso o arquivo já possua uma linha,
@@ -68,7 +113,7 @@ module Src.Util.TxtFunctions where
             then return "1"
             else do
                 let ultimaLinhaEmLista = P.words (last conteudoEmLista)
-                let ultimoId = read (P.take ((P.length (ultimaLinhaEmLista!!3))-1) (ultimaLinhaEmLista!!3)) :: Int 
+                let ultimoId = read (P.take ((P.length (ultimaLinhaEmLista!!3))-1) (ultimaLinhaEmLista!!3)) :: Int
                 return (show (ultimoId+1))
 
     {-
@@ -99,15 +144,19 @@ module Src.Util.TxtFunctions where
     atualizaLista [] _ _ _= return ()
     atualizaLista (linhaAtual:linhasRestantes) id novaLinha arquivo = do
         if ("id = " ++ id ++ ",") `T.isInfixOf` linhaAtual
-            then do 
-                hPutStrLn arquivo novaLinha
-                atualizaLista linhasRestantes id novaLinha arquivo
+            then do
+                if novaLinha == ""
+                    then do
+                        atualizaLista linhasRestantes id novaLinha arquivo
+                else do
+                    hPutStrLn arquivo novaLinha
+                    atualizaLista linhasRestantes id novaLinha arquivo
             else do
                 hPutStrLn arquivo linhaAtual
                 atualizaLista linhasRestantes id novaLinha arquivo
 
     {-
-    Essa funcao remove uma linha com base no id da linha
+    Remove uma linha com base no seu id.
     Parametros:
         nomeArquivo = o nome do arquivo no diretório database
         id = id da linha 
@@ -121,3 +170,12 @@ module Src.Util.TxtFunctions where
         atualizaLista conteudoArquivo id "" arquivo
         hFlush arquivo
         hClose arquivo
+
+    {-
+    Adiciona aspas a um String.
+    Útil para comparar atributos String na database.
+    Parametros:
+        texto = texto a ser envolto em aspas
+    -}
+    adicionaAspas :: String -> String 
+    adicionaAspas texto = "\"" ++ texto ++ "\""
