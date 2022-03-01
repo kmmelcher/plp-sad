@@ -28,7 +28,3 @@ module Src.Controller.DisciplinaController where
         let disciplina = (read disciplinaAtual :: Disciplina)
         retornarTodasSiglasRecursivo disciplinasRestantes ((D.sigla disciplina) : ret)
         
-
-
-
-        

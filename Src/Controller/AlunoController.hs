@@ -1,12 +1,9 @@
 module Src.Controller.AlunoController where
     import Src.Model.Aluno as A
     import Src.Util.TxtFunctions
-
     import Src.Controller.ChatController
     import Src.Model.Ticket
-
-
-    import Src.Controller.DisciplinaController as DC
+    import Src.Controller.DisciplinaController ( exibeDisciplinas, retornarTodasSiglas )
     
 
     adicionaAluno :: IO()
@@ -20,7 +17,6 @@ module Src.Controller.AlunoController where
         let aluno = Aluno matricula nome disciplinas
         adicionaLinha "Alunos" $ show aluno
         putStrLn "Aluno cadastrado com sucesso.\n"
-
 
     excluirTicket :: Int -> IO()
     excluirTicket matAluno = do
