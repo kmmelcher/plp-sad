@@ -3,4 +3,12 @@ Mensagem {id = 2, autor = 120110123, conteudo = "Como faco para ler uma lista de
 Mensagem {id = 3, autor = 120110369, conteudo = "Oi, É só fazer o input <- getLine e depois  read input :: [[Int]]", horario = "02/24/22 14h05"}
 Mensagem {id = 4, autor = 120110123, conteudo = "Obrigado , deu certo aqui", horario = "02/24/22 14h55"}
 Mensagem {id = 5, autor = 120110123, conteudo = "Como converto IO Int para Int?", horario = "04/24/22 13h50"}
-Mensagem {id = 6, autor = 120110258, conteudo = "E SIMPLES BASTA DESISTIR", horario = "03/01/22 18h01"}
+Mensagem {id = 6, autor = 120110258, conteudo = "Utilizando o operador <- dentro de um bloco DO", horario = "03/01/22 18h01"}
+Mensagem {id = 7, autor = 120110338, conteudo = "Gostaria de saber em que situacoes utilizar mux ou demux nos circuitos combinacionais", horario = "03/01/22 19h12"}
+Mensagem {id = 8, autor = 119111321, conteudo = "O mux serve para selecionar uma de suas diversas entradas para a sua saida.", horario = "03/01/22 20h02"}
+Mensagem {id = 9, autor = 119111321, conteudo = "Já o demux faz a operacao inversa, ou seja recebe uma entrada e seleciona qual de suas saidas ira receber o sinal de entrada", horario = "03/01/22 20h03"}
+Mensagem {id = 10, autor = 120110456, conteudo = "Boa tarde manuel, uma duvida sobre UML, para que tenhamos composicao ou agregacao, é necessário uma colecao de objetos? Ex: lista de compras, ou poderia ser tbm no caso de algum objeto que tivesse apenas um atributo compra", horario = "03/02/22 16h25"}
+Mensagem {id = 11, autor = 119231444, conteudo = "boa tarde, pode ser apenas um atributo, nao necessariamente precisa ser uma colecao", horario = "03/02/22 16h50"}
+Mensagem {id = 12, autor = 120110456, conteudo = "Entendi, ai no caso da composicao, o atributo vai existir somente naquela classe?", horario = "03/02/22 16h54"}
+Mensagem {id = 13, autor = 119231444, conteudo = "isso, ja na agregacao o atributo é utilizado por mais de uma classe", horario = "03/02/22 17h00"}
+Mensagem {id = 14, autor = 120110258, conteudo = "boa noite , nao estou conseguindo entrar na maquina virtual utilizando o ssh, alguem pode me ajudar no privado?", horario = "03/02/22 17h02"}
