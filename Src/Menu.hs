@@ -16,16 +16,18 @@ module Src.Menu where
         putStrLn "1) Realizar cadastro\n2) Entrar no sistema\n3) Sair"
         opcao <- getLine
         putStr "\n"
-        if opcao == "1" then do
+        decideMenuPrincipal opcao
+    
+    decideMenuPrincipal :: String -> IO ()
+    decideMenuPrincipal opcao
+        | opcao == "1" = do
             menuCadastro
             menuPrincipal
-            else 
-            if opcao == "2" then menuLogin else 
-                if opcao == "3" 
-                    then putStrLn "Saindo..." 
-                else do
-                    putStrLn "Insira um valor válido!\n"
-                    menuPrincipal
+        | opcao == "2" = menuLogin
+        | opcao == "3" = putStrLn "Saindo..." 
+        | otherwise = do 
+            putStrLn "Insira um valor válido!\n"
+            menuPrincipal
 
     menuCadastro :: IO ()
     menuCadastro = do
@@ -82,7 +84,27 @@ module Src.Menu where
         putStrLn "== SAD: MENU PROFESSOR ==\n Digite o número da ação que deseja executar!\n\n"
         instanciaProfessor <- buscaObjetoById "Professores" idProfessor
         let professor = read instanciaProfessor :: Professor
-        putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Desvincular Monitor"
+        putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Desvincular Monitor\n4) Deslogar"
+        opcao <- getLine 
+        decideMenuProfessor idProfessor opcao
+
+    decideMenuProfessor :: Int -> String -> IO()
+    decideMenuProfessor idProfessor opcao
+        | opcao == "1" = do
+            putStrLn "Exibindo tickets...\n"
+            exibeMenuProfessor idProfessor
+        | opcao == "2" = do
+            putStrLn "Respondendo tickets...\n"
+            exibeMenuProfessor idProfessor
+        | opcao == "3" = do
+            putStrLn "Desvinculando monitor...\n"
+            exibeMenuProfessor idProfessor
+        | opcao == "4" = do
+            putStrLn "Deslogando...\n"
+            menuPrincipal
+        | otherwise = do 
+            putStrLn "Opção inválida!"
+            exibeMenuProfessor idProfessor
 
     exibeMenuMonitor :: Int -> IO()
     exibeMenuMonitor idMonitor = do
