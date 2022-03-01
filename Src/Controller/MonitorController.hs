@@ -1,7 +1,9 @@
 module Src.Controller.MonitorController where
-    import Src.Model.Monitor
+    import Src.Model.Monitor as M
     import Src.Util.TxtFunctions
-
+    import Src.Model.Ticket as T
+    import Src.Controller.ChatController
+    
     adicionaMonitor :: IO()
     adicionaMonitor = do
         id <- insereMatricula
@@ -45,3 +47,20 @@ module Src.Controller.MonitorController where
         id <- insereMatricula
         removeLinha "Monitores" (show id)
         putStrLn "Monitor removido com sucesso!\n"
+
+    exibeTicketsDisciplina :: Monitor -> IO()
+    exibeTicketsDisciplina monitor = do
+        tickets <- pegaTicketsDeUmaDisciplina (M.disciplina monitor)
+        if tickets == [] then putStrLn "\nAinda não há tickets nesta disciplina.\n" else do
+            putStrLn ("\nEstes são os tickets existentes da disciplina: " ++ M.disciplina monitor)
+            exibeTicketsDisciplinaRecursivo tickets
+    
+    exibeTicketsDisciplinaRecursivo :: [Int] -> IO()
+    exibeTicketsDisciplinaRecursivo [] = do
+        putStr "\n"
+        return ()
+    exibeTicketsDisciplinaRecursivo (idTicketAtual:idsTicketsRestantes) = do
+        instanciaTicket <- buscaObjetoById "Tickets" idTicketAtual
+        let ticket = read instanciaTicket :: Ticket
+        putStrLn (show (T.id ticket) ++ ") " ++ titulo ticket ++ " (" ++ status ticket ++ ")")
+        exibeTicketsDisciplinaRecursivo idsTicketsRestantes
