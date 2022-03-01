@@ -69,8 +69,8 @@ module Src.Controller.ChatController where
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (idMensagem: T.mensagens ticket) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
-    pegaTicketsDeUmaDisciplina :: String -> IO[Int]
-    pegaTicketsDeUmaDisciplina disciplina = do 
+    getTicketsDisciplina :: String -> IO[Int]
+    getTicketsDisciplina disciplina = do 
         tickets <- fileToStringArray "Tickets"
         return(comparaDisciplinaDeTodosTickets tickets disciplina) 
     
@@ -92,7 +92,7 @@ module Src.Controller.ChatController where
     -}
     exibeTicketsDisciplina :: String -> IO()
     exibeTicketsDisciplina nomeDisciplina = do
-        tickets <- pegaTicketsDeUmaDisciplina nomeDisciplina
+        tickets <- getTicketsDisciplina nomeDisciplina
         if null tickets 
             then putStrLn "\nAinda não há tickets nesta disciplina.\n" 
         else do
@@ -136,3 +136,19 @@ module Src.Controller.ChatController where
         let ticket = read instanciaTicket :: T.Ticket
         let novoTicket = T.Ticket (T.id ticket) (T.titulo ticket) (T.mensagens ticket) "Resolvido" (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show id) (show novoTicket)
+    
+    getTicketsEmAndamento :: String -> IO[Int]
+    getTicketsEmAndamento disciplina = do
+        ticketsDisciplina <- getTicketsDisciplina disciplina
+        getTicketsEmAndamentoRecursivo ticketsDisciplina
+
+    getTicketsEmAndamentoRecursivo :: [Int] -> IO([Int])
+    getTicketsEmAndamentoRecursivo [] = return ([])
+    getTicketsEmAndamentoRecursivo (ticketAtual:ticketsRestantes) = do
+        ticketToString <- buscaObjetoById "Tickets" ticketAtual
+        let ticket = read ticketToString :: T.Ticket
+        if T.status ticket == "Em Andamento" then do
+            proximosTickets <- getTicketsEmAndamentoRecursivo ticketsRestantes
+            return ([T.id ticket] ++ proximosTickets)
+            else
+                getTicketsEmAndamentoRecursivo ticketsRestantes

@@ -5,9 +5,9 @@ module Src.Menu where
     import Src.Controller.MonitorController
     import Src.Controller.ProfessorController
     import Src.Util.TxtFunctions
-    import Src.Model.Monitor
+    import Src.Model.Monitor as M
     import Src.Model.Professor as P
-    import Src.Model.Aluno
+    import Src.Model.Aluno as A
 
     menuPrincipal :: IO()
     menuPrincipal = do
@@ -71,7 +71,7 @@ module Src.Menu where
         instanciaMonitor <- buscaObjetoById "Monitores" idPerfil
         let monitor = read instanciaMonitor :: Monitor
         putStrLn ("Foi identificado que você é monitor da disciplina: " ++ disciplina monitor)
-        putStrLn ("Como deseja entrar no sistema?\n\n 1) Entrar como Aluno\n 2) Entrar como Monitor de " ++ disciplina monitor)
+        putStrLn ("Como deseja entrar no sistema?\n\n1) Entrar como Aluno\n2) Entrar como Monitor de " ++ disciplina monitor)
         escolha <- getLine
         putStr "\n"
         if escolha == "1" then exibeMenuAluno idPerfil else 
@@ -83,7 +83,7 @@ module Src.Menu where
     exibeMenuProfessor idProfessor = do
         instanciaProfessor <- buscaObjetoById "Professores" idProfessor
         let professor = read instanciaProfessor :: Professor
-        putStrLn "== SAD: MENU PROFESSOR =="
+        putStrLn "\n== SAD: MENU PROFESSOR =="
         putStrLn ("ID: " ++ show (P.id professor) ++ " | " ++ "Nome: " ++ P.nome professor ++ " | " ++ "Disciplinas: " ++ show (P.disciplinas professor))
         putStrLn "Digite o número da ação que deseja executar!\n"
         putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Desvincular Monitor\n4) Deslogar"
@@ -110,31 +110,35 @@ module Src.Menu where
 
     exibeMenuMonitor :: Int -> IO()
     exibeMenuMonitor idMonitor = do
-        putStrLn "== SAD: MENU MONITOR ==\nDigite o número da ação que deseja executar!\n\n"
         instanciaMonitor <- buscaObjetoById "Monitores" idMonitor
+        instanciaMonitorAluno <- buscaObjetoById "Alunos" idMonitor
         let monitor = read instanciaMonitor :: Monitor
+        let aluno = read instanciaMonitorAluno :: Aluno
+        putStrLn "\n== SAD: MENU MONITOR =="
+        putStrLn ("ID: " ++ show (M.id monitor) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplina: " ++ M.disciplina monitor)
+        putStrLn "Digite o número da ação que deseja executar!\n"
         putStrLn "1) Exibir todos os tickets\n2) Responder tickets em progresso\n3) Deslogar"
         opcao <- getLine 
-        decideMenuMonitor idMonitor monitor opcao
+        decideMenuMonitor monitor opcao
 
-    decideMenuMonitor :: Int -> Monitor -> String -> IO()
-    decideMenuMonitor idMonitor monitor opcao
+    decideMenuMonitor :: Monitor -> String -> IO()
+    decideMenuMonitor monitor opcao
         | opcao == "1" = do
-            exibeTicketsDaDisciplina monitor
-            exibeMenuMonitor idMonitor
+            exibeTicketsDisciplina (disciplina monitor)
+            exibeMenuMonitor (M.id monitor)
         | opcao == "2" = do
             respondeTicket monitor
-            exibeMenuMonitor idMonitor
+            exibeMenuMonitor (M.id monitor)
         | opcao == "3" = do
             putStrLn "Deslogando...\n"
             menuPrincipal
         | otherwise  = do
             putStrLn "Opção inválida!\n"
-            exibeMenuMonitor idMonitor
+            exibeMenuMonitor (M.id monitor)
 
     exibeMenuAluno :: Int -> IO()
     exibeMenuAluno idAluno = do
-        putStrLn "== SAD: MENU ALUNO ==\nDigite o número da ação que deseja executar!\n\n"
+        putStrLn "\n== SAD: MENU ALUNO ==\nDigite o número da ação que deseja executar!\n\n"
         instanciaAluno <- buscaObjetoById "Alunos" idAluno
         let aluno = read instanciaAluno :: Aluno
         putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido"

@@ -55,15 +55,10 @@ module Src.Controller.MonitorController where
                 putStrLn "Este monitor não é de uma disciplina sua! Tente novamente."
                 removeMonitor disciplinasDoProfessor
 
-    getTicketsDaDisciplina :: Monitor -> IO [Int]
-    getTicketsDaDisciplina monitor = pegaTicketsDeUmaDisciplina (M.disciplina monitor)
-
-    exibeTicketsDaDisciplina :: Monitor -> IO()
-    exibeTicketsDaDisciplina monitor = exibeTicketsDisciplina (M.disciplina monitor)
-
     respondeTicket :: Monitor -> IO()
     respondeTicket monitor = do
-        tickets <- getTicketsDaDisciplina monitor
-        putStrLn "\nTickets em andamento da sua disciplina:"
-        exibeTicketsEmAndamento tickets
-        adicionaMensagem (M.id monitor)
+        tickets <- getTicketsEmAndamento (M.disciplina monitor)
+        if tickets == [] then putStrLn "Não há tickets em andamento por enquanto." else do
+            putStrLn "\nTickets em andamento da sua disciplina:"
+            exibeTicketsEmAndamento tickets
+            adicionaMensagem (M.id monitor)
