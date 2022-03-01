@@ -43,17 +43,17 @@ module Src.Controller.MonitorController where
                 insereDisciplina id
 
     removeMonitor :: [String] -> IO()
-    removeMonitor disciplinas = do
+    removeMonitor disciplinasDoProfessor = do
         id <- insereMatricula
         monitorToString <- buscaObjetoById "Monitores" id
         let monitor = read monitorToString :: Monitor
 
-        if (M.disciplina monitor) `elem` disciplinas then do
+        if (M.disciplina monitor) `elem` disciplinasDoProfessor then do
             removeLinha "Monitores" (show id)
             putStrLn "Monitor removido com sucesso!\n"
             else do
                 putStrLn "Este monitor não é de uma disciplina sua! Tente novamente."
-                removeMonitor disciplinas
+                removeMonitor disciplinasDoProfessor
 
     getTicketsDaDisciplina :: Monitor -> IO [Int]
     getTicketsDaDisciplina monitor = pegaTicketsDeUmaDisciplina (M.disciplina monitor)
