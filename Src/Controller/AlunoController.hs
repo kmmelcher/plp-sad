@@ -3,7 +3,7 @@ module Src.Controller.AlunoController where
     import Src.Util.TxtFunctions
     import Src.Controller.ChatController
     import Src.Model.Ticket
-    import Src.Controller.DisciplinaController ( exibeDisciplinas, retornarTodasSiglas )
+    import Src.Controller.DisciplinaController as DC
     
 
     adicionaAluno :: IO()
