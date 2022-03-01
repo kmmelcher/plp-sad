@@ -3,7 +3,7 @@ module Src.Controller.AlunoController where
     import Src.Util.TxtFunctions
     import Src.Controller.ChatController
     import Src.Model.Ticket
-    import Src.Controller.DisciplinaController ( exibeDisciplinas, retornarTodasSiglas )
+    import Src.Controller.DisciplinaController as DC
     
 
     adicionaAluno :: IO()
@@ -50,9 +50,8 @@ module Src.Controller.AlunoController where
         putStrLn "\nInforme a sigla da disciplina na qual deseja se matricular:"
         sigla <- getLine
         siglasCadastradas <- retornarTodasSiglas
-        if sigla `elem` siglasCadastradas then do
-            let jaEstaMatriculado = if sigla `elem` (disciplinas aluno) then True else False
-            if jaEstaMatriculado then do 
+        if sigla `elem` siglasCadastradas then
+            if sigla `elem` (disciplinas aluno) then do 
                 putStrLn ("Você já está matriculado em " ++ sigla ++ " , tente novamente\n\n")
                 matriculaAlunoEmDisciplina aluno 
             else do 
@@ -77,3 +76,19 @@ module Src.Controller.AlunoController where
         else do 
             putStrLn ("Você não está matriculado na disciplina " ++ sigla ++ " . Tente novamente\n\n")
             desmatriculaAlunoDeDisciplina aluno
+    
+    resolveTicket :: Aluno -> IO()
+    resolveTicket aluno = do
+        ticketsAluno <- pegaTicketsDoAluno (A.id aluno)
+        putStrLn "Estes são os seus tickets com status \"Em andamento\"\n"
+        exibeTicketsEmAndamento ticketsAluno
+        putStrLn "\ninsira o id do ticket que deseja marcar como concluído"
+        input <- getLine
+        let id = read input :: Int
+        idValido <- checaIdDeTicketEmAndamento id
+        if idValido then do
+            marcaTicketComoConcluido id
+            putStrLn "Ticket alterado com sucesso.\n"
+             else do
+            putStrLn "Insira um id válido!"
+            resolveTicket aluno

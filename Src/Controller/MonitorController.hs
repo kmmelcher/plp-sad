@@ -42,6 +42,12 @@ module Src.Controller.MonitorController where
                 putStrLn "Disciplina não cadastrada!\n(Digite \"VOLTAR\" para voltar ao menu principal)\n"
                 insereDisciplina id
 
+    removeMonitor :: IO()
+    removeMonitor = do
+        id <- insereMatricula
+        removeLinha "Monitores" (show id)
+        putStrLn "Monitor removido com sucesso!\n"
+
     exibeTicketsDisciplina :: Monitor -> IO()
     exibeTicketsDisciplina monitor = do
         tickets <- pegaTicketsDeUmaDisciplina (M.disciplina monitor)
