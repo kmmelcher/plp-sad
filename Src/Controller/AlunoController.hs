@@ -33,7 +33,7 @@ module Src.Controller.AlunoController where
             else print "Ticket invalido"
 
     mostraTickets :: [Int] -> IO()
-    mostraTickets [] = print " "
+    mostraTickets [] = return ()
     mostraTickets (head:tail) = do
         ticketStr <- buscaObjetoById "Tickets" head
         let ticket = read ticketStr :: Ticket

@@ -22,7 +22,7 @@ module Src.Controller.ProfessorController where
     lerTicketsDisciplina idProfessor = do
          profStr <- buscaObjetoById "Professores" idProfessor
          let professor = read profStr :: Professor
-         print "Disciplinas cadastradas: "
+         putStrLn "\nDisciplinas cadastradas: "
          printArray (disciplinas professor)
          sel <- getLine
          if verificaDisciplina (disciplinas professor) sel
@@ -35,7 +35,7 @@ module Src.Controller.ProfessorController where
                 print "Disciplina invalida!"
 
     printArray :: [String] -> IO()
-    printArray [] = putStr "Entre Com a sigla da disciplina: "
+    printArray [] = putStr "\nEntre Com a sigla da disciplina: "
     printArray (head:tail) = do
         print head
         printArray tail
