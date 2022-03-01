@@ -24,9 +24,9 @@ module Src.Controller.AlunoController where
 
     excluirTicket :: Int -> IO()
     excluirTicket matAluno = do
-        putStrLn "Escolha entre os seus Tickets qual será excluido :"
         ticketsIds <- pegaTicketsDoAluno matAluno
         mostraTickets ticketsIds
+        putStrLn "Escolha entre os seus Tickets qual será excluido: "
         sel <- getLine 
         if verificaTicket ticketsIds (read sel)
             then removeLinha "Tickets" sel
@@ -81,5 +81,4 @@ module Src.Controller.AlunoController where
         else do 
             putStrLn ("Você não está matriculado na disciplina " ++ sigla ++ " . Tente novamente\n\n")
             desmatriculaAlunoDeDisciplina aluno
-
-
+         
