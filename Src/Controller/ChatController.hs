@@ -32,7 +32,7 @@ module Src.Controller.ChatController where
         idMensagem <- buscaNovoId "Mensagens"
         tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M")
         let mensagem = Mensagem (read idMensagem) id conteudo tempo
-        inserirMensagemNoTicket idTicket id (read idMensagem)
+        inserirMensagemNoTicket idTicket (read idMensagem)
         adicionaLinha "Mensagens" $ show mensagem
     
     pegaTicketsDoAluno :: Int -> IO[Int]
@@ -60,11 +60,10 @@ module Src.Controller.ChatController where
     Insere uma mensagem em um Ticket.
     Parametros
         idTicket : ticket no qual voce quer inserir a mensagem.
-        idAutor : id do autor, seja ele um monitor, professor ou aluno.
         idMensagem: Mensagem a ser inserida no Ticket.
     -}
-    inserirMensagemNoTicket :: Int -> Int -> Int -> IO()
-    inserirMensagemNoTicket idTicket idAutor idMensagem = do 
+    inserirMensagemNoTicket :: Int -> Int -> IO()
+    inserirMensagemNoTicket idTicket idMensagem = do 
         ticketStr <- buscaObjetoById "Tickets" idTicket
         let ticket = read ticketStr :: T.Ticket
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (idMensagem: T.mensagens ticket) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
