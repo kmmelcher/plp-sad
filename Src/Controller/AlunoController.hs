@@ -33,7 +33,7 @@ module Src.Controller.AlunoController where
             else print "Ticket invalido"
 
     mostraTickets :: [Int] -> IO()
-    mostraTickets [] = print "end"
+    mostraTickets [] = print " "
     mostraTickets (head:tail) = do
         ticketStr <- buscaObjetoById "Tickets" head
         let ticket = read ticketStr :: Ticket
@@ -47,15 +47,38 @@ module Src.Controller.AlunoController where
 
     matriculaAlunoEmDisciplina :: Aluno -> IO()
     matriculaAlunoEmDisciplina aluno = do
+        putStrLn "Você já está matriculado nas seguintes disciplinas: "
+        putStrLn(show (disciplinas aluno))
         putStrLn "Atualmente, estas são todas as disciplinas disponíveis para matrícula, exibidas em id, nome e sigla:\n\n"
         exibeDisciplinas aluno
         putStrLn "\nInforme a sigla da disciplina na qual deseja se matricular:"
-        sigla <- getLine 
-        t <- checaExistenciaByAtributo "Disciplinas" "sigla" sigla
-        if t
-            then do
+        sigla <- getLine
+        siglasCadastradas <- retornarTodasSiglas
+        if sigla `elem` siglasCadastradas then do
+            let jaEstaMatriculado = if sigla `elem` (disciplinas aluno) then True else False
+            if jaEstaMatriculado then do 
+                putStrLn ("Você já está matriculado em " ++ sigla ++ " , tente novamente\n\n")
+                matriculaAlunoEmDisciplina aluno 
+            else do 
                 let alunoAtualizado = Aluno (A.id aluno) (nome aluno) ([sigla] ++ disciplinas aluno)
-                atualizaLinhaById "Alunos" (show (A.id aluno)) (show aluno)
+                atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
                 putStrLn "Matricula realizada com sucesso!"
-            else
-                print "Sigla inexistente"
+        else do 
+            putStrLn "Sigla Inválida , tente novamente\n\n"
+            matriculaAlunoEmDisciplina aluno
+    
+    desmatriculaAlunoDeDisciplina :: Aluno -> IO()
+    desmatriculaAlunoDeDisciplina aluno = do 
+        putStrLn "\nAtualmente, o aluno está matriculado nas seguintes disciplinas: \n"
+        putStrLn (show(disciplinas aluno))
+        putStrLn "Informe a sigla da disciplina na qual deseja se desmatricular: "
+        sigla <- getLine 
+        if sigla `elem` (disciplinas aluno) then do
+            let disciplinasExcetoMencionada = filter (/= sigla) (disciplinas aluno)
+            let alunoAtualizado = Aluno (A.id aluno) (nome aluno) (disciplinasExcetoMencionada)
+            atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
+            putStrLn "Cancelamento de matricula realizada com sucesso!\n"
+        else do 
+            putStrLn ("Você não está matriculado na disciplina " ++ sigla ++ " . Tente novamente\n\n")
+            desmatriculaAlunoDeDisciplina aluno
+         
