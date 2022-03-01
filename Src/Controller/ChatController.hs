@@ -69,6 +69,8 @@ module Src.Controller.ChatController where
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (idMensagem: T.mensagens ticket) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
+
+    -- Funcao para retornar todos os tickets de uma disciplina
     getTicketsDisciplina :: String -> IO[Int]
     getTicketsDisciplina disciplina = do 
         tickets <- fileToStringArray "Tickets"
@@ -84,7 +86,8 @@ module Src.Controller.ChatController where
     comparaDisciplinaDeTodosTickets (x:xs) disciplina = if ( comparaDisciplinaDeUmTicket x disciplina ) 
         then retornaIdTicket x : (comparaDisciplinaDeTodosTickets xs disciplina) 
         else [] ++ (comparaDisciplinaDeTodosTickets xs disciplina)
-    
+    ------
+
     {- 
     Exibe todos os tickets de uma disciplina.
     Parâmetros:
@@ -147,7 +150,7 @@ module Src.Controller.ChatController where
     getTicketsEmAndamentoRecursivo (ticketAtual:ticketsRestantes) = do
         ticketToString <- buscaObjetoById "Tickets" ticketAtual
         let ticket = read ticketToString :: T.Ticket
-        if T.status ticket == "Em Andamento" then do
+        if (T.status ticket == "Em Andamento") then do
             proximosTickets <- getTicketsEmAndamentoRecursivo ticketsRestantes
             return ([T.id ticket] ++ proximosTickets)
             else
