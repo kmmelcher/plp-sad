@@ -66,7 +66,7 @@ decideMenuAlunoMonitor idPerfil = do
     instanciaMonitor <- (buscaObjetoById "Monitores" idPerfil)
     let monitor = read instanciaMonitor :: Monitor
     putStrLn ("Foi identificado que você é monitor da disciplina: " ++ disciplina monitor)
-    putStrLn ("Como deseja entrar no sistema?\n\n 1) Entrar como Aluno\n 2) Entrar como Monitor de " ++ disciplina monitor)
+    putStrLn ("Como deseja entrar no sistema?\n\n1) Entrar como Aluno\n2) Entrar como Monitor de " ++ disciplina monitor)
     escolha <- getLine
     putStr "\n"
     if escolha == "1" then exibeMenuAluno idPerfil else 
@@ -76,21 +76,26 @@ decideMenuAlunoMonitor idPerfil = do
 
 exibeMenuProfessor :: Int -> IO()
 exibeMenuProfessor idProfessor = do
-    putStrLn "== SAD: MENU PROFESSOR ==\n Digite o número da ação que deseja executar!\n\n"
+    putStrLn "== SAD: MENU PROFESSOR ==\nDigite o número da ação que deseja executar!"
     instanciaProfessor <- buscaObjetoById "Professores" idProfessor
     let professor = read instanciaProfessor :: Professor
     putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Desvincular Monitor"
 
 exibeMenuMonitor :: Int -> IO()
 exibeMenuMonitor idMonitor = do
-    putStrLn "== SAD: MENU MONITOR ==\n Digite o número da ação que deseja executar!\n\n"
+    putStrLn "== SAD: MENU MONITOR ==\nDigite o número da ação que deseja executar!"
     instanciaMonitor <- buscaObjetoById "Monitores" idMonitor
     let monitor = read instanciaMonitor :: Monitor
-    putStrLn "1) Exibir todos os tickets\n 2) Responder tickets em progresso"
+    putStrLn "1) Exibir todos os tickets\n2) Responder tickets em progresso"
+    input <- getLine 
+    if input == "1" then do
+        exibeTicketsDisciplina monitor
+        exibeMenuMonitor idMonitor 
+        else exibeMenuMonitor idMonitor
 
 exibeMenuAluno :: Int -> IO()
 exibeMenuAluno idAluno = do
-    putStrLn "== SAD: MENU ALUNO ==\n Digite o número da ação que deseja executar!\n\n"
+    putStrLn "== SAD: MENU ALUNO ==\nDigite o número da ação que deseja executar!"
     instanciaAluno <- buscaObjetoById "Alunos" idAluno
     let aluno = read instanciaAluno :: Aluno
     putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido"

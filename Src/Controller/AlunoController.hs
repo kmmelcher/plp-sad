@@ -77,4 +77,3 @@ module Src.Controller.AlunoController where
         else do 
             putStrLn ("Você não está matriculado na disciplina " ++ sigla ++ " . Tente novamente\n\n")
             desmatriculaAlunoDeDisciplina aluno
-         
