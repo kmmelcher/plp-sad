@@ -32,6 +32,12 @@ module Src.Util.TxtFunctions where
     {- 
     Esta função retorna o formato em string de um objeto identificado pelo seu atributo. 
     Caso não seja encontrado o objeto, uma string vazia é retornada.
+    
+    Forma de uso:
+        - Você deve usar delimitadores no valor do atributo. Se for uma String ela deve
+        estar envolta em aspas, se for um inteiro deve ter uma vírgula ou uma chave indicando
+        seu final.
+    
     Parametros:
         nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
         atributo = O atributo do objeto que deseja ser buscado
