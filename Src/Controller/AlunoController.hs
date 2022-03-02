@@ -1,8 +1,6 @@
 module Src.Controller.AlunoController where
     import Src.Model.Aluno as A
     import Src.Util.TxtFunctions
-    import Src.Controller.ChatController
-    import Src.Model.Ticket as T
     import Src.Controller.DisciplinaController as DC
     
     getAluno:: Int -> IO(Aluno)

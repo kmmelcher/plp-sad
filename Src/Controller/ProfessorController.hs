@@ -2,8 +2,6 @@ module Src.Controller.ProfessorController where
     import Src.Model.Professor
     import Src.Util.TxtFunctions
     import Src.Controller.ChatController
-    import Src.Model.Ticket
-    import Src.Controller.AlunoController
 
     getProfessor:: Int -> IO(Professor)
     getProfessor id = do

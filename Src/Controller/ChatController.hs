@@ -2,7 +2,6 @@ module Src.Controller.ChatController where
     import Src.Model.Mensagem
     import Src.Model.Aluno as A
     import qualified Src.Model.Ticket as T
-    import Control.Monad (when)
     import Src.Util.TxtFunctions
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
