@@ -5,7 +5,7 @@ module Src.Controller.ProfessorController where
     import Src.Model.Ticket
     import Src.Controller.AlunoController
 
-    getProfessor:: Int -> IO(Professor)
+    getProfessor:: Int -> IO Professor
     getProfessor id = do
         professorToString <- getObjetoById "Professores" id
         return (read professorToString :: Professor)
@@ -25,7 +25,7 @@ module Src.Controller.ProfessorController where
 
     lerTicketsDisciplina :: Professor -> IO()
     lerTicketsDisciplina professor = do
-        if (length (disciplinas professor) > 1) then do
+        if length (disciplinas professor) > 1 then do
             putStrLn "Insira qual disciplina você deseja visualizar os tickets:"
             disciplina <- getLine
             if verificaDisciplina (disciplinas professor) disciplina
@@ -34,10 +34,9 @@ module Src.Controller.ProfessorController where
                     putStrLn "\nDisciplina invalida!"
                     lerTicketsDisciplina professor
         else do
-               exibeTicketsDisciplina ((disciplinas professor)!!0)    
+               exibeTicketsDisciplina (head (disciplinas professor))
 
     verificaDisciplina :: [String] -> String -> Bool
     verificaDisciplina [] _ = False
     verificaDisciplina (disciplinaAtual:disciplinasRestantes) disciplina = do
         (disciplinaAtual == disciplina) || verificaDisciplina disciplinasRestantes disciplina
-

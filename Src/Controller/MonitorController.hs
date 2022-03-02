@@ -3,7 +3,7 @@ module Src.Controller.MonitorController where
     import Src.Util.TxtFunctions
     import Src.Model.Ticket as T
     import Src.Controller.ChatController
-    
+
     getMonitor:: Int -> IO Monitor
     getMonitor id = do
         monitorToString <- getObjetoById "Monitores" id
@@ -22,10 +22,10 @@ module Src.Controller.MonitorController where
             adicionaLinha "Monitores" $ show monitor
             putStrLn "Monitor cadastrado com sucesso!\n"
 
-    insereMatricula :: IO(Int)
+    insereMatricula :: IO Int
     insereMatricula = do
         putStrLn "\nInsira a matricula do monitor"
-        id <- readLn 
+        id <- readLn
         alunoCadastrado <- checaExistenciaById "Alunos" id
         if alunoCadastrado || id == 0
             then return id
@@ -33,11 +33,11 @@ module Src.Controller.MonitorController where
             putStrLn "\nAluno não cadastrado!\n(Digite 0 para voltar ao menu principal)\n"
             insereMatricula
 
-    insereDisciplina :: Int -> IO(String)
+    insereDisciplina :: Int -> IO String
     insereDisciplina id = do
         if id == 0
             then return "VOLTAR"
-        else do            
+        else do
             putStrLn "Insira a disciplina do monitor"
             disciplina <- getLine
             disciplinaCadastrada <- checaExistenciaByAtributo  "Disciplinas" "sigla" (adicionaAspas disciplina)
@@ -51,7 +51,7 @@ module Src.Controller.MonitorController where
     removeMonitor disciplinasDoProfessor = do
         id <- insereMatricula
         monitor <- getMonitor id
-        if (M.disciplina monitor) `elem` disciplinasDoProfessor then do
+        if M.disciplina monitor `elem` disciplinasDoProfessor then do
             removeLinha "Monitores" (show id)
             putStrLn "Monitor removido com sucesso!\n"
             else do
