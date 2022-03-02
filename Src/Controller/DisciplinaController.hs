@@ -5,7 +5,7 @@ module Src.Controller.DisciplinaController where
     
     getDisciplina:: Int -> IO(Disciplina)
     getDisciplina id = do
-        disciplinaToString <- buscaObjetoById "Disciplinas" id
+        disciplinaToString <- getObjetoById "Disciplinas" id
         return (read disciplinaToString :: Disciplina)
 
     exibeDisciplinasDisponiveis:: Aluno -> IO()

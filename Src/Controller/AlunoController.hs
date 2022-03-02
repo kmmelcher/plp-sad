@@ -7,7 +7,7 @@ module Src.Controller.AlunoController where
     
     getAluno:: Int -> IO(Aluno)
     getAluno id = do
-        alunoToString <- buscaObjetoById "Alunos" id
+        alunoToString <- getObjetoById "Alunos" id
         return (read alunoToString :: Aluno)
 
     adicionaAluno :: IO()

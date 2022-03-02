@@ -10,12 +10,12 @@ module Src.Controller.ChatController where
     
     getTicket:: Int -> IO(T.Ticket)
     getTicket id = do
-        ticketToString <- buscaObjetoById "Tickets" id
+        ticketToString <- getObjetoById "Tickets" id
         return (read ticketToString :: T.Ticket)
 
     getMensagem:: Int -> IO(Mensagem)
     getMensagem id = do
-        mensagemToString <- buscaObjetoById "Mensagens" id
+        mensagemToString <- getObjetoById "Mensagens" id
         return (read mensagemToString :: Mensagem)
 
     adicionaTicket :: Aluno -> IO()
@@ -223,7 +223,7 @@ module Src.Controller.ChatController where
     mostraTickets :: [Int] -> IO()
     mostraTickets [] = return ()
     mostraTickets (head:tail) = do
-        ticketStr <- buscaObjetoById "Tickets" head
+        ticketStr <- getObjetoById "Tickets" head
         let ticket = read ticketStr :: T.Ticket
         putStrLn $ show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")"
         mostraTickets tail

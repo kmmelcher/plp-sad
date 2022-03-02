@@ -6,7 +6,7 @@ module Src.Controller.MonitorController where
     
     getMonitor:: Int -> IO Monitor
     getMonitor id = do
-        monitorToString <- buscaObjetoById "Monitores" id
+        monitorToString <- getObjetoById "Monitores" id
         return (read monitorToString :: Monitor)
 
     adicionaMonitor :: IO()
