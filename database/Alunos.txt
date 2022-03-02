@@ -1,7 +1,10 @@
 Aluno {id = 120110123, nome = "Kilian Melcher", disciplinas = ["OAC", "LOAC", "PLP", "Psoft"]}
 Aluno {id = 120110456, nome = "Pedro Adrian", disciplinas = ["SO", "Redes", "PLP", "Psoft", "BD"]}
-Aluno {id = 120110789, nome = "Álef Carlos", disciplinas = ["EDA", "LEDA", "IP", "PLP"]}
+Aluno {id = 120110789, nome = "Alef Carlos", disciplinas = ["EDA", "LEDA", "IP", "PLP"]}
 Aluno {id = 120110338, nome = "Vinícius Azevedo", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
 Aluno {id = 120110258, nome = "Filipe Ramalho", disciplinas = ["PLP", "BD", "AS", "Redes", "SO"]}
 Aluno {id = 120110369, nome = "Luiggy Ferreira", disciplinas = ["OAC", "LOAC", "PLP", "Psoft"]}
 Aluno {id = 120111211, nome = "Robervaldo", disciplinas = ["BD","AS"]}
+Aluno {id = 119111321, nome = "Antonio Carlos", disciplinas = ["SO","AS","Psoft","IP"]}
+Aluno {id = 119231444, nome = "Manuel Silva", disciplinas = ["SO","AS","Redes","IP"]}
+Aluno {id = 119232555, nome = "Paulo Costa", disciplinas = ["LOAC","AS","Redes","IP"]}

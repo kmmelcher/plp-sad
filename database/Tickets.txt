@@ -1,2 +1,5 @@
 Ticket {id = 1, titulo = "lendo lista da entrada", mensagens = [1, 2, 3, 4], status = "Resolvido", autor = 120110123, disciplina = "PLP"}
-Ticket {id = 2, titulo = "Como converter tipo IO?", mensagens = [6,5], status = "Em Andamento", autor = 120110123, disciplina = "PLP"}
+Ticket {id = 2, titulo = "Como converter tipo IO?", mensagens = [6,5], status = "Resolvido", autor = 120110123, disciplina = "PLP"}
+Ticket {id = 3, titulo = "Qual a diferenca de mux e demux?", mensagens = [7,8,9], status = "Resolvido", autor = 120110338, disciplina = "OAC"}
+Ticket {id = 4, titulo = "duvida sobre relacionamentos no diagrama uml", mensagens = [10,11,12,13], status = "Em Andamento", autor = 120110456, disciplina = "Psoft"}
+Ticket {id = 5, titulo = "nao estou conseguindo entrar no sistema", mensagens = [14], status = "Em Andamento", autor = 120110258, disciplina = "BD"}
