@@ -171,4 +171,4 @@ module Src.Menu where
             menuPrincipal
         | otherwise  = do
             putStrLn "Opção inválida!\n"
-            exibeMenuMonitor (M.id monitor)
+            exibeMenuAluno (A.id aluno)
