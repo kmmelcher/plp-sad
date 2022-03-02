@@ -22,6 +22,7 @@ module Src.Controller.AlunoController where
         adicionaLinha "Alunos" $ show aluno
         putStrLn "Aluno cadastrado com sucesso.\n"
 
+    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
     excluirTicket :: Int -> IO()
     excluirTicket matAluno = do
         ticketsIds <- pegaTicketsDoAluno matAluno
@@ -31,7 +32,8 @@ module Src.Controller.AlunoController where
         if verificaTicket ticketsIds (read sel)
             then removeLinha "Tickets" sel
             else print "Ticket invalido"
-
+    
+    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
     mostraTickets :: [Int] -> IO()
     mostraTickets [] = return ()
     mostraTickets (head:tail) = do
@@ -40,6 +42,7 @@ module Src.Controller.AlunoController where
         putStrLn $ show (T.id ticket) ++ ") " ++ titulo ticket ++ " (" ++ status ticket ++ ")"
         mostraTickets tail
 
+    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
     verificaTicket :: [Int] -> Int -> Bool
     verificaTicket [] x = False
     verificaTicket (head:tail) x = do
@@ -47,16 +50,16 @@ module Src.Controller.AlunoController where
 
     matriculaAlunoEmDisciplina :: Aluno -> IO()
     matriculaAlunoEmDisciplina aluno = do
-        putStrLn "Você já está matriculado nas seguintes disciplinas: "
-        putStrLn(show (disciplinas aluno))
-        putStrLn "Atualmente, estas são todas as disciplinas disponíveis para matrícula, exibidas em id, nome e sigla:\n\n"
-        exibeDisciplinas aluno
+        putStrLn "Você está matriculado nas seguintes disciplinas:"
+        putStrLn (show (disciplinas aluno))
+        putStrLn "Estas são todas as disciplinas disponíveis para matrícula:\n"
+        exibeDisciplinasDisponiveis aluno
         putStrLn "\nInforme a sigla da disciplina na qual deseja se matricular:"
         sigla <- getLine
-        siglasCadastradas <- retornarTodasSiglas
+        siglasCadastradas <- getSiglas
         if sigla `elem` siglasCadastradas then
             if sigla `elem` (disciplinas aluno) then do 
-                putStrLn ("Você já está matriculado em " ++ sigla ++ " , tente novamente\n\n")
+                putStrLn ("Você já está matriculado em " ++ sigla ++ ", tente novamente\n\n")
                 matriculaAlunoEmDisciplina aluno 
             else do 
                 let alunoAtualizado = Aluno (A.id aluno) (nome aluno) ([sigla] ++ disciplinas aluno)
@@ -68,7 +71,7 @@ module Src.Controller.AlunoController where
     
     desmatriculaAlunoDeDisciplina :: Aluno -> IO()
     desmatriculaAlunoDeDisciplina aluno = do 
-        putStrLn "\nAtualmente, o aluno está matriculado nas seguintes disciplinas: \n"
+        putStrLn "\nVocê está matriculado nas seguintes disciplinas:\n"
         putStrLn (show(disciplinas aluno))
         putStrLn "Informe a sigla da disciplina na qual deseja se desmatricular: "
         sigla <- getLine 
@@ -78,9 +81,10 @@ module Src.Controller.AlunoController where
             atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
             putStrLn "Cancelamento de matricula realizada com sucesso!\n"
         else do 
-            putStrLn ("Você não está matriculado na disciplina " ++ sigla ++ " . Tente novamente\n\n")
+            putStrLn ("Insira um valor válido!\n\n")
             desmatriculaAlunoDeDisciplina aluno
     
+    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
     resolveTicket :: Aluno -> IO()
     resolveTicket aluno = do
         ticketsAluno <- pegaTicketsDoAluno (A.id aluno)
@@ -97,6 +101,7 @@ module Src.Controller.AlunoController where
             putStrLn "Insira um id válido!"
             resolveTicket aluno
 
+    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
     adicionaMensagemAluno :: Aluno -> IO()
     adicionaMensagemAluno aluno = do
         putStrLn "Foram identificados os seguintes tickets desse autor: "

@@ -66,3 +66,7 @@ module Src.Controller.MonitorController where
             putStrLn "\nTickets em andamento da sua disciplina:"
             exibeTickets tickets
             adicionaMensagem (M.id monitor)
+        -- FALTA CHECAR SE O INPUT PARA ESCOLHER ID PARA RESPOTA É:
+        -- 1: VÁLIDO
+        -- 2: DA DISCIPLINA DO MONITOR
+        -- 3: REFERENTE A UM TICKET "EM ANDAMENTO"

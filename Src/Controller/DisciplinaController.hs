@@ -8,28 +8,28 @@ module Src.Controller.DisciplinaController where
         disciplinaToString <- buscaObjetoById "Disciplinas" id
         return (read disciplinaToString :: Disciplina)
 
-    exibeDisciplinas:: Aluno -> IO()
-    exibeDisciplinas aluno = do
+    exibeDisciplinasDisponiveis:: Aluno -> IO()
+    exibeDisciplinasDisponiveis aluno = do
         disciplinas <- fileToStringArray "Disciplinas"
-        exibeDisciplinasRecursivo disciplinas aluno
+        exibeDisciplinasDisponiveisRecursivo disciplinas aluno
     
-    exibeDisciplinasRecursivo :: [String] -> Aluno  -> IO()
-    exibeDisciplinasRecursivo [] _ = return ()
-    exibeDisciplinasRecursivo (disciplinaAtual:disciplinasRestantes) aluno = do
+    exibeDisciplinasDisponiveisRecursivo :: [String] -> Aluno  -> IO()
+    exibeDisciplinasDisponiveisRecursivo [] _ = return ()
+    exibeDisciplinasDisponiveisRecursivo (disciplinaAtual:disciplinasRestantes) aluno = do
         let disciplina = (read disciplinaAtual :: Disciplina)
         if (show (D.sigla disciplina)) `elem` (disciplinas aluno)
-            then exibeDisciplinasRecursivo disciplinasRestantes aluno else do
+            then exibeDisciplinasDisponiveisRecursivo disciplinasRestantes aluno else do
             putStrLn (show (D.id disciplina) ++ ") " ++ show (D.nome disciplina) ++ " - " ++ show (sigla disciplina))
-            exibeDisciplinasRecursivo disciplinasRestantes aluno
+            exibeDisciplinasDisponiveisRecursivo disciplinasRestantes aluno
     
-    retornarTodasSiglas :: IO([String])
-    retornarTodasSiglas = do 
+    getSiglas :: IO([String])
+    getSiglas = do 
         disciplinas <- fileToStringArray "Disciplinas"
-        retornarTodasSiglasRecursivo disciplinas []
+        getSiglasRecursivo disciplinas []
     
-    retornarTodasSiglasRecursivo :: [String] -> [String] -> IO([String])
-    retornarTodasSiglasRecursivo [] ret = return ret
-    retornarTodasSiglasRecursivo (disciplinaAtual:disciplinasRestantes) ret = do 
+    getSiglasRecursivo :: [String] -> [String] -> IO([String])
+    getSiglasRecursivo [] ret = return ret
+    getSiglasRecursivo (disciplinaAtual:disciplinasRestantes) ret = do 
         let disciplina = (read disciplinaAtual :: Disciplina)
-        retornarTodasSiglasRecursivo disciplinasRestantes ((D.sigla disciplina) : ret)
+        getSiglasRecursivo disciplinasRestantes ((D.sigla disciplina) : ret)
         

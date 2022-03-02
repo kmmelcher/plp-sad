@@ -27,10 +27,7 @@ module Src.Controller.ChatController where
             id <- buscaNovoId "Tickets"
             let ticket = T.Ticket (read id) (titulo) [] "Em Andamento" (A.id aluno) disciplinaTicket
             adicionaLinha "Tickets" $ show ticket
-            putStrLn "Deseja adicionar mais um ticket? (s/n)"
-            resposta <- getLine
-            Control.Monad.when (resposta == "s") $ do
-                    adicionaTicket aluno
+            putStrLn "Ticket adicionado com sucesso!"
         else do 
             putStrLn ("Você não está matriculado na disciplina " ++ disciplinaTicket) 
     
@@ -45,6 +42,7 @@ module Src.Controller.ChatController where
         let mensagem = Mensagem (read idMensagem) id conteudo tempo
         inserirMensagemNoTicket idTicket (read idMensagem)
         adicionaLinha "Mensagens" $ show mensagem
+        putStrLn "Mensagem adicionada com sucesso."
     
     pegaTicketsDoAluno :: Int -> IO[Int]
     pegaTicketsDoAluno matricula = do

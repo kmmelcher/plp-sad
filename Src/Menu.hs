@@ -44,7 +44,7 @@ module Src.Menu where
 
     menuLogin :: IO()
     menuLogin = do
-        putStrLn "Por favor, insira sua matrícula (ou seu id, caso seja professor). Para voltar ao menu principal, digite VOLTAR:"
+        putStrLn "Insira sua matrícula (ou seu id, caso seja professor). Para voltar ao menu principal, digite VOLTAR:"
 
         input <- getLine
         putStr "\n"
@@ -113,7 +113,7 @@ module Src.Menu where
         putStrLn "\n== SAD: MENU MONITOR =="
         putStrLn ("ID: " ++ show (M.id monitor) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplina: " ++ M.disciplina monitor)
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Exibir todos os tickets\n2) Responder tickets em progresso\n3) Deslogar"
+        putStrLn "1) Exibir todos os tickets\n2) Responder tickets em andamento\n3) Deslogar"
         opcao <- getLine 
         decideMenuMonitor monitor opcao
 
@@ -138,7 +138,7 @@ module Src.Menu where
         putStrLn "\n== SAD: MENU ALUNO =="
         putStrLn ("ID: " ++ show (A.id aluno) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplinas: " ++ show (A.disciplinas aluno))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido\n7)Deslogar"
+        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido\n7) Deslogar"
         opcao <- getLine 
         decideMenuAluno aluno opcao
     
