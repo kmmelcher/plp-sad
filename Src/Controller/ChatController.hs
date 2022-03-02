@@ -42,7 +42,7 @@ module Src.Controller.ChatController where
             idMensagem <- buscaNovoId "Mensagens"
             tempo <- getCurrentTime >>= return.formatTime defaultTimeLocale "%D %Hh%M"
             let mensagem = Mensagem (read idMensagem) id conteudo tempo
-            inserirMensagemNoTicket idTicket (read idMensagem)
+            insereMensagemNoTicket idTicket (read idMensagem)
             adicionaLinha "Mensagens" $ show mensagem
             putStrLn "Mensagem adicionada com sucesso."
         else do
@@ -67,22 +67,27 @@ module Src.Controller.ChatController where
             return (T.id ticket : proximos)
             else return proximos
 
-    retornaIdTicket :: String -> Int
-    retornaIdTicket t = do
-        let ticket = read t :: T.Ticket
-        T.id ticket
-
     {- 
     Insere uma mensagem em um Ticket.
     Parametros
         idTicket : ticket no qual voce quer inserir a mensagem.
         idMensagem: Mensagem a ser inserida no Ticket.
     -}
-    inserirMensagemNoTicket :: Int -> Int -> IO()
-    inserirMensagemNoTicket idTicket idMensagem = do
+    insereMensagemNoTicket :: Int -> Int -> IO()
+    insereMensagemNoTicket idTicket idMensagem = do
         ticket <- getTicket idTicket
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (idMensagem: T.mensagens ticket) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
+
+    {-
+    Exibe todos os tickets de uma disciplina.
+    Parâmetros:
+        nomeDisciplina: Nome da disciplina a ser exibida.
+    -}
+    exibeTicketsDisciplina :: String -> IO()
+    exibeTicketsDisciplina nomeDisciplina = do
+        tickets <- getTicketsDisciplina nomeDisciplina
+        exibeTickets tickets "nesta disciplina" ("da disciplina: " ++ nomeDisciplina)
 
     {- 
     Retorna todos os tickets de uma disciplina
@@ -92,18 +97,22 @@ module Src.Controller.ChatController where
     getTicketsDisciplina :: String -> IO[Int]
     getTicketsDisciplina disciplina = do
         tickets <- fileToStringArray "Tickets"
-        return(comparaDisciplinaDeTodosTickets tickets disciplina)
-
-    comparaDisciplinaDeUmTicket :: String -> String -> Bool
-    comparaDisciplinaDeUmTicket str disciplina = do
-        let ticket = read str :: T.Ticket
-        T.disciplina ticket == disciplina
-
-    comparaDisciplinaDeTodosTickets :: [String] -> String -> [Int]
-    comparaDisciplinaDeTodosTickets [] disciplina = []
-    comparaDisciplinaDeTodosTickets (x:xs) disciplina = if comparaDisciplinaDeUmTicket x disciplina
-        then retornaIdTicket x : comparaDisciplinaDeTodosTickets xs disciplina
-        else comparaDisciplinaDeTodosTickets xs disciplina
+        getTicketsDisciplinaRecursivo tickets disciplina
+    
+    getTicketsDisciplinaRecursivo :: [String] -> String -> IO[Int]
+    getTicketsDisciplinaRecursivo [] _ = return ([])
+    getTicketsDisciplinaRecursivo (ticketAtual:ticketsRestantes) disciplina = do
+        ticket <- getTicket (read ticketAtual)
+        if (T.disciplina ticket) == disciplina
+            then do
+                proximos <- getTicketsDisciplinaRecursivo ticketsRestantes disciplina
+                return ([T.id ticket] ++ proximos)
+            else getTicketsDisciplinaRecursivo ticketsRestantes disciplina
+    
+    exibeTicketsEmAndamento :: [Int] -> IO()
+    exibeTicketsEmAndamento tickets = do
+        ticketsEmAndamento <- getTicketsEmAndamento tickets
+        exibeTickets ticketsEmAndamento "em andamento" "em andamento da sua disciplina:"
 
     getTicketsEmAndamento :: [Int] -> IO[Int]
     getTicketsEmAndamento tickets = do
@@ -118,26 +127,6 @@ module Src.Controller.ChatController where
             return (T.id ticket : proximosTickets)
             else
                 getTicketsEmAndamentoRecursivo ticketsRestantes
-
-    {-
-    Exibe tickets em andamento de uma disciplina.
-    Parâmetros:
-        disciplina: Nome da disciplina a ser exibida.
-    -}
-    exibeTicketsEmAndamento :: [Int] -> IO()
-    exibeTicketsEmAndamento tickets = do
-        ticketsEmAndamento <- getTicketsEmAndamento tickets
-        exibeTickets ticketsEmAndamento "em andamento" "em andamento da sua disciplina:"
-
-    {-
-    Exibe todos os tickets de uma disciplina.
-    Parâmetros:
-        nomeDisciplina: Nome da disciplina a ser exibida.
-    -}
-    exibeTicketsDisciplina :: String -> IO()
-    exibeTicketsDisciplina nomeDisciplina = do
-        tickets <- getTicketsDisciplina nomeDisciplina
-        exibeTickets tickets "nesta disciplina" ("da disciplina: " ++ nomeDisciplina)
 
     {-
     Exibe uma lista de tickets.
@@ -168,8 +157,8 @@ module Src.Controller.ChatController where
         ticket <- getTicket id
         return (T.status ticket == "Em Andamento")
 
-    marcaTicketComoConcluido :: Int -> IO()
-    marcaTicketComoConcluido id = do
+    atualizaTicketStatus :: Int -> IO()
+    atualizaTicketStatus id = do
         ticket <- getTicket id
         let novoTicket = T.Ticket (T.id ticket) (T.titulo ticket) (T.mensagens ticket) "Resolvido" (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show id) (show novoTicket)
@@ -184,7 +173,7 @@ module Src.Controller.ChatController where
         let id = read input :: Int
         idValido <- checaIdDeTicketEmAndamento id
         if idValido then do
-            marcaTicketComoConcluido id
+            atualizaTicketStatus id
             putStrLn "Ticket alterado com sucesso.\n"
              else do
             putStrLn "Insira um id válido!"
@@ -212,20 +201,12 @@ module Src.Controller.ChatController where
     excluirTicket :: Int -> IO()
     excluirTicket matAluno = do
         ticketsIds <- getTicketsAluno matAluno
-        mostraTickets ticketsIds
+        exibeTickets ticketsIds "para exclusão" "existentes"
         putStrLn "Escolha entre os seus Tickets qual será excluido: "
         sel <- getLine
         if verificaTicket ticketsIds (read sel)
             then removeLinha "Tickets" sel
             else print "Ticket invalido"
-
-    mostraTickets :: [Int] -> IO()
-    mostraTickets [] = return ()
-    mostraTickets (head:tail) = do
-        ticketStr <- getObjetoById "Tickets" head
-        let ticket = read ticketStr :: T.Ticket
-        putStrLn $ show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")"
-        mostraTickets tail
 
     verificaTicket :: [Int] -> Int -> Bool
     verificaTicket [] x = False
