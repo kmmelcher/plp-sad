@@ -22,7 +22,7 @@ module Src.Controller.AlunoController where
         adicionaLinha "Alunos" $ show aluno
         putStrLn "Aluno cadastrado com sucesso.\n"
 
-    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
+    -- DEVE SER MOVIDO PARA OUTRO CONTROLADOR
     excluirTicket :: Int -> IO()
     excluirTicket matAluno = do
         ticketsIds <- pegaTicketsDoAluno matAluno
@@ -33,7 +33,7 @@ module Src.Controller.AlunoController where
             then removeLinha "Tickets" sel
             else print "Ticket invalido"
     
-    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
+    -- DEVE SER MOVIDO PARA OUTRO CONTROLADOR
     mostraTickets :: [Int] -> IO()
     mostraTickets [] = return ()
     mostraTickets (head:tail) = do
@@ -42,7 +42,7 @@ module Src.Controller.AlunoController where
         putStrLn $ show (T.id ticket) ++ ") " ++ titulo ticket ++ " (" ++ status ticket ++ ")"
         mostraTickets tail
 
-    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
+    -- DEVE SER MOVIDO PARA OUTRO CONTROLADOR
     verificaTicket :: [Int] -> Int -> Bool
     verificaTicket [] x = False
     verificaTicket (head:tail) x = do
@@ -84,7 +84,7 @@ module Src.Controller.AlunoController where
             putStrLn ("Insira um valor válido!\n\n")
             desmatriculaAlunoDeDisciplina aluno
     
-    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
+    -- DEVE SER MOVIDO PARA OUTRO CONTROLADOR
     resolveTicket :: Aluno -> IO()
     resolveTicket aluno = do
         ticketsAluno <- pegaTicketsDoAluno (A.id aluno)
@@ -101,7 +101,7 @@ module Src.Controller.AlunoController where
             putStrLn "Insira um id válido!"
             resolveTicket aluno
 
-    -- DEVE SER MOVIDO PARA OTRO CONTROLADOR
+    -- DEVE SER MOVIDO PARA OUTRO CONTROLADOR
     adicionaMensagemAluno :: Aluno -> IO()
     adicionaMensagemAluno aluno = do
         putStrLn "Foram identificados os seguintes tickets desse autor: "
