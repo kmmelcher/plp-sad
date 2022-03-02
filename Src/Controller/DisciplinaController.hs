@@ -16,4 +16,15 @@ module Src.Controller.DisciplinaController where
             then exibeDisciplinasRecursivo disciplinasRestantes aluno else do
             putStrLn (show (D.id disciplina) ++ ") " ++ show (D.nome disciplina) ++ " - " ++ show (sigla disciplina))
             exibeDisciplinasRecursivo disciplinasRestantes aluno
+    
+    retornarTodasSiglas :: IO([String])
+    retornarTodasSiglas = do 
+        disciplinas <- fileToStringArray "Disciplinas"
+        retornarTodasSiglasRecursivo disciplinas []
+    
+    retornarTodasSiglasRecursivo :: [String] -> [String] -> IO([String])
+    retornarTodasSiglasRecursivo [] ret = return ret
+    retornarTodasSiglasRecursivo (disciplinaAtual:disciplinasRestantes) ret = do 
+        let disciplina = (read disciplinaAtual :: Disciplina)
+        retornarTodasSiglasRecursivo disciplinasRestantes ((D.sigla disciplina) : ret)
         
