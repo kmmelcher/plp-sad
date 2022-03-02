@@ -5,6 +5,10 @@ module Src.Controller.AlunoController where
     import Src.Model.Ticket as T
     import Src.Controller.DisciplinaController as DC
     
+    getAluno:: Int -> IO(Aluno)
+    getAluno id = do
+        alunoToString <- buscaObjetoById "Alunos" id
+        return (read alunoToString :: Aluno)
 
     adicionaAluno :: IO()
     adicionaAluno = do
@@ -81,7 +85,7 @@ module Src.Controller.AlunoController where
     resolveTicket aluno = do
         ticketsAluno <- pegaTicketsDoAluno (A.id aluno)
         putStrLn "Estes são os seus tickets com status \"Em andamento\"\n"
-        exibeTicketsEmAndamento ticketsAluno
+        exibeTickets ticketsAluno
         putStrLn "\ninsira o id do ticket que deseja marcar como concluído"
         input <- getLine
         let id = read input :: Int

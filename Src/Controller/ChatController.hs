@@ -7,6 +7,16 @@ module Src.Controller.ChatController where
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
 
+    getTicket:: Int -> IO(T.Ticket)
+    getTicket id = do
+        ticketToString <- buscaObjetoById "Tickets" id
+        return (read ticketToString :: T.Ticket)
+
+    getMensagem:: Int -> IO(Mensagem)
+    getMensagem id = do
+        mensagemToString <- buscaObjetoById "Mensagens" id
+        return (read mensagemToString :: Mensagem)
+
     adicionaTicket :: Aluno -> IO()
     adicionaTicket aluno = do
         putStrLn "Insira o nome da disciplina que você tem dúvida:"
@@ -65,8 +75,7 @@ module Src.Controller.ChatController where
     -}
     inserirMensagemNoTicket :: Int -> Int -> IO()
     inserirMensagemNoTicket idTicket idMensagem = do 
-        ticketStr <- buscaObjetoById "Tickets" idTicket
-        let ticket = read ticketStr :: T.Ticket
+        ticket <- getTicket idTicket
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (idMensagem: T.mensagens ticket) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
@@ -115,8 +124,7 @@ module Src.Controller.ChatController where
         putStr "\n"
         return ()
     exibeTicketsDisciplinaRecursivo (idTicketAtual:idsTicketsRestantes) = do
-        instanciaTicket <- buscaObjetoById "Tickets" idTicketAtual
-        let ticket = read instanciaTicket :: T.Ticket
+        ticket <- getTicket idTicketAtual
         putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")")
         exibeTicketsDisciplinaRecursivo idsTicketsRestantes
 
@@ -125,8 +133,7 @@ module Src.Controller.ChatController where
         putStr "\n"
         return ()
     exibeTickets (ticketAtual:ticketsRestantes) = do
-        instanciaTicket <- buscaObjetoById "Tickets" ticketAtual
-        let ticket = read instanciaTicket :: T.Ticket
+        ticket <- getTicket ticketAtual
         if T.status ticket == "Em Andamento" then do 
             putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " - " ++ T.disciplina ticket)
             exibeTickets ticketsRestantes
@@ -134,14 +141,12 @@ module Src.Controller.ChatController where
     
     checaIdDeTicketEmAndamento :: Int -> IO(Bool)
     checaIdDeTicketEmAndamento id = do
-        instanciaTicket <- buscaObjetoById "Tickets" id
-        let ticket = read instanciaTicket :: T.Ticket
+        ticket <- getTicket id
         return (T.status ticket == "Em Andamento")
     
     marcaTicketComoConcluido :: Int -> IO()
     marcaTicketComoConcluido id = do
-        instanciaTicket <- buscaObjetoById "Tickets" id
-        let ticket = read instanciaTicket :: T.Ticket
+        ticket <- getTicket id
         let novoTicket = T.Ticket (T.id ticket) (T.titulo ticket) (T.mensagens ticket) "Resolvido" (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show id) (show novoTicket)
     
@@ -153,8 +158,7 @@ module Src.Controller.ChatController where
     getTicketsEmAndamentoRecursivo :: [Int] -> IO([Int])
     getTicketsEmAndamentoRecursivo [] = return ([])
     getTicketsEmAndamentoRecursivo (ticketAtual:ticketsRestantes) = do
-        ticketToString <- buscaObjetoById "Tickets" ticketAtual
-        let ticket = read ticketToString :: T.Ticket
+        ticket <- getTicket ticketAtual
         if (T.status ticket == "Em Andamento") then do
             proximosTickets <- getTicketsEmAndamentoRecursivo ticketsRestantes
             return ([T.id ticket] ++ proximosTickets)

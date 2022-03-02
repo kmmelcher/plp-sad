@@ -68,8 +68,7 @@ module Src.Menu where
 
     decideMenuAlunoMonitor :: Int -> IO()
     decideMenuAlunoMonitor idPerfil = do
-        instanciaMonitor <- buscaObjetoById "Monitores" idPerfil
-        let monitor = read instanciaMonitor :: Monitor
+        monitor <- getMonitor idPerfil
         putStrLn ("Foi identificado que você é monitor da disciplina: " ++ disciplina monitor)
         putStrLn ("Como deseja entrar no sistema?\n\n1) Entrar como Aluno\n2) Entrar como Monitor de " ++ disciplina monitor)
         escolha <- getLine
@@ -81,8 +80,7 @@ module Src.Menu where
 
     exibeMenuProfessor :: Int -> IO()
     exibeMenuProfessor idProfessor = do
-        instanciaProfessor <- buscaObjetoById "Professores" idProfessor
-        let professor = read instanciaProfessor :: Professor
+        professor <- getProfessor idProfessor
         putStrLn "\n== SAD: MENU PROFESSOR =="
         putStrLn ("ID: " ++ show (P.id professor) ++ " | " ++ "Nome: " ++ P.nome professor ++ " | " ++ "Disciplinas: " ++ show (P.disciplinas professor))
         putStrLn "Digite o número da ação que deseja executar!\n"
@@ -109,11 +107,9 @@ module Src.Menu where
             exibeMenuProfessor (P.id professor)
 
     exibeMenuMonitor :: Int -> IO()
-    exibeMenuMonitor idMonitor = do
-        instanciaMonitor <- buscaObjetoById "Monitores" idMonitor
-        instanciaMonitorAluno <- buscaObjetoById "Alunos" idMonitor
-        let monitor = read instanciaMonitor :: Monitor
-        let aluno = read instanciaMonitorAluno :: Aluno
+    exibeMenuMonitor id = do
+        monitor <- getMonitor id
+        aluno <- getAluno id
         putStrLn "\n== SAD: MENU MONITOR =="
         putStrLn ("ID: " ++ show (M.id monitor) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplina: " ++ M.disciplina monitor)
         putStrLn "Digite o número da ação que deseja executar!\n"
@@ -138,8 +134,7 @@ module Src.Menu where
 
     exibeMenuAluno :: Int -> IO()
     exibeMenuAluno idAluno = do
-        instanciaAluno <- buscaObjetoById "Alunos" idAluno
-        let aluno = read instanciaAluno :: Aluno
+        aluno <- getAluno idAluno
         putStrLn "\n== SAD: MENU ALUNO =="
         putStrLn ("ID: " ++ show (A.id aluno) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplinas: " ++ show (A.disciplinas aluno))
         putStrLn "Digite o número da ação que deseja executar!\n"

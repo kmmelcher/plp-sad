@@ -5,6 +5,11 @@ module Src.Controller.ProfessorController where
     import Src.Model.Ticket
     import Src.Controller.AlunoController
 
+    getProfessor:: Int -> IO(Professor)
+    getProfessor id = do
+        professorToString <- buscaObjetoById "Professores" id
+        return (read professorToString :: Professor)
+
     adicionaProfessor :: IO()
     adicionaProfessor = do
             putStrLn "Insira o nome do professor: "

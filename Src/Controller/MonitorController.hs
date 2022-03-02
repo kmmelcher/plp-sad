@@ -4,6 +4,11 @@ module Src.Controller.MonitorController where
     import Src.Model.Ticket as T
     import Src.Controller.ChatController
     
+    getMonitor:: Int -> IO(Monitor)
+    getMonitor id = do
+        monitorToString <- buscaObjetoById "Monitores" id
+        return (read monitorToString :: Monitor)
+
     adicionaMonitor :: IO()
     adicionaMonitor = do
         id <- insereMatricula
@@ -45,8 +50,7 @@ module Src.Controller.MonitorController where
     removeMonitor :: [String] -> IO()
     removeMonitor disciplinasDoProfessor = do
         id <- insereMatricula
-        monitorToString <- buscaObjetoById "Monitores" id
-        let monitor = read monitorToString :: Monitor
+        monitor <- getMonitor id
 
         if (M.disciplina monitor) `elem` disciplinasDoProfessor then do
             removeLinha "Monitores" (show id)

@@ -3,6 +3,11 @@ module Src.Controller.DisciplinaController where
     import Src.Util.TxtFunctions
     import Src.Model.Aluno as A
     
+    getDisciplina:: Int -> IO(Disciplina)
+    getDisciplina id = do
+        disciplinaToString <- buscaObjetoById "Disciplinas" id
+        return (read disciplinaToString :: Disciplina)
+
     exibeDisciplinas:: Aluno -> IO()
     exibeDisciplinas aluno = do
         disciplinas <- fileToStringArray "Disciplinas"
