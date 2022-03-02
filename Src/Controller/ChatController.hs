@@ -119,6 +119,21 @@ module Src.Controller.ChatController where
             else
                 getTicketsEmAndamentoRecursivo ticketsRestantes
 
+    
+    getTicketsConcluidos :: [Int] -> IO[Int]
+    getTicketsConcluidos tickets = do
+        getTicketsConcluidosRecursivo tickets
+
+    getTicketsConcluidosRecursivo :: [Int] -> IO [Int]
+    getTicketsConcluidosRecursivo [] = return []
+    getTicketsConcluidosRecursivo (ticketAtual:ticketsRestantes) = do
+        ticket <- getTicket ticketAtual
+        if T.status ticket == "Resolvido" then do
+            proximosTickets <- getTicketsConcluidosRecursivo ticketsRestantes
+            return (T.id ticket : proximosTickets)
+            else
+                getTicketsConcluidosRecursivo ticketsRestantes
+
     {-
     Exibe tickets em andamento de uma disciplina.
     Parâmetros:
@@ -128,6 +143,16 @@ module Src.Controller.ChatController where
     exibeTicketsEmAndamento tickets = do
         ticketsEmAndamento <- getTicketsEmAndamento tickets
         exibeTickets ticketsEmAndamento "em andamento" "em andamento da sua disciplina:"
+
+    {-
+    Exibe tickets concluidos de uma disciplina.
+    Parâmetros:
+        disciplina: Nome da disciplina a ser exibida.
+    -}
+    exibeTicketsConcluidos :: [Int] -> IO()
+    exibeTicketsConcluidos tickets = do
+        ticketsConcluidos <- getTicketsConcluidos tickets
+        exibeTickets ticketsConcluidos "Concluidos" "Concluidos nesta disciplina"
 
     {-
     Exibe todos os tickets de uma disciplina.
