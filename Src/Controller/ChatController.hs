@@ -6,7 +6,7 @@ module Src.Controller.ChatController where
     import Src.Util.TxtFunctions
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
-
+    
     getTicket:: Int -> IO(T.Ticket)
     getTicket id = do
         ticketToString <- buscaObjetoById "Tickets" id
@@ -44,21 +44,20 @@ module Src.Controller.ChatController where
         adicionaLinha "Mensagens" $ show mensagem
         putStrLn "Mensagem adicionada com sucesso."
     
-    pegaTicketsDoAluno :: Int -> IO[Int]
-    pegaTicketsDoAluno matricula = do
+    -- Não poderia retornar um array de tickets?
+    getTicketsAluno :: Int -> IO[Int]
+    getTicketsAluno matricula = do
         tickets <- fileToStringArray "Tickets"
-        return(comparaAutorDeTodosTickets tickets matricula) 
-        
-    comparaAutorDeUmTicket :: String -> Int -> Bool
-    comparaAutorDeUmTicket str i = do 
-        let ticket = read(str) :: T.Ticket
-        if T.autor(ticket) == i then True else False
+        getTicketsAlunoRecursivo tickets matricula
     
-    comparaAutorDeTodosTickets :: [String] -> Int -> [Int]
-    comparaAutorDeTodosTickets [] i = []
-    comparaAutorDeTodosTickets (x:xs) i = if ( comparaAutorDeUmTicket x i ) 
-        then retornaIdTicket x : (comparaAutorDeTodosTickets xs i) 
-        else [] ++ (comparaAutorDeTodosTickets xs i)
+    getTicketsAlunoRecursivo :: [String] -> Int -> IO([Int])
+    getTicketsAlunoRecursivo [] _ = return ([])
+    getTicketsAlunoRecursivo (ticketAtual:ticketsRestantes) matricula = do
+        let ticket = (read ticketAtual :: T.Ticket)
+        proximos <- getTicketsAlunoRecursivo ticketsRestantes matricula
+        if (T.autor ticket) == matricula then do
+            return ([T.id ticket] ++ proximos)
+            else return proximos
 
     retornaIdTicket :: String -> Int 
     retornaIdTicket t = do 

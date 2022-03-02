@@ -25,7 +25,7 @@ module Src.Controller.AlunoController where
     -- DEVE SER MOVIDO PARA OUTRO CONTROLADOR
     excluirTicket :: Int -> IO()
     excluirTicket matAluno = do
-        ticketsIds <- pegaTicketsDoAluno matAluno
+        ticketsIds <- getTicketsAluno matAluno
         mostraTickets ticketsIds
         putStrLn "Escolha entre os seus Tickets qual será excluido: "
         sel <- getLine 
@@ -87,7 +87,7 @@ module Src.Controller.AlunoController where
     -- DEVE SER MOVIDO PARA OUTRO CONTROLADOR
     resolveTicket :: Aluno -> IO()
     resolveTicket aluno = do
-        ticketsAluno <- pegaTicketsDoAluno (A.id aluno)
+        ticketsAluno <- getTicketsAluno (A.id aluno)
         putStrLn "Estes são os seus tickets com status \"Em andamento\"\n"
         exibeTickets ticketsAluno
         putStrLn "\ninsira o id do ticket que deseja marcar como concluído"
@@ -105,6 +105,6 @@ module Src.Controller.AlunoController where
     adicionaMensagemAluno :: Aluno -> IO()
     adicionaMensagemAluno aluno = do
         putStrLn "Foram identificados os seguintes tickets desse autor: "
-        tickets <- pegaTicketsDoAluno (A.id aluno)
+        tickets <- getTicketsAluno (A.id aluno)
         print tickets
         adicionaMensagem (A.id aluno)
