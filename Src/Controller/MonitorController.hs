@@ -60,5 +60,5 @@ module Src.Controller.MonitorController where
         tickets <- getTicketsEmAndamento (M.disciplina monitor)
         if tickets == [] then putStrLn "Não há tickets em andamento por enquanto." else do
             putStrLn "\nTickets em andamento da sua disciplina:"
-            exibeTicketsEmAndamento tickets
+            exibeTickets tickets
             adicionaMensagem (M.id monitor)

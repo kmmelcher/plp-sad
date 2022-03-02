@@ -138,9 +138,11 @@ module Src.Menu where
 
     exibeMenuAluno :: Int -> IO()
     exibeMenuAluno idAluno = do
-        putStrLn "\n== SAD: MENU ALUNO ==\nDigite o número da ação que deseja executar!\n\n"
         instanciaAluno <- buscaObjetoById "Alunos" idAluno
         let aluno = read instanciaAluno :: Aluno
+        putStrLn "\n== SAD: MENU ALUNO =="
+        putStrLn ("ID: " ++ show (A.id aluno) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplinas: " ++ show (A.disciplinas aluno))
+        putStrLn "Digite o número da ação que deseja executar!\n"
         putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido\n7)Deslogar"
         opcao <- getLine 
         decideMenuAluno aluno opcao

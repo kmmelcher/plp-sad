@@ -120,17 +120,17 @@ module Src.Controller.ChatController where
         putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")")
         exibeTicketsDisciplinaRecursivo idsTicketsRestantes
 
-    exibeTicketsEmAndamento :: [Int] -> IO()
-    exibeTicketsEmAndamento [] = do
+    exibeTickets :: [Int] -> IO()
+    exibeTickets [] = do
         putStr "\n"
         return ()
-    exibeTicketsEmAndamento (ticketAtual:ticketsRestantes) = do
+    exibeTickets (ticketAtual:ticketsRestantes) = do
         instanciaTicket <- buscaObjetoById "Tickets" ticketAtual
         let ticket = read instanciaTicket :: T.Ticket
         if T.status ticket == "Em Andamento" then do 
             putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " - " ++ T.disciplina ticket)
-            exibeTicketsEmAndamento ticketsRestantes
-        else exibeTicketsEmAndamento ticketsRestantes
+            exibeTickets ticketsRestantes
+        else exibeTickets ticketsRestantes
     
     checaIdDeTicketEmAndamento :: Int -> IO(Bool)
     checaIdDeTicketEmAndamento id = do
