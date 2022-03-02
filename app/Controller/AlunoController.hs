@@ -1,9 +1,9 @@
-module Src.Controller.AlunoController where
-    import Src.Model.Aluno as A
-    import Src.Util.TxtFunctions
-    import Src.Controller.ChatController
-    import Src.Model.Ticket as T
-    import Src.Controller.DisciplinaController as DC
+module Controller.AlunoController where
+    import Model.Aluno as A
+    import Util.TxtFunctions
+    import Controller.ChatController
+    import Model.Ticket as T
+    import Controller.DisciplinaController as DC
 
     getAluno:: Int -> IO Aluno
     getAluno id = do

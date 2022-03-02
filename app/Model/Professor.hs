@@ -1,5 +1,4 @@
-module Src.Model.Professor where
-    import GHC.Read (Read)
+module Model.Professor where
     data Professor = Professor {
         id :: Int,
         nome :: String,

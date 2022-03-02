@@ -1,8 +1,8 @@
-module Src.Controller.MonitorController where
-    import Src.Model.Monitor as M
-    import Src.Util.TxtFunctions
-    import Src.Model.Ticket as T
-    import Src.Controller.ChatController
+module Controller.MonitorController where
+    import Model.Monitor as M
+    import Util.TxtFunctions
+    import Model.Ticket as T
+    import Controller.ChatController
 
     getMonitor:: Int -> IO Monitor
     getMonitor id = do

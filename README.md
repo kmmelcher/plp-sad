@@ -1,29 +1,59 @@
-# plp-sad
-Serviço de atendimento ao discente (Projeto da disciplina de Paradigmas de linguagens de Programação)
+![SAD ICON](http://www.br2n.com/images/sad/sad.gif)
 
-Link do trello: https://trello.com/b/kFlVjDPl/haskel-project-sad
+![SAD ICON](./github/assets/icon.png)
 
-Link do docs: https://docs.google.com/document/d/1k2UjTAwDMaXf1ZzzIWbWzvQvJngPg6-wjg4JFil-XHQ/edit#
+<h1 align="center">
+  <img src=".github/assets/icon.png" width="72px" align="center">&nbsp;&nbsp;
+  SAD
+</h1>
 
-# Usage
+# Serviço de atendimento ao discente (SAD)
 
-From the repo root directory use this command on terminal:
-``` 
-$ ghci Src/Main.hs 
-``` 
-Once inside of haskell console call main function:
+## Instalação
+
+### Pré-requisitos
+
+Para usar o SAD é preciso ter as seguintes ferramentas instaladas:
+ - [GIT](https://git-scm.com/)
+ - [Cabal](https://www.haskell.org/cabal/)
+
+### Executando
+
+1. Clonar repositório
+
+```base
+$ git clone https://github.com/kmmelcher/plp-sad.git
+$ cd plp-sad
 ```
-*Main> main
-Bem vindo ao SAD!
------ MENU -----
-1) Cadastrar aluno
-1
-Insira o nome do aluno: 
-Kilian
-Insira a matricula do aluno
-120110391
-Insira as disciplinas do aluno
-["OAC","LOAC","PLP","PSOFT"]
-*Main>
+
+2. Configurar o Cabal e instalar as dependências
+
+```bash
+$ cabal update
+$ cabal install cabal-install
+$ cabal build
+```
+
+3. Executar o projeto
+```bash
+$ cabal run
+```
+
+# Usando o SAD
+
+```
+Bem vindo ao Sistema de Atendimento ao Discente!
+O que deseja fazer?
+
+1) Realizar cadastro
+2) Entrar no sistema
+3) Sair
 ``` 
-You should get this output.
+
+# Autores
+
+- Kilian Melcher ([kmmelcher](https://github.com/kmmelcher))
+- Vinícius Azevedo ([viniciussousaazevedo](https://github.com/viniciussousaazevedo))
+- Pedro Adrian ([adrianmartinez-cg](https://github.com/adrianmartinez-cg))
+- Filipe Ramalho ([musquitinh0](https://github.com/musquitinh0))
+- Álef Ádonis ([AlefAdonis](https://github.com/AlefAdonis))

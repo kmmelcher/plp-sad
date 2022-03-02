@@ -1,4 +1,4 @@
-module Src.Model.Mensagem where
+module Model.Mensagem where
     import Data.Time (UTCTime)
     data Mensagem = Mensagem {
         id :: Int,

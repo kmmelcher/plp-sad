@@ -1,13 +1,13 @@
-module Src.Menu where
+module Menu where
 
-    import Src.Controller.AlunoController
-    import Src.Controller.ChatController
-    import Src.Controller.MonitorController
-    import Src.Controller.ProfessorController
-    import Src.Util.TxtFunctions
-    import Src.Model.Monitor as M
-    import Src.Model.Professor as P
-    import Src.Model.Aluno as A
+    import Controller.AlunoController
+    import Controller.ChatController
+    import Controller.MonitorController
+    import Controller.ProfessorController
+    import Util.TxtFunctions
+    import Model.Monitor as M
+    import Model.Professor as P
+    import Model.Aluno as A
 
     menuPrincipal :: IO()
     menuPrincipal = do
@@ -155,14 +155,13 @@ module Src.Menu where
             exibeMenuAluno (A.id aluno)
         | opcao == "4" = do
             adicionaMensagemAluno aluno
-            menuPrincipal
+            exibeMenuAluno (A.id aluno)
         | opcao == "5" = do
-            -- Falta funcao para ler tickets de uma disciplina?
-            putStrLn "Deslogando...\n"
-            menuPrincipal
+            putStrLn "Lendo tickets da disciplina...\n"
+            exibeMenuAluno (A.id aluno)
         | opcao == "6" = do
             resolveTicket aluno
-            menuPrincipal
+            exibeMenuAluno (A.id aluno)
         | opcao == "7" = do
             putStrLn "Deslogando...\n"
             menuPrincipal

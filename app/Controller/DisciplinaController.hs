@@ -1,7 +1,7 @@
-module Src.Controller.DisciplinaController where
-    import Src.Model.Disciplina as D
-    import Src.Util.TxtFunctions
-    import Src.Model.Aluno as A
+module Controller.DisciplinaController where
+    import Model.Disciplina as D
+    import Util.TxtFunctions
+    import Model.Aluno as A
 
     getDisciplina:: Int -> IO Disciplina
     getDisciplina id = do

@@ -1,12 +1,12 @@
-module Src.Controller.ChatController where
-    import Src.Model.Mensagem
-    import Src.Model.Aluno as A
-    import qualified Src.Model.Ticket as T
+module Controller.ChatController where
+    import Model.Mensagem
+    import Model.Aluno as A
+    import qualified Model.Ticket as T
     import Control.Monad (when)
-    import Src.Util.TxtFunctions
+    import Util.TxtFunctions
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
-    import Src.Model.Monitor as M
+    import Model.Monitor as M
 
     getTicket:: Int -> IO T.Ticket
     getTicket id = do
