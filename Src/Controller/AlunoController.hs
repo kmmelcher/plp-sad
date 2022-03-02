@@ -1,8 +1,11 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use print" #-}
 module Src.Controller.AlunoController where
     import Src.Model.Aluno as A
     import Src.Util.TxtFunctions
     import Src.Controller.DisciplinaController as DC
-
+    import Src.Controller.ChatController (exibeTicketsDisciplina)
+    
     getAluno:: Int -> IO Aluno
     getAluno id = do
         alunoToString <- getObjetoById "Alunos" id
@@ -55,3 +58,14 @@ module Src.Controller.AlunoController where
         else do
             putStrLn "Insira um valor válido!\n\n"
             desmatriculaAlunoDeDisciplina aluno
+
+    --mostraTicketsResolvidos :: Aluno ->  IO()
+    --mostraTicketsResolvidos aluno = do
+    --    let disc = disciplinas aluno
+    --    mostraTicketsDeDisciplinas disc
+
+    --mostraTicketsDeDisciplinas :: [String] -> IO()
+    --mostraTicketsDeDisciplinas [] = return ()
+    --mostraTicketsDeDisciplinas (disciplina:resto) = do
+    --    TicketsDisciplina disciplina
+    --    mostraTicketsDeDisciplinas resto

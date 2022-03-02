@@ -131,6 +131,24 @@ module Src.Controller.ChatController where
             else
                 getTicketsEmAndamentoRecursivo ticketsRestantes
 
+    
+    getTicketsConcluidos :: [Int] -> IO[Int]
+    getTicketsConcluidos tickets = do
+        getTicketsConcluidosRecursivo tickets
+
+    getTicketsConcluidosRecursivo :: [Int] -> IO [Int]
+    getTicketsConcluidosRecursivo [] = return []
+    getTicketsConcluidosRecursivo (ticketAtual:ticketsRestantes) = do
+        ticket <- getTicket ticketAtual
+        if T.status ticket == "Resolvido" then do
+            proximosTickets <- getTicketsConcluidosRecursivo ticketsRestantes
+            return (T.id ticket : proximosTickets)
+            else
+                getTicketsConcluidosRecursivo ticketsRestantes
+
+
+
+
     {-
     Exibe uma lista de tickets.
     Checa se a lista de tickets é vazia, nesse caso é avisado ao usuário.
