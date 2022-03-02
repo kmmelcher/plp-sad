@@ -1,9 +1,14 @@
 module Src.Controller.ProfessorController where
     import Src.Model.Professor
     import Src.Util.TxtFunctions
-    import Src.Controller.ChatController (pegaTicketsDeUmaDisciplina)
+    import Src.Controller.ChatController
     import Src.Model.Ticket
     import Src.Controller.AlunoController
+
+    getProfessor:: Int -> IO(Professor)
+    getProfessor id = do
+        professorToString <- getObjetoById "Professores" id
+        return (read professorToString :: Professor)
 
     adicionaProfessor :: IO()
     adicionaProfessor = do
@@ -18,30 +23,21 @@ module Src.Controller.ProfessorController where
             adicionaLinha "Professores" profToString
             putStrLn ("Professor cadastrado com sucesso no id " ++ id ++ ". Decore seu id para utilizar o sistema!\n")
 
-    lerTicketsDisciplina :: Int -> IO()
-    lerTicketsDisciplina idProfessor = do
-         profStr <- buscaObjetoById "Professores" idProfessor
-         let professor = read profStr :: Professor
-         print "Disciplinas cadastradas: "
-         printArray (disciplinas professor)
-         sel <- getLine
-         if verificaDisciplina (disciplinas professor) sel
-            then do
-                tickets <- pegaTicketsDeUmaDisciplina sel
-                if null tickets
-                    then putStrLn "Não há tickets para essa disciplina"
-                    else mostraTickets tickets
-            else
-                print "Disciplina invalida!"
-
-    printArray :: [String] -> IO()
-    printArray [] = putStr "Entre Com a sigla da disciplina: "
-    printArray (head:tail) = do
-        print head
-        printArray tail
+    lerTicketsDisciplina :: Professor -> IO()
+    lerTicketsDisciplina professor = do
+        if (length (disciplinas professor) > 1) then do
+            putStrLn "Insira qual disciplina você deseja visualizar os tickets:"
+            disciplina <- getLine
+            if verificaDisciplina (disciplinas professor) disciplina
+                then exibeTicketsDisciplina disciplina
+                else do
+                    putStrLn "\nDisciplina invalida!"
+                    lerTicketsDisciplina professor
+        else do
+               exibeTicketsDisciplina ((disciplinas professor)!!0)    
 
     verificaDisciplina :: [String] -> String -> Bool
-    verificaDisciplina [] x = False
-    verificaDisciplina (head:tail) x = do
-        (head == x) || verificaDisciplina tail x
+    verificaDisciplina [] _ = False
+    verificaDisciplina (disciplinaAtual:disciplinasRestantes) disciplina = do
+        (disciplinaAtual == disciplina) || verificaDisciplina disciplinasRestantes disciplina
 

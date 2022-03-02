@@ -4,6 +4,11 @@ module Src.Controller.MonitorController where
     import Src.Model.Ticket as T
     import Src.Controller.ChatController
     
+    getMonitor:: Int -> IO Monitor
+    getMonitor id = do
+        monitorToString <- getObjetoById "Monitores" id
+        return (read monitorToString :: Monitor)
+
     adicionaMonitor :: IO()
     adicionaMonitor = do
         id <- insereMatricula
@@ -19,13 +24,13 @@ module Src.Controller.MonitorController where
 
     insereMatricula :: IO(Int)
     insereMatricula = do
-        putStrLn "Insira a matricula do monitor"
+        putStrLn "\nInsira a matricula do monitor"
         id <- readLn 
         alunoCadastrado <- checaExistenciaById "Alunos" id
         if alunoCadastrado || id == 0
             then return id
         else do
-            putStrLn "Aluno não cadastrado!\n(Digite 0 para voltar ao menu principal)\n"
+            putStrLn "\nAluno não cadastrado!\n(Digite 0 para voltar ao menu principal)\n"
             insereMatricula
 
     insereDisciplina :: Int -> IO(String)
@@ -42,21 +47,13 @@ module Src.Controller.MonitorController where
                 putStrLn "Disciplina não cadastrada!\n(Digite \"VOLTAR\" para voltar ao menu principal)\n"
                 insereDisciplina id
 
-    removeMonitor :: IO()
-    removeMonitor = do
+    removeMonitor :: [String] -> IO()
+    removeMonitor disciplinasDoProfessor = do
         id <- insereMatricula
-        removeLinha "Monitores" (show id)
-        putStrLn "Monitor removido com sucesso!\n"
-
-    getTicketsDaDisciplina :: Monitor -> IO [Int]
-    getTicketsDaDisciplina monitor = pegaTicketsDeUmaDisciplina (M.disciplina monitor)
-
-    exibeTicketsDaDisciplina :: Monitor -> IO()
-    exibeTicketsDaDisciplina monitor = exibeTicketsDisciplina (M.disciplina monitor)
-
-    respondeTicket :: Monitor -> IO()
-    respondeTicket monitor = do
-        tickets <- getTicketsDaDisciplina monitor
-        putStrLn "\nTickets em andamento da sua disciplina:"
-        exibeTicketsEmAndamento tickets
-        adicionaMensagem (M.id monitor)
+        monitor <- getMonitor id
+        if (M.disciplina monitor) `elem` disciplinasDoProfessor then do
+            removeLinha "Monitores" (show id)
+            putStrLn "Monitor removido com sucesso!\n"
+            else do
+                putStrLn "Este monitor não é de uma disciplina sua! Tente novamente."
+                removeMonitor disciplinasDoProfessor

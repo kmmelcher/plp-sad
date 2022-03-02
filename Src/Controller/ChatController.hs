@@ -1,55 +1,72 @@
 module Src.Controller.ChatController where
     import Src.Model.Mensagem
+    import Src.Model.Aluno as A
     import qualified Src.Model.Ticket as T
     import Control.Monad (when)
     import Src.Util.TxtFunctions
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
-    import qualified Src.Model.Ticket as T
+    import Src.Model.Monitor as M
     
-    adicionaTicket :: IO()
-    adicionaTicket = do
-        putStrLn "\nInsira o id do solicitante: "
-        autor <- getLine
+    getTicket:: Int -> IO(T.Ticket)
+    getTicket id = do
+        ticketToString <- getObjetoById "Tickets" id
+        return (read ticketToString :: T.Ticket)
+
+    getMensagem:: Int -> IO(Mensagem)
+    getMensagem id = do
+        mensagemToString <- getObjetoById "Mensagens" id
+        return (read mensagemToString :: Mensagem)
+
+    adicionaTicket :: Aluno -> IO()
+    adicionaTicket aluno = do
         putStrLn "Insira o nome da disciplina que você tem dúvida:"
         disciplinaTicket <-  getLine
-        putStrLn "Insira um título para sua dúvida:"
-        titulo <- getLine
-        id <- buscaNovoId "Tickets"
-        let ticket = T.Ticket (read id) (titulo) [] "Em Andamento" (read autor) disciplinaTicket
-        adicionaLinha "Tickets" $ show ticket
-        putStrLn "Deseja adicionar mais um ticket? (s/n)"
-        resposta <- getLine
-        Control.Monad.when (resposta == "s") $ do
-                adicionaTicket
+        if disciplinaTicket `elem` (disciplinas aluno) then do
+            putStrLn "Insira um título para sua dúvida:"
+            titulo <- getLine
+            id <- buscaNovoId "Tickets"
+            let ticket = T.Ticket (read id) (titulo) [] "Em Andamento" (A.id aluno) disciplinaTicket
+            adicionaLinha "Tickets" $ show ticket
+            putStrLn "Ticket adicionado com sucesso!"
+        else do 
+            putStrLn ("Você não está matriculado na disciplina " ++ disciplinaTicket) 
     
-    adicionaMensagem :: Int -> IO()
-    adicionaMensagem id = do
+    adicionaMensagem :: Int -> [Int] -> IO()
+    adicionaMensagem id ticketsValidos = do
         putStrLn "Escolha o ticket no qual deseja inserir a mensagem: "
         idTicket <- readLn
-        putStrLn "Digite a mensagem:"
-        conteudo <- getLine
-        idMensagem <- buscaNovoId "Mensagens"
-        tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M")
-        let mensagem = Mensagem (read idMensagem) id conteudo tempo
-        inserirMensagemNoTicket idTicket (read idMensagem)
-        adicionaLinha "Mensagens" $ show mensagem
-    
-    pegaTicketsDoAluno :: Int -> IO[Int]
-    pegaTicketsDoAluno matricula = do
+        if ehTicketValido idTicket ticketsValidos
+            then do
+            putStrLn "Digite a mensagem:"
+            conteudo <- getLine
+            idMensagem <- buscaNovoId "Mensagens"
+            tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M")
+            let mensagem = Mensagem (read idMensagem) id conteudo tempo
+            inserirMensagemNoTicket idTicket (read idMensagem)
+            adicionaLinha "Mensagens" $ show mensagem
+            putStrLn "Mensagem adicionada com sucesso."
+        else do
+            putStrLn "Ticket inválido!\n"
+            adicionaMensagem id ticketsValidos
+
+    ehTicketValido :: Int -> [Int] -> Bool 
+    ehTicketValido ticketId ticketsValidos = ticketId `elem` ticketsValidos
+
+    -- Não poderia retornar um array de tickets?
+    getTicketsAluno :: Int -> IO[Int]
+    getTicketsAluno matricula = do
         tickets <- fileToStringArray "Tickets"
-        return(comparaAutorDeTodosTickets tickets matricula) 
-        
-    comparaAutorDeUmTicket :: String -> Int -> Bool
-    comparaAutorDeUmTicket str i = do 
-        let ticket = read(str) :: T.Ticket
-        if T.autor(ticket) == i then True else False
-    
-    comparaAutorDeTodosTickets :: [String] -> Int -> [Int]
-    comparaAutorDeTodosTickets [] i = []
-    comparaAutorDeTodosTickets (x:xs) i = if ( comparaAutorDeUmTicket x i ) 
-        then retornaIdTicket x : (comparaAutorDeTodosTickets xs i) 
-        else [] ++ (comparaAutorDeTodosTickets xs i)
+        getTicketsAlunoRecursivo tickets matricula
+
+    getTicketsAlunoRecursivo :: [String] -> Int -> IO([Int])
+    getTicketsAlunoRecursivo [] _ = return ([])
+    getTicketsAlunoRecursivo (ticketAtual:ticketsRestantes) matricula = do
+        let ticket = (read ticketAtual :: T.Ticket)
+        proximos <- getTicketsAlunoRecursivo ticketsRestantes matricula
+        if (T.autor ticket) == matricula then do
+            return ([T.id ticket] ++ proximos)
+            else return proximos
 
     retornaIdTicket :: String -> Int 
     retornaIdTicket t = do 
@@ -64,13 +81,17 @@ module Src.Controller.ChatController where
     -}
     inserirMensagemNoTicket :: Int -> Int -> IO()
     inserirMensagemNoTicket idTicket idMensagem = do 
-        ticketStr <- buscaObjetoById "Tickets" idTicket
-        let ticket = read ticketStr :: T.Ticket
+        ticket <- getTicket idTicket
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (idMensagem: T.mensagens ticket) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
-    pegaTicketsDeUmaDisciplina :: String -> IO[Int]
-    pegaTicketsDeUmaDisciplina disciplina = do 
+    {- 
+    Retorna todos os tickets de uma disciplina
+    Parametros
+        disciplina: qual o nome da disciplina dos tickets que queremos retornar
+    -}
+    getTicketsDisciplina :: String -> IO[Int]
+    getTicketsDisciplina disciplina = do 
         tickets <- fileToStringArray "Tickets"
         return(comparaDisciplinaDeTodosTickets tickets disciplina) 
     
@@ -84,55 +105,130 @@ module Src.Controller.ChatController where
     comparaDisciplinaDeTodosTickets (x:xs) disciplina = if ( comparaDisciplinaDeUmTicket x disciplina ) 
         then retornaIdTicket x : (comparaDisciplinaDeTodosTickets xs disciplina) 
         else [] ++ (comparaDisciplinaDeTodosTickets xs disciplina)
-    
-    {- 
+
+    getTicketsEmAndamento :: [Int] -> IO[Int]
+    getTicketsEmAndamento tickets = do
+        getTicketsEmAndamentoRecursivo tickets
+
+    getTicketsEmAndamentoRecursivo :: [Int] -> IO [Int]
+    getTicketsEmAndamentoRecursivo [] = return []
+    getTicketsEmAndamentoRecursivo (ticketAtual:ticketsRestantes) = do
+        ticket <- getTicket ticketAtual
+        if T.status ticket == "Em Andamento" then do
+            proximosTickets <- getTicketsEmAndamentoRecursivo ticketsRestantes
+            return ([T.id ticket] ++ proximosTickets)
+            else
+                getTicketsEmAndamentoRecursivo ticketsRestantes
+
+    {-
+    Exibe tickets em andamento de uma disciplina.
+    Parâmetros:
+        disciplina: Nome da disciplina a ser exibida.
+    -}
+    exibeTicketsEmAndamento :: [Int] -> IO()
+    exibeTicketsEmAndamento tickets = do
+        ticketsEmAndamento <- getTicketsEmAndamento tickets
+        exibeTickets ticketsEmAndamento "em andamento" "em andamento da sua disciplina:"
+
+    {-
     Exibe todos os tickets de uma disciplina.
     Parâmetros:
         nomeDisciplina: Nome da disciplina a ser exibida.
     -}
     exibeTicketsDisciplina :: String -> IO()
     exibeTicketsDisciplina nomeDisciplina = do
-        tickets <- pegaTicketsDeUmaDisciplina nomeDisciplina
-        if null tickets 
-            then putStrLn "\nAinda não há tickets nesta disciplina.\n" 
-        else do
-            putStrLn ("\nEstes são os tickets existentes da disciplina: " ++ nomeDisciplina)
-            exibeTicketsDisciplinaRecursivo tickets
-    
-    {-
-    Itera recursivamente sobre todos os tickets da disciplina exibindo cada um.
-    -}
-    exibeTicketsDisciplinaRecursivo :: [Int] -> IO()
-    exibeTicketsDisciplinaRecursivo [] = do
-        putStr "\n"
-        return ()
-    exibeTicketsDisciplinaRecursivo (idTicketAtual:idsTicketsRestantes) = do
-        instanciaTicket <- buscaObjetoById "Tickets" idTicketAtual
-        let ticket = read instanciaTicket :: T.Ticket
-        putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")")
-        exibeTicketsDisciplinaRecursivo idsTicketsRestantes
+        tickets <- getTicketsDisciplina nomeDisciplina
+        exibeTickets tickets "nesta disciplina" ("da disciplina: " ++ nomeDisciplina)
 
-    exibeTicketsEmAndamento :: [Int] -> IO()
-    exibeTicketsEmAndamento [] = do
+    {-
+    Exibe uma lista de tickets.
+    Checa se a lista de tickets é vazia, nesse caso é avisado ao usuário.
+    -}
+    exibeTickets :: [Int] -> String -> String -> IO()
+    exibeTickets tickets mensagemSemTicket mensagemComTickets = do
+        if null tickets 
+            then putStrLn ("\nAinda não há tickets " ++ mensagemSemTicket ++ ".\n")
+        else do
+            putStrLn ("\nEstes são os tickets existentes " ++ mensagemComTickets ++ "\n")
+            exibeTicketsRecursivo tickets
+
+    {-
+    Itera recursivamente sobre uma lista de tickets exibindo cada um.
+    -}
+    exibeTicketsRecursivo :: [Int] -> IO()
+    exibeTicketsRecursivo [] = do
         putStr "\n"
         return ()
-    exibeTicketsEmAndamento (ticketAtual:ticketsRestantes) = do
-        instanciaTicket <- buscaObjetoById "Tickets" ticketAtual
-        let ticket = read instanciaTicket :: T.Ticket
-        if T.status ticket == "Em Andamento" then do 
-            putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " - " ++ T.disciplina ticket)
-            exibeTicketsEmAndamento ticketsRestantes
-        else exibeTicketsEmAndamento ticketsRestantes
-    
-    checaIdDeTicketEmAndamento :: Int -> IO(Bool)
+    exibeTicketsRecursivo (idTicketAtual:idsTicketsRestantes) = do
+        ticket <- getTicket idTicketAtual
+        putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")")
+        exibeTicketsRecursivo idsTicketsRestantes
+
+    checaIdDeTicketEmAndamento :: Int -> IO Bool
     checaIdDeTicketEmAndamento id = do
-        instanciaTicket <- buscaObjetoById "Tickets" id
-        let ticket = read instanciaTicket :: T.Ticket
+        ticket <- getTicket id
         return (T.status ticket == "Em Andamento")
     
     marcaTicketComoConcluido :: Int -> IO()
     marcaTicketComoConcluido id = do
-        instanciaTicket <- buscaObjetoById "Tickets" id
-        let ticket = read instanciaTicket :: T.Ticket
+        ticket <- getTicket id
         let novoTicket = T.Ticket (T.id ticket) (T.titulo ticket) (T.mensagens ticket) "Resolvido" (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show id) (show novoTicket)
+
+    resolveTicket :: Aluno -> IO()
+    resolveTicket aluno = do
+        ticketsAluno <- getTicketsAluno (A.id aluno)
+        putStrLn "Estes são os seus tickets com status \"Em andamento\"\n"
+        exibeTicketsEmAndamento ticketsAluno
+        putStrLn "\ninsira o id do ticket que deseja marcar como concluído"
+        input <- getLine
+        let id = read input :: Int
+        idValido <- checaIdDeTicketEmAndamento id
+        if idValido then do
+            marcaTicketComoConcluido id
+            putStrLn "Ticket alterado com sucesso.\n"
+             else do
+            putStrLn "Insira um id válido!"
+            resolveTicket aluno
+
+    adicionaMensagemMonitor :: Monitor -> IO()
+    adicionaMensagemMonitor monitor = do
+        tickets <- getTicketsDisciplina (M.disciplina monitor)
+        exibeTicketsEmAndamento tickets
+        ticketsEmAndamento <- getTicketsEmAndamento tickets
+        if null tickets 
+            then return ()
+        else do
+            adicionaMensagem (M.id monitor) ticketsEmAndamento
+
+    adicionaMensagemAluno :: Aluno -> IO()
+    adicionaMensagemAluno aluno = do
+        putStrLn "Foram identificados os seguintes tickets desse autor: "
+        tickets <- getTicketsAluno (A.id aluno)
+        ticketsEmAndamento <- getTicketsEmAndamento tickets
+        exibeTicketsEmAndamento tickets
+        print tickets
+        adicionaMensagem (A.id aluno) ticketsEmAndamento
+
+    excluirTicket :: Int -> IO()
+    excluirTicket matAluno = do
+        ticketsIds <- getTicketsAluno matAluno
+        mostraTickets ticketsIds
+        putStrLn "Escolha entre os seus Tickets qual será excluido: "
+        sel <- getLine 
+        if verificaTicket ticketsIds (read sel)
+            then removeLinha "Tickets" sel
+            else print "Ticket invalido"
+
+    mostraTickets :: [Int] -> IO()
+    mostraTickets [] = return ()
+    mostraTickets (head:tail) = do
+        ticketStr <- getObjetoById "Tickets" head
+        let ticket = read ticketStr :: T.Ticket
+        putStrLn $ show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")"
+        mostraTickets tail
+
+    verificaTicket :: [Int] -> Int -> Bool
+    verificaTicket [] x = False
+    verificaTicket (head:tail) x = do
+        (head == x) || verificaTicket tail x
