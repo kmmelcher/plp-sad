@@ -1,5 +1,3 @@
-![SAD ICON](http://www.br2n.com/images/sad/sad.gif | width=100)
-
 <h1 align="center">
   <img src="http://www.br2n.com/images/sad/sad.gif" width="90px" align="center">&nbsp;&nbsp;
   SAD
