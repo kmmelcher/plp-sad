@@ -26,8 +26,8 @@ module Src.Util.TxtFunctions where
         nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
         idObjeto = O id do objeto que deseja ser buscado
     -}
-    buscaObjetoById :: String -> Int -> IO(String)
-    buscaObjetoById nomeArquivo objetoId = buscaObjetoByAtributo nomeArquivo "id" (show objetoId ++ ",")
+    getObjetoById :: String -> Int -> IO(String)
+    getObjetoById nomeArquivo objetoId = buscaObjetoByAtributo nomeArquivo "id" (show objetoId ++ ",")
 
     {- 
     Esta função retorna o formato em string de um objeto identificado pelo seu atributo. 
@@ -73,7 +73,7 @@ module Src.Util.TxtFunctions where
     -}
     checaExistenciaById :: String -> Int -> IO(Bool)
     checaExistenciaById nomeArquivo idObjeto = do
-        existeObjeto <- buscaObjetoById nomeArquivo idObjeto
+        existeObjeto <- getObjetoById nomeArquivo idObjeto
         return (existeObjeto /= "")
 
     {-

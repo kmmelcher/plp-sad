@@ -7,7 +7,7 @@ module Src.Controller.AlunoController where
     
     getAluno:: Int -> IO(Aluno)
     getAluno id = do
-        alunoToString <- buscaObjetoById "Alunos" id
+        alunoToString <- getObjetoById "Alunos" id
         return (read alunoToString :: Aluno)
 
     adicionaAluno :: IO()
@@ -37,7 +37,7 @@ module Src.Controller.AlunoController where
     mostraTickets :: [Int] -> IO()
     mostraTickets [] = return ()
     mostraTickets (head:tail) = do
-        ticketStr <- buscaObjetoById "Tickets" head
+        ticketStr <- getObjetoById "Tickets" head
         let ticket = read ticketStr :: Ticket
         putStrLn $ show (T.id ticket) ++ ") " ++ titulo ticket ++ " (" ++ status ticket ++ ")"
         mostraTickets tail
