@@ -1,6 +1,15 @@
-Mensagem {id = 1, autor = 120110123, conteudo = "Boa tarde, Estou com duvida na questao pratica 3", horario = "02/24/22 14h00"}
-Mensagem {id = 2, autor = 120110123, conteudo = "Como faco para ler uma lista de inteiros da entrada?", horario = "02/24/22 14h03"}
-Mensagem {id = 3, autor = 120110369, conteudo = "Oi, É só fazer o input <- getLine e depois  read input :: [[Int]]", horario = "02/24/22 14h05"}
-Mensagem {id = 4, autor = 120110123, conteudo = "Obrigado , deu certo aqui", horario = "02/24/22 14h55"}
-Mensagem {id = 5, autor = 120110123, conteudo = "Como converto IO Int para Int?", horario = "04/24/22 13h50"}
-Mensagem {id = 6, autor = 120110258, conteudo = "E SIMPLES BASTA DESISTIR", horario = "03/01/22 18h01"}
+~esMensagem {id = 1, autor = 120110001, conteudo = "Boa tarde, Estou com duvida na questao pratica 3", horario = "02/24/22 14h00"}
+Mensagem {id = 2, autor = 120110001, conteudo = "Como faco para ler uma lista de inteiros da entrada?", horario = "02/24/22 14h03"}
+Mensagem {id = 3, autor = 120110008, conteudo = "Oi, É só fazer o input <- getLine e depois  read input :: [[Int]]", horario = "02/24/22 14h05"}
+Mensagem {id = 4, autor = 120110001, conteudo = "Obrigado , deu certo aqui", horario = "02/24/22 14h55"}
+Mensagem {id = 5, autor = 120110005, conteudo = "Como converto IO Int para Int?", horario = "04/24/22 13h50"}
+Mensagem {id = 6, autor = 120110008, conteudo = "E SIMPLES BASTA DESISTIR", horario = "03/01/22 18h01"}
+Mensagem {id = 7, autor = 120110002, conteudo = "Posso usar consultas Aninhadas nesse roteiro", horario = "03/02/22 16h18"}
+Mensagem {id = 8, autor = 120110011, conteudo = "Apenas nas questões 14 e 15", horario = "03/02/22 16h21"}
+Mensagem {id = 9, autor = 120110002, conteudo = "OK, valeu!", horario = "03/02/22 16h21"}
+Mensagem {id = 10, autor = 120110017, conteudo = "Olá, boa noite, estou com duvida em como o pipeline ajuda em um Processador", horario = "03/02/22 18h47"}
+Mensagem {id = 11, autor = 120110005, conteudo = "Como que um semaforo lida com as regiões criticas?", horario = "03/02/22 18h49"}
+Mensagem {id = 12, autor = 120110004, conteudo = "Como implemento uma arvore AVL?", horario = "03/02/22 18h50"}
+Mensagem {id = 13, autor = 120110010, conteudo = "Utilizando uma comando especial do processador que faz a comparação com um operação chamada test-and-set, que realiza 2 operções em um unico ciclo de clock, permitindo que a região critíca seja implementada", horario = "03/02/22 18h52"}
+Mensagem {id = 14, autor = 120110002, conteudo = "O pipeline ajuda com a diminição do espaço fisico utilizado pelo processador, pois realiza calculos repetidos atraves do tempo e não sobre o espaço", horario = "03/02/22 18h52"}
+Mensagem {id = 15, autor = 120110005, conteudo = "Entendi não, pode explicar melhor?", horario = "03/02/22 18h55"}

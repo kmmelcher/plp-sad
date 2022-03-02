@@ -1,2 +1,6 @@
-Ticket {id = 1, titulo = "lendo lista da entrada", mensagens = [1, 2, 3, 4], status = "Resolvido", autor = 120110123, disciplina = "PLP"}
-Ticket {id = 2, titulo = "Como converter tipo IO?", mensagens = [6,5], status = "Em Andamento", autor = 120110123, disciplina = "PLP"}
+Ticket {id = 1, titulo = "lendo lista da entrada", mensagens = [1, 2, 3, 4], status = "Resolvido", autor = 120110001, disciplina = "PLP"}
+Ticket {id = 2, titulo = "Como converter tipo IO?", mensagens = [5,6], status = "Em Andamento", autor = 120110005, disciplina = "PLP"}
+Ticket {id = 3, titulo = "Consultas Aninhadas", mensagens = [7,8,9], status = "Resolvido", autor = 120110002, disciplina = "BD"}
+Ticket {id = 4, titulo = "pipeline", mensagens = [10,14], status = "Em Andamento", autor = 120110002, disciplina = "OAC"}
+Ticket {id = 5, titulo = "Regiao critica", mensagens = [11,13,15], status = "Em Andamento", autor = 120110005, disciplina = "SO"}
+Ticket {id = 6, titulo = "AVL", mensagens = [12], status = "Em Andamento", autor = 120110002, disciplina = "EDA"}
