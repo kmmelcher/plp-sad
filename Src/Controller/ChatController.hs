@@ -6,13 +6,13 @@ module Src.Controller.ChatController where
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
     import Src.Model.Monitor as M
-    
-    getTicket:: Int -> IO(T.Ticket)
+
+    getTicket:: Int -> IO T.Ticket
     getTicket id = do
         ticketToString <- getObjetoById "Tickets" id
         return (read ticketToString :: T.Ticket)
 
-    getMensagem:: Int -> IO(Mensagem)
+    getMensagem:: Int -> IO Mensagem
     getMensagem id = do
         mensagemToString <- getObjetoById "Mensagens" id
         return (read mensagemToString :: Mensagem)
@@ -21,16 +21,16 @@ module Src.Controller.ChatController where
     adicionaTicket aluno = do
         putStrLn "Insira o nome da disciplina que você tem dúvida:"
         disciplinaTicket <-  getLine
-        if disciplinaTicket `elem` (disciplinas aluno) then do
+        if disciplinaTicket `elem` disciplinas aluno then do
             putStrLn "Insira um título para sua dúvida:"
             titulo <- getLine
             id <- buscaNovoId "Tickets"
-            let ticket = T.Ticket (read id) (titulo) [] "Em Andamento" (A.id aluno) disciplinaTicket
+            let ticket = T.Ticket (read id) titulo [] "Em Andamento" (A.id aluno) disciplinaTicket
             adicionaLinha "Tickets" $ show ticket
             putStrLn "Ticket adicionado com sucesso!"
-        else do 
-            putStrLn ("Você não está matriculado na disciplina " ++ disciplinaTicket) 
-    
+        else do
+            putStrLn ("Você não está matriculado na disciplina " ++ disciplinaTicket)
+
     adicionaMensagem :: Int -> [Int] -> IO()
     adicionaMensagem id ticketsValidos = do
         putStrLn "Escolha o ticket no qual deseja inserir a mensagem: "
@@ -40,7 +40,7 @@ module Src.Controller.ChatController where
             putStrLn "Digite a mensagem:"
             conteudo <- getLine
             idMensagem <- buscaNovoId "Mensagens"
-            tempo <- getCurrentTime >>= return.(formatTime defaultTimeLocale "%D %Hh%M")
+            tempo <- getCurrentTime >>= return.formatTime defaultTimeLocale "%D %Hh%M"
             let mensagem = Mensagem (read idMensagem) id conteudo tempo
             inserirMensagemNoTicket idTicket (read idMensagem)
             adicionaLinha "Mensagens" $ show mensagem
@@ -49,7 +49,7 @@ module Src.Controller.ChatController where
             putStrLn "Ticket inválido!\n"
             adicionaMensagem id ticketsValidos
 
-    ehTicketValido :: Int -> [Int] -> Bool 
+    ehTicketValido :: Int -> [Int] -> Bool
     ehTicketValido ticketId ticketsValidos = ticketId `elem` ticketsValidos
 
     -- Não poderia retornar um array de tickets?
@@ -63,15 +63,15 @@ module Src.Controller.ChatController where
     getTicketsAlunoRecursivo (ticketAtual:ticketsRestantes) matricula = do
         let ticket = (read ticketAtual :: T.Ticket)
         proximos <- getTicketsAlunoRecursivo ticketsRestantes matricula
-        if (T.autor ticket) == matricula then do
-            return ([T.id ticket] ++ proximos)
+        if T.autor ticket == matricula then do
+            return (T.id ticket : proximos)
             else return proximos
 
-    retornaIdTicket :: String -> Int 
-    retornaIdTicket t = do 
-        let ticket = read(t) :: T.Ticket 
-        T.id(ticket)
-    
+    retornaIdTicket :: String -> Int
+    retornaIdTicket t = do
+        let ticket = read t :: T.Ticket
+        T.id ticket
+
     {- 
     Insere uma mensagem em um Ticket.
     Parametros
@@ -79,7 +79,7 @@ module Src.Controller.ChatController where
         idMensagem: Mensagem a ser inserida no Ticket.
     -}
     inserirMensagemNoTicket :: Int -> Int -> IO()
-    inserirMensagemNoTicket idTicket idMensagem = do 
+    inserirMensagemNoTicket idTicket idMensagem = do
         ticket <- getTicket idTicket
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (idMensagem: T.mensagens ticket) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
@@ -90,20 +90,20 @@ module Src.Controller.ChatController where
         disciplina: qual o nome da disciplina dos tickets que queremos retornar
     -}
     getTicketsDisciplina :: String -> IO[Int]
-    getTicketsDisciplina disciplina = do 
+    getTicketsDisciplina disciplina = do
         tickets <- fileToStringArray "Tickets"
-        return(comparaDisciplinaDeTodosTickets tickets disciplina) 
-    
+        return(comparaDisciplinaDeTodosTickets tickets disciplina)
+
     comparaDisciplinaDeUmTicket :: String -> String -> Bool
-    comparaDisciplinaDeUmTicket str disciplina = do 
-        let ticket = read(str) :: T.Ticket
-        if T.disciplina(ticket) == disciplina then True else False
-    
+    comparaDisciplinaDeUmTicket str disciplina = do
+        let ticket = read str :: T.Ticket
+        T.disciplina ticket == disciplina
+
     comparaDisciplinaDeTodosTickets :: [String] -> String -> [Int]
     comparaDisciplinaDeTodosTickets [] disciplina = []
-    comparaDisciplinaDeTodosTickets (x:xs) disciplina = if ( comparaDisciplinaDeUmTicket x disciplina ) 
-        then retornaIdTicket x : (comparaDisciplinaDeTodosTickets xs disciplina) 
-        else [] ++ (comparaDisciplinaDeTodosTickets xs disciplina)
+    comparaDisciplinaDeTodosTickets (x:xs) disciplina = if comparaDisciplinaDeUmTicket x disciplina
+        then retornaIdTicket x : comparaDisciplinaDeTodosTickets xs disciplina
+        else comparaDisciplinaDeTodosTickets xs disciplina
 
     getTicketsEmAndamento :: [Int] -> IO[Int]
     getTicketsEmAndamento tickets = do
@@ -115,7 +115,7 @@ module Src.Controller.ChatController where
         ticket <- getTicket ticketAtual
         if T.status ticket == "Em Andamento" then do
             proximosTickets <- getTicketsEmAndamentoRecursivo ticketsRestantes
-            return ([T.id ticket] ++ proximosTickets)
+            return (T.id ticket : proximosTickets)
             else
                 getTicketsEmAndamentoRecursivo ticketsRestantes
 
@@ -145,7 +145,7 @@ module Src.Controller.ChatController where
     -}
     exibeTickets :: [Int] -> String -> String -> IO()
     exibeTickets tickets mensagemSemTicket mensagemComTickets = do
-        if null tickets 
+        if null tickets
             then putStrLn ("\nAinda não há tickets " ++ mensagemSemTicket ++ ".\n")
         else do
             putStrLn ("\nEstes são os tickets existentes " ++ mensagemComTickets ++ "\n")
@@ -167,7 +167,7 @@ module Src.Controller.ChatController where
     checaIdDeTicketEmAndamento id = do
         ticket <- getTicket id
         return (T.status ticket == "Em Andamento")
-    
+
     marcaTicketComoConcluido :: Int -> IO()
     marcaTicketComoConcluido id = do
         ticket <- getTicket id
@@ -195,7 +195,7 @@ module Src.Controller.ChatController where
         tickets <- getTicketsDisciplina (M.disciplina monitor)
         exibeTicketsEmAndamento tickets
         ticketsEmAndamento <- getTicketsEmAndamento tickets
-        if null tickets 
+        if null tickets
             then return ()
         else do
             adicionaMensagem (M.id monitor) ticketsEmAndamento
@@ -214,7 +214,7 @@ module Src.Controller.ChatController where
         ticketsIds <- getTicketsAluno matAluno
         mostraTickets ticketsIds
         putStrLn "Escolha entre os seus Tickets qual será excluido: "
-        sel <- getLine 
+        sel <- getLine
         if verificaTicket ticketsIds (read sel)
             then removeLinha "Tickets" sel
             else print "Ticket invalido"
