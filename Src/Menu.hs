@@ -144,7 +144,7 @@ module Src.Menu where
         putStrLn "\n== SAD: MENU ALUNO =="
         putStrLn ("ID: " ++ show (A.id aluno) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplinas: " ++ show (A.disciplinas aluno))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler tickets de uma disciplina\n6) Marcar ticket como resolvido\n7) Deslogar"
+        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler mensagens de um ticket \n6) Ler tickets de uma disciplina\n7) Marcar ticket como resolvido\n8) Deslogar"
         opcao <- getLine 
         decideMenuAluno aluno opcao
     
@@ -163,15 +163,30 @@ module Src.Menu where
             adicionaMensagemAluno aluno
             menuPrincipal
         | opcao == "5" = do
-            -- Falta funcao para ler tickets de uma disciplina?
-            putStrLn "Deslogando...\n"
-            menuPrincipal
+            putStrLn "Estes sao os tickets abertos por vc:"
+            ticketsAluno <- (getTicketsAluno (A.id aluno))
+            print(ticketsAluno)
+            if null ticketsAluno then do 
+                putStrLn "Vc n tem nenhum ticket aberto. Voltando ao menu"
+                exibeMenuAluno (A.id aluno) 
+            else do
+                putStrLn "Insira o id do ticket que vc deseja ler as mensagens: "
+                idTicket <- readLn
+                if idTicket `elem` ticketsAluno then do
+                exibeMensagensTicket idTicket 
+                menuPrincipal
+                else do 
+                    putStrLn "Id de ticket invalido. Insira outro valor"
+                    decideMenuAluno aluno opcao
         | opcao == "6" = do
-            resolveTicket aluno
+            putStrLn "Func n implementada."
             menuPrincipal
         | opcao == "7" = do
-            putStrLn "Deslogando...\n"
+            resolveTicket aluno
             menuPrincipal
+        | opcao == "8" = do
+            putStrLn "Deslogando...\n"
+            menuPrincipal     
         | otherwise  = do
             putStrLn "Opção inválida!\n"
             exibeMenuAluno (A.id aluno)
