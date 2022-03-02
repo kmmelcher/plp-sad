@@ -1,7 +1,8 @@
 module Src.Controller.ProfessorController where
     import Src.Model.Professor
     import Src.Util.TxtFunctions
-
+    import Src.Controller.ChatController (adicionaMensagem)
+    
     adicionaProfessor :: IO()
     adicionaProfessor = do
             putStrLn "Insira o nome do professor: "
