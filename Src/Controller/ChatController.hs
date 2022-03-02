@@ -1,6 +1,6 @@
 module Src.Controller.ChatController where
     import Src.Model.Mensagem
-    import Src.Model.Aluno
+    import Src.Model.Aluno as A
     import qualified Src.Model.Ticket as T
     import Control.Monad (when)
     import Src.Util.TxtFunctions
@@ -15,12 +15,12 @@ module Src.Controller.ChatController where
             putStrLn "Insira um título para sua dúvida:"
             titulo <- getLine
             id <- buscaNovoId "Tickets"
-            let ticket = T.Ticket (read id) (titulo) [] "Em Andamento" () disciplinaTicket
+            let ticket = T.Ticket (read id) (titulo) [] "Em Andamento" (A.id aluno) disciplinaTicket
             adicionaLinha "Tickets" $ show ticket
             putStrLn "Deseja adicionar mais um ticket? (s/n)"
             resposta <- getLine
             Control.Monad.when (resposta == "s") $ do
-                    adicionaTicket
+                    adicionaTicket aluno
         else do 
             putStrLn ("Você não está matriculado na disciplina " ++ disciplinaTicket) 
     
