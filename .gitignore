@@ -42,6 +42,10 @@ cabal.project.local~
 .history
 .ionide
 
+## Txt archives
+*.txt
+
 # Support for Project snippet scope
+
 
 # End of https://www.toptal.com/developers/gitignore/api/haskell,visualstudiocode
