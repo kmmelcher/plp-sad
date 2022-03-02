@@ -1,9 +1,7 @@
 ![SAD ICON](http://www.br2n.com/images/sad/sad.gif)
 
-![SAD ICON](./github/assets/icon.png)
-
 <h1 align="center">
-  <img src=".github/assets/icon.png" width="72px" align="center">&nbsp;&nbsp;
+  <img href="http://www.br2n.com/images/sad/sad.gif" width="90px" align="center">&nbsp;&nbsp;
   SAD
 </h1>
 
