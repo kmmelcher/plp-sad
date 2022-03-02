@@ -35,7 +35,7 @@ module Src.Menu where
         putStrLn "1) Cadastrar aluno\n2) Cadastrar monitor\n3) Cadastrar professor\n4) Voltar para o menu principal"
         opcao <- getLine
         putStr "\n"
-        decideMenuCadastro
+        decideMenuCadastro opcao
     
 
     decideMenuCadastro :: String -> IO ()
