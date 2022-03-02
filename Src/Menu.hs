@@ -35,12 +35,18 @@ module Src.Menu where
         putStrLn "1) Cadastrar aluno\n2) Cadastrar monitor\n3) Cadastrar professor\n4) Voltar para o menu principal"
         opcao <- getLine
         putStr "\n"
-        if opcao == "1" then adicionaAluno else
-            if opcao == "2" then adicionaMonitor else
-                if opcao == "3" then adicionaProfessor else
-                    if opcao == "4" then menuPrincipal else do
-                    putStrLn "Insira um valor válido!\n"
-                    menuCadastro
+        decideMenuCadastro
+    
+
+    decideMenuCadastro :: String -> IO ()
+    decideMenuCadastro opcao 
+        | opcao == "1" = adicionaAluno 
+        | opcao == "2" = adicionaMonitor
+        | opcao == "3" = adicionaProfessor
+        | opcao == "4" = menuPrincipal
+        | otherwise = do
+            putStrLn "Insira um valor válido!\n"
+            menuCadastro
 
     menuLogin :: IO()
     menuLogin = do
