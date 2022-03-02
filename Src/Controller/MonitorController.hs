@@ -4,7 +4,7 @@ module Src.Controller.MonitorController where
     import Src.Model.Ticket as T
     import Src.Controller.ChatController
     
-    getMonitor:: Int -> IO(Monitor)
+    getMonitor:: Int -> IO Monitor
     getMonitor id = do
         monitorToString <- buscaObjetoById "Monitores" id
         return (read monitorToString :: Monitor)
@@ -51,22 +51,9 @@ module Src.Controller.MonitorController where
     removeMonitor disciplinasDoProfessor = do
         id <- insereMatricula
         monitor <- getMonitor id
-
         if (M.disciplina monitor) `elem` disciplinasDoProfessor then do
             removeLinha "Monitores" (show id)
             putStrLn "Monitor removido com sucesso!\n"
             else do
                 putStrLn "Este monitor não é de uma disciplina sua! Tente novamente."
                 removeMonitor disciplinasDoProfessor
-
-    respondeTicket :: Monitor -> IO()
-    respondeTicket monitor = do
-        tickets <- getTicketsEmAndamento (M.disciplina monitor)
-        if tickets == [] then putStrLn "Não há tickets em andamento por enquanto." else do
-            putStrLn "\nTickets em andamento da sua disciplina:"
-            exibeTickets tickets
-            adicionaMensagem (M.id monitor)
-        -- FALTA CHECAR SE O INPUT PARA ESCOLHER ID PARA RESPOTA É:
-        -- 1: VÁLIDO
-        -- 2: DA DISCIPLINA DO MONITOR
-        -- 3: REFERENTE A UM TICKET "EM ANDAMENTO"

@@ -123,7 +123,7 @@ module Src.Menu where
             exibeTicketsDisciplina (disciplina monitor)
             exibeMenuMonitor (M.id monitor)
         | opcao == "2" = do
-            respondeTicket monitor
+            adicionaMensagemMonitor monitor
             exibeMenuMonitor (M.id monitor)
         | opcao == "3" = do
             putStrLn "Deslogando...\n"
