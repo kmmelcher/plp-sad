@@ -2,11 +2,19 @@ module Src.Controller.MonitorController where
     import Src.Model.Monitor as M
     import Src.Util.TxtFunctions
     
+    {- 
+    Retorna o monitor a partir do seu ID
+    Parametros:
+        id = matricula do monitor
+    -}
     getMonitor:: Int -> IO Monitor
     getMonitor id = do
         monitorToString <- getObjetoById "Monitores" id
         return (read monitorToString :: Monitor)
-
+    
+    {- 
+    Adiciona um monitor a partir de dados inseridos pelo usuaário
+    -}
     adicionaMonitor :: IO()
     adicionaMonitor = do
         id <- insereMatricula
@@ -20,6 +28,9 @@ module Src.Controller.MonitorController where
             adicionaLinha "Monitores" $ show monitor
             putStrLn "Monitor cadastrado com sucesso!\n"
 
+    {- 
+    Realiza as entradas do usuario para receber uma matricula de monitor válida
+    -}
     insereMatricula :: IO Int
     insereMatricula = do
         putStrLn "\nInsira a matricula do monitor"
@@ -32,6 +43,11 @@ module Src.Controller.MonitorController where
             putStrLn "\nMonitor não identificado, tente novamente.\n(Digite 0 para voltar ao menu principal)"
             insereMatricula
 
+    {- 
+    função para receber os dados da disciplina de um monitor no momento do cadastro
+    Parametros:
+        id = matricula do monitor
+    -}
     insereDisciplina :: Int -> IO String
     insereDisciplina id = do
         if id == 0
@@ -46,6 +62,11 @@ module Src.Controller.MonitorController where
                 putStrLn "Disciplina não cadastrada!\n(Digite \"VOLTAR\" para voltar ao menu principal)\n"
                 insereDisciplina id
 
+    {- 
+    Função que remove um monitor a partir de entradas do usuario
+    Parametros:
+        disciplinasDoProfessor = array com as disciplinas do professor que deseja remover o monitor
+    -}
     removeMonitor :: [String] -> IO()
     removeMonitor disciplinasDoProfessor = do
         id <- insereMatricula
