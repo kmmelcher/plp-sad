@@ -9,7 +9,6 @@ module Src.Controller.ChatController where
     import Src.Model.Professor as P
     import Src.Controller.AlunoController
 
-
     getTicket:: Int -> IO T.Ticket
     getTicket id = do
         ticketToString <- getObjetoById "Tickets" id
@@ -24,7 +23,7 @@ module Src.Controller.ChatController where
     adicionaTicket aluno = do
         putStrLn "Insira o nome da disciplina que você tem dúvida:"
         disciplinaTicket <-  getLine
-        if disciplinaTicket `elem` A.disciplinas aluno then do
+        if disciplinaTicket `elem` (A.disciplinas aluno) then do
             putStrLn "Insira um título para sua dúvida:"
             titulo <- getLine
             id <- buscaNovoId "Tickets"
@@ -261,7 +260,7 @@ module Src.Controller.ChatController where
         ehMonitor <- checaExistenciaById "Monitores" autorMsg
         ehAluno <- checaExistenciaById "Alunos" autorMsg
         if ehProf then do 
-            prof <- xProfessor autorMsg
+            prof <- pegaProfessor autorMsg
             let nomeProf = (P.nome prof)
             putStrLn ("Autor: " ++ nomeProf ++ "\n")
             putStrLn ("Mensagem: " ++ conteudoMsg ++ "\n")
@@ -274,7 +273,7 @@ module Src.Controller.ChatController where
             putStrLn ("Erro: Mensagem com autor nao cadastrado") 
     
     -- Peguei de forma temporaria do ProfessorController para nao precisar importar (tá dando import ciclico) 
-    xProfessor:: Int -> IO Professor
-    xProfessor id = do
+    pegaProfessor:: Int -> IO Professor
+    pegaProfessor id = do
         professorToString <- getObjetoById "Professores" id
-        return (read professorToString :: Professor) 
+        return (read professorToString :: Professor)

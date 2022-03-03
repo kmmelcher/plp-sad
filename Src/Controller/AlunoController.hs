@@ -1,10 +1,7 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Use print" #-}
 module Src.Controller.AlunoController where
     import Src.Model.Aluno as A
     import Src.Util.TxtFunctions
     import Src.Controller.DisciplinaController as DC
-    import Src.Controller.ChatController (exibeTicketsDisciplina)
     
     getAluno:: Int -> IO Aluno
     getAluno id = do
