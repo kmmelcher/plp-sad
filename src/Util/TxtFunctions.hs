@@ -1,4 +1,4 @@
-module Src.Util.TxtFunctions where
+module Util.TxtFunctions where
     import System.IO
     import Control.Exception (evaluate)
     import Prelude as P

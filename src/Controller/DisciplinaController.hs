@@ -1,13 +1,8 @@
-module Src.Controller.DisciplinaController where
-    import Src.Model.Disciplina as D
-    import Src.Util.TxtFunctions
-    import Src.Model.Aluno as A
-    
-    {- 
-    Retorna uma disciplina a partir do seu ID
-    Parametros:
-        id = id da disciplina a ser retornada
-    -}
+module Controller.DisciplinaController where
+    import Model.Disciplina as D
+    import Util.TxtFunctions
+    import Model.Aluno as A
+
     getDisciplina:: Int -> IO Disciplina
     getDisciplina id = do
         disciplinaToString <- getObjetoById "Disciplinas" id

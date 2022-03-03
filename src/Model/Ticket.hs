@@ -1,5 +1,5 @@
-module Src.Model.Ticket where
-    import Src.Model.Mensagem (Mensagem)
+module Model.Ticket where
+    import Model.Mensagem (Mensagem)
     data Ticket = Ticket {
         id :: Int,
         titulo :: String,

@@ -1,13 +1,8 @@
-module Src.Controller.MonitorController where
-    import Src.Model.Monitor as M
-    import Src.Util.TxtFunctions
-    import Src.Controller.AlunoController
-    
-    {- 
-    Retorna o monitor a partir do seu ID
-    Parametros:
-        id = matricula do monitor
-    -}
+module Controller.MonitorController where
+    import Model.Monitor as M
+    import Util.TxtFunctions
+    import Controller.AlunoController
+
     getMonitor:: Int -> IO Monitor
     getMonitor id = do
         monitorToString <- getObjetoById "Monitores" id

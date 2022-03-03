@@ -1,9 +1,8 @@
-module Src.Controller.AlunoController where
-    import Src.Model.Aluno as A
-    import Src.Util.TxtFunctions
-    import Src.Controller.DisciplinaController as DC
-    import Src.Model.Monitor as M
-    
+module Controller.AlunoController where
+    import Model.Aluno as A
+    import Util.TxtFunctions
+    import Controller.DisciplinaController as DC
+    import Model.Monitor as M
 
     {- 
     Função que retorna um objeto do tipo Aluno com o id fornecido

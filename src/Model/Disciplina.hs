@@ -1,4 +1,4 @@
-module Src.Model.Disciplina where
+module Model.Disciplina where
     data Disciplina = Disciplina {
         id :: Int,
         sigla :: String,

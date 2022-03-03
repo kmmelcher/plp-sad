@@ -1,24 +1,17 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Use <&>" #-}
-module Src.Controller.ChatController where
-    import Src.Model.Mensagem as MSG
-    import Src.Model.Aluno as A
-    import qualified Src.Model.Ticket as T
-    import Src.Util.TxtFunctions
+module Controller.ChatController where
+    import Model.Mensagem as MSG
+    import Model.Aluno as A
+    import Model.Ticket as T
+    import Util.TxtFunctions
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
-    import Src.Model.Monitor as M
-    import Src.Model.Professor as P
-    import Src.Controller.AlunoController
-    import Src.Controller.ProfessorController
-    import Src.Model.Ticket (Ticket)
-    import Src.Model.Disciplina
+    import Model.Monitor as M
+    import Model.Professor as P
+    import Controller.AlunoController
+    import Controller.ProfessorController
+    import Model.Ticket (Ticket)
+    import Model.Disciplina
     
-    {- 
-    Função que retorna um objeto do tipo ticket a partir de um ID fornecido
-    Parametros:
-        id = O id do ticket desejado
-    -}
     getTicket:: Int -> IO T.Ticket
     getTicket id = do
         ticketToString <- getObjetoById "Tickets" id
@@ -126,7 +119,6 @@ module Src.Controller.ChatController where
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (T.mensagens ticket ++ [idMensagem]) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
-
     {-
     Exibe todos os tickets de uma disciplina.
     Parâmetros:
@@ -137,11 +129,9 @@ module Src.Controller.ChatController where
         tickets <- getTicketsDisciplina nomeDisciplina
         exibeTickets tickets "nesta disciplina" ("da disciplina: " ++ nomeDisciplina)
 
-
     getTodosOsTickets:: IO [String]
     getTodosOsTickets = do
         fileToStringArray "Tickets"
-       
 
     {- 
     Retorna todos os tickets de uma disciplina
@@ -153,7 +143,6 @@ module Src.Controller.ChatController where
 
         tickets <- fileToStringArray "Tickets"
         getTicketsDisciplinaRecursivo tickets disciplina
-
 
     {- 
     Função auxiliar de getTicketsDisciplina
@@ -221,7 +210,6 @@ module Src.Controller.ChatController where
             return (T.id ticket : proximosTickets)
             else
                 getTicketsConcluidosRecursivo ticketsRestantes
-
 
     {-
     Exibe uma lista de tickets.
@@ -391,16 +379,16 @@ module Src.Controller.ChatController where
     -}
     exibeMensagem :: Mensagem -> String ->IO()
     exibeMensagem mensagem disciplina = do
-        ehProf <- checaExistenciaById "Professores" (autor mensagem)
-        ehMonitor <- checaExistenciaById "Monitores" (autor mensagem)
-        monitorStr <- getObjetoById "Monitores" (autor mensagem)
+        ehProf <- checaExistenciaById "Professores" (MSG.autor mensagem)
+        ehMonitor <- checaExistenciaById "Monitores" (MSG.autor mensagem)
+        monitorStr <- getObjetoById "Monitores" (MSG.autor mensagem)
         let monitor = read monitorStr :: Monitor
 
         if ehProf then do
-            professor <- getProfessor (autor mensagem)
+            professor <- getProfessor (MSG.autor mensagem)
             putStrLn ("[" ++ horario mensagem ++ "] " ++ "(PROFESSOR) " ++ P.nome professor ++ " - " ++ conteudo mensagem)
         else do
-            aluno <- getAluno (autor mensagem)
+            aluno <- getAluno (MSG.autor mensagem)
             if ehMonitor && (M.disciplina monitor == disciplina) then
                 putStrLn ("[" ++ horario mensagem ++ "] " ++ "(MONITOR) " ++ A.nome aluno ++ " - " ++ conteudo mensagem)
             else putStrLn ("[" ++ horario mensagem ++ "] " ++ "(ALUNO) " ++ A.nome aluno ++ " - " ++ conteudo mensagem)

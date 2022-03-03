@@ -1,13 +1,13 @@
-module Src.Menu where
+module Menu where
 
-    import Src.Controller.AlunoController
-    import Src.Controller.ChatController
-    import Src.Controller.MonitorController
-    import Src.Controller.ProfessorController
-    import Src.Util.TxtFunctions
-    import Src.Model.Monitor as M
-    import Src.Model.Professor as P
-    import Src.Model.Aluno as A
+    import Controller.AlunoController
+    import Controller.ChatController
+    import Controller.MonitorController
+    import Controller.ProfessorController
+    import Util.TxtFunctions
+    import Model.Monitor as M
+    import Model.Professor as P
+    import Model.Aluno as A
 
     menuPrincipal :: IO()
     menuPrincipal = do

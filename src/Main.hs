@@ -1,4 +1,4 @@
-import Src.Menu (menuPrincipal)
+import Menu (menuPrincipal)
 
 main :: IO()
 main = menuPrincipal

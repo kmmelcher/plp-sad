@@ -1,10 +1,8 @@
-module Src.Controller.ProfessorController where
-    import Src.Util.TxtFunctions
-    import Src.Model.Ticket
-    import Src.Controller.AlunoController
-    import qualified Src.Model.Professor as P
-    import Control.Exception (evaluate)
-
+module Controller.ProfessorController where
+    import Util.TxtFunctions
+    import Model.Ticket
+    import Controller.AlunoController
+    import Model.Professor as P
 
     {- 
     Retorna o professor atravez de seu id
@@ -15,7 +13,6 @@ module Src.Controller.ProfessorController where
     getProfessor id = do
         professorToString <- getObjetoById "Professores" id
         return (read professorToString :: P.Professor)
-
 
     {- 
     Verifica se uma disciplina pertence ao professor
