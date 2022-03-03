@@ -55,14 +55,3 @@ module Src.Controller.AlunoController where
         else do
             putStrLn "Insira um valor válido!\n\n"
             desmatriculaAlunoDeDisciplina aluno
-
-    --mostraTicketsResolvidos :: Aluno ->  IO()
-    --mostraTicketsResolvidos aluno = do
-    --    let disc = disciplinas aluno
-    --    mostraTicketsDeDisciplinas disc
-
-    --mostraTicketsDeDisciplinas :: [String] -> IO()
-    --mostraTicketsDeDisciplinas [] = return ()
-    --mostraTicketsDeDisciplinas (disciplina:resto) = do
-    --    TicketsDisciplina disciplina
-    --    mostraTicketsDeDisciplinas resto
