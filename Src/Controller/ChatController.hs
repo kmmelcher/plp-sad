@@ -6,6 +6,8 @@ module Src.Controller.ChatController where
     import Data.Time (getCurrentTime, UTCTime)
     import Data.Time.Format
     import Src.Model.Monitor as M
+    import Src.Model.Professor as P
+    import Src.Controller.AlunoController
 
     getTicket:: Int -> IO T.Ticket
     getTicket id = do
@@ -21,7 +23,7 @@ module Src.Controller.ChatController where
     adicionaTicket aluno = do
         putStrLn "Insira o nome da disciplina que você tem dúvida:"
         disciplinaTicket <-  getLine
-        if disciplinaTicket `elem` disciplinas aluno then do
+        if disciplinaTicket `elem` (A.disciplinas aluno) then do
             putStrLn "Insira um título para sua dúvida:"
             titulo <- getLine
             id <- buscaNovoId "Tickets"
@@ -230,3 +232,48 @@ module Src.Controller.ChatController where
     verificaTicket [] x = False
     verificaTicket (head:tail) x = do
         (head == x) || verificaTicket tail x
+
+    exibeMensagensTicket :: Int -> IO()
+    exibeMensagensTicket idTicket = do 
+        mensagens <- getMensagensTicket idTicket 
+        exibeMensagensTicketRecursivo mensagens
+    
+    exibeMensagensTicketRecursivo :: [IO Mensagem] -> IO()
+    exibeMensagensTicketRecursivo [] = return ()
+    exibeMensagensTicketRecursivo (mensagemAtual:mensagensRestantes) = do
+        exibeMensagem mensagemAtual
+        exibeMensagensTicketRecursivo mensagensRestantes
+    
+    getMensagensTicket :: Int -> IO[IO Mensagem]
+    getMensagensTicket idTicket = do 
+        ticket <- getTicket idTicket
+        let mensagensTicket = T.mensagens ticket
+        return(map getMensagem mensagensTicket)
+
+    exibeMensagem :: IO Mensagem -> IO() 
+    exibeMensagem mensagemIO = do
+        mensagem <- mensagemIO 
+        let autorMsg = (autor mensagem)
+        let conteudoMsg = (conteudo mensagem)
+        let horarioMsg = (horario mensagem)
+        ehProf <- checaExistenciaById "Professores" autorMsg 
+        ehMonitor <- checaExistenciaById "Monitores" autorMsg
+        ehAluno <- checaExistenciaById "Alunos" autorMsg
+        if ehProf then do 
+            prof <- pegaProfessor autorMsg
+            let nomeProf = (P.nome prof)
+            putStrLn ("Autor: " ++ nomeProf ++ "\n")
+            putStrLn ("Mensagem: " ++ conteudoMsg ++ "\n")
+        else if (ehMonitor || ehAluno) then do 
+            aluno <- getAluno autorMsg
+            let nomeAluno = (A.nome aluno)
+            putStrLn ("Autor: " ++ nomeAluno ++ "\n")
+            putStrLn ("Mensagem: " ++ conteudoMsg ++ "\n")
+        else do
+            putStrLn ("Erro: Mensagem com autor nao cadastrado") 
+    
+    -- Peguei de forma temporaria do ProfessorController para nao precisar importar (tá dando import ciclico) 
+    pegaProfessor:: Int -> IO Professor
+    pegaProfessor id = do
+        professorToString <- getObjetoById "Professores" id
+        return (read professorToString :: Professor)
