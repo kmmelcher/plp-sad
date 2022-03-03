@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use <&>" #-}
 module Src.Controller.ChatController where
     import Src.Model.Mensagem
     import Src.Model.Aluno as A
@@ -9,7 +11,7 @@ module Src.Controller.ChatController where
     import Src.Model.Professor as P
     import Src.Controller.AlunoController
     import Src.Controller.ProfessorController
-    
+
     getTicket:: Int -> IO T.Ticket
     getTicket id = do
         ticketToString <- getObjetoById "Tickets" id
@@ -24,7 +26,7 @@ module Src.Controller.ChatController where
     adicionaTicket aluno = do
         putStrLn "\nInsira a sigla da disciplina na qual deseja se desmatricular:"
         disciplinaTicket <-  getLine
-        if disciplinaTicket `elem` (A.disciplinas aluno) then do
+        if disciplinaTicket `elem` A.disciplinas aluno then do
             putStrLn "Insira um título para sua dúvida:"
             titulo <- getLine
             id <- buscaNovoId "Tickets"
@@ -32,7 +34,7 @@ module Src.Controller.ChatController where
             adicionaLinha "Tickets" $ show ticket
             putStrLn "\nTicket adicionado com sucesso!"
         else do
-            putStrLn ("Você não possui está cadastrado nesta disciplina! Tente novamente.")
+            putStrLn "Você não possui está cadastrado nesta disciplina! Tente novamente."
             adicionaTicket aluno
 
     adicionaMensagem :: Int -> [Int] -> IO()
@@ -62,8 +64,8 @@ module Src.Controller.ChatController where
         tickets <- fileToStringArray "Tickets"
         getTicketsAlunoRecursivo tickets matricula
 
-    getTicketsAlunoRecursivo :: [String] -> Int -> IO([Int])
-    getTicketsAlunoRecursivo [] _ = return ([])
+    getTicketsAlunoRecursivo :: [String] -> Int -> IO [Int]
+    getTicketsAlunoRecursivo [] _ = return []
     getTicketsAlunoRecursivo (ticketAtual:ticketsRestantes) matricula = do
         let ticket = (read ticketAtual :: T.Ticket)
         proximos <- getTicketsAlunoRecursivo ticketsRestantes matricula
@@ -102,17 +104,17 @@ module Src.Controller.ChatController where
     getTicketsDisciplina disciplina = do
         tickets <- fileToStringArray "Tickets"
         getTicketsDisciplinaRecursivo tickets disciplina
-    
+
     getTicketsDisciplinaRecursivo :: [String] -> String -> IO[Int]
-    getTicketsDisciplinaRecursivo [] _ = return ([])
+    getTicketsDisciplinaRecursivo [] _ = return []
     getTicketsDisciplinaRecursivo (ticketAtual:ticketsRestantes) disciplina = do
         let ticket = (read ticketAtual :: T.Ticket)
-        if (T.disciplina ticket) == disciplina
+        if T.disciplina ticket == disciplina
             then do
                 proximos <- getTicketsDisciplinaRecursivo ticketsRestantes disciplina
-                return ([T.id ticket] ++ proximos)
+                return (T.id ticket : proximos)
             else getTicketsDisciplinaRecursivo ticketsRestantes disciplina
-    
+
     exibeTicketsEmAndamento :: [Int] -> IO()
     exibeTicketsEmAndamento tickets = do
         ticketsEmAndamento <- getTicketsEmAndamento tickets
@@ -230,57 +232,57 @@ module Src.Controller.ChatController where
 
     leTicketsDoAluno :: Aluno -> IO()
     leTicketsDoAluno aluno = do
-        ticketsAluno <- (getTicketsAluno (A.id aluno))
+        ticketsAluno <- getTicketsAluno (A.id aluno)
         if null ticketsAluno then exibeTickets ticketsAluno "de sua autoria" "criados por você" else do
             exibeTickets ticketsAluno "de sua autoria" "criados por você"
             putStrLn "Insira o id do ticket que deseja ler as mensagens: "
             idTicket <- readLn
-            if idTicket `elem` ticketsAluno then exibeMensagensDeTicket idTicket else do 
+            if idTicket `elem` ticketsAluno then exibeMensagensDeTicket idTicket else do
                 putStrLn "Id de ticket invalido!"
                 leTicketsDoAluno aluno
 
     exibeMensagensDeTicket :: Int -> IO()
-    exibeMensagensDeTicket idTicket = do 
-        mensagens <- getMensagensDoTicket idTicket 
+    exibeMensagensDeTicket idTicket = do
+        mensagens <- getMensagensDoTicket idTicket
         exibeMensagensDoTicketRecursivo mensagens
-    
+
     exibeMensagensDoTicketRecursivo :: [IO Mensagem] -> IO()
     exibeMensagensDoTicketRecursivo [] = return ()
     exibeMensagensDoTicketRecursivo (mensagemAtualIO:mensagensRestantesIO) = do
         mensagemAtual <- mensagemAtualIO
         exibeMensagem mensagemAtual
         exibeMensagensDoTicketRecursivo mensagensRestantesIO
-    
+
     getMensagensDoTicket :: Int -> IO[IO Mensagem]
-    getMensagensDoTicket idTicket = do 
+    getMensagensDoTicket idTicket = do
         ticket <- getTicket idTicket
         let mensagensTicket = T.mensagens ticket
         return(map getMensagem mensagensTicket)
 
-    exibeMensagem :: Mensagem -> IO() 
+    exibeMensagem :: Mensagem -> IO()
     exibeMensagem mensagem = do
         ehProf <- checaExistenciaById "Professores" (autor mensagem)
         ehMonitor <- checaExistenciaById "Monitores" (autor mensagem)
         ehAluno <- checaExistenciaById "Alunos" (autor mensagem)
-        if ehProf then do 
+        if ehProf then do
             professor <- getProfessor (autor mensagem)
-            putStrLn ("[" ++ (horario mensagem) ++ "] " ++ "(PROFESSOR) " ++ (P.nome professor) ++ " - " ++ (conteudo mensagem)) 
-        else do 
+            putStrLn ("[" ++ horario mensagem ++ "] " ++ "(PROFESSOR) " ++ P.nome professor ++ " - " ++ conteudo mensagem)
+        else do
             aluno <- getAluno (autor mensagem)
             if ehMonitor then
-                putStrLn ("[" ++ (horario mensagem) ++ "] " ++ "(MONITOR) " ++ (A.nome aluno) ++ " - " ++ (conteudo mensagem)) 
-            else putStrLn ("[" ++ (horario mensagem) ++ "] " ++ "(ALUNO) " ++ (A.nome aluno) ++ " - " ++ (conteudo mensagem)) 
-    
+                putStrLn ("[" ++ horario mensagem ++ "] " ++ "(MONITOR) " ++ A.nome aluno ++ " - " ++ conteudo mensagem)
+            else putStrLn ("[" ++ horario mensagem ++ "] " ++ "(ALUNO) " ++ A.nome aluno ++ " - " ++ conteudo mensagem)
+
     leTicketsDaDisciplinaAluno :: Aluno -> IO()
     leTicketsDaDisciplinaAluno aluno = do
         putStrLn "\nInforme a sigla da disciplina na qual deseja visualizar os tickets:"
         disciplina <- getLine
-        if disciplina `elem` (A.disciplinas aluno) then do
+        if disciplina `elem` A.disciplinas aluno then do
             exibeMensagensDisciplina disciplina
         else do
             putStrLn "\nEsta sigla não é valida ou é referente a uma disciplina na qual você não está matrículado!\n"
             leTicketsDaDisciplinaAluno aluno
-    
+
     exibeMensagensDisciplina :: String -> IO()
     exibeMensagensDisciplina disciplina = do
         tickets <- getTicketsDisciplina disciplina
@@ -292,7 +294,7 @@ module Src.Controller.ChatController where
             if idTicket `elem` ticketsDisciplina then exibeMensagensDeTicket idTicket else do
                 putStrLn "Insira um valor válido!"
                 exibeMensagensDisciplina disciplina
-    
+
     lerTicketsDisciplinaProfessor :: Professor -> IO()
     lerTicketsDisciplinaProfessor professor = do
         if length (P.disciplinas professor) > 1 then do
@@ -307,7 +309,7 @@ module Src.Controller.ChatController where
                exibeTicketsDisciplina (head (P.disciplinas professor))
         putStr "Insira o id do Ticket que deseja visualizar ou 0 para sair: "
         idTicket <- readLn
-        if idTicket == 0 
+        if idTicket == 0
             then return ()
             else do
                 ticket <- getTicket idTicket
