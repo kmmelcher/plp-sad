@@ -1,20 +1,20 @@
 Aluno {id = 120110001, nome = "Kilian Melcher", disciplinas = ["OAC", "LOAC", "PLP", "Psoft"]}
 Aluno {id = 120110002, nome = "Pedro Adrian", disciplinas = ["SO", "Redes", "PLP", "Psoft", "BD"]}
-Aluno {id = 120110003, nome = "Álef Carlos", disciplinas = ["EDA", "LEDA", "IP", "PLP"]}
-Aluno {id = 120110004, nome = "Vinícius Azevedo", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
+Aluno {id = 120110003, nome = "Alef Carlos", disciplinas = ["EDA", "LEDA", "IP", "PLP"]}
+Aluno {id = 120110004, nome = "Vinicius Azevedo", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
 Aluno {id = 120110005, nome = "Filipe Ramalho", disciplinas = ["PLP", "BD", "AS", "Redes", "SO"]}
 Aluno {id = 120110006, nome = "Luiggy Ferreira", disciplinas = ["OAC", "LOAC", "PLP", "Psoft"]}
 Aluno {id = 120110007, nome = "Robervaldo", disciplinas = ["BD","AS"]}
 Aluno {id = 120110008, nome = "Roberto Carlos", disciplinas = ["SO", "Redes", "AS"]}
-Aluno {id = 120110009, nome = "владимир", disciplinas = ["OAC", "LOAC", "PLP"]}
-Aluno {id = 120110010, nome = "かまど たんじろ", disciplinas = ["AA", "EDA", "LEDA"]}
+Aluno {id = 120110009, nome = "Roberto Miranda", disciplinas = ["OAC", "LOAC", "PLP"]}
+Aluno {id = 120110010, nome = "Antonio Esterco", disciplinas = ["AA", "EDA", "LEDA"]}
 Aluno {id = 120110011, nome = "Lionel Messi", disciplinas = ["PLP", "SO", "Redes"]}
 Aluno {id = 120110012, nome = "Renata Glasc", disciplinas = ["ES", "SO", "Redes"]}
 Aluno {id = 120110013, nome = "Morgana Silva", disciplinas = ["OAC", "LOAC", "PLP", "Psoft"]}
 Aluno {id = 120110014, nome = "Gabriela Cattuzo", disciplinas = ["OAC", "LOAC", "PLP", "Psoft"]}
 Aluno {id = 120110015, nome = "Fatima Bernardes", disciplinas = ["SO", "Redes", "PLP", "Psoft", "BD"]}
-Aluno {id = 120110016, nome = "Sasha Grey", disciplinas = ["SO", "Redes", "PLP", "Psoft", "BD"]}
-Aluno {id = 120110017, nome = "Mia Kalifa", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
+Aluno {id = 120110016, nome = "Maria Rita", disciplinas = ["SO", "Redes", "PLP", "Psoft", "BD"]}
+Aluno {id = 120110017, nome = "Melina Carvalho", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
 Aluno {id = 120110018, nome = "Emma Wattson", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
 Aluno {id = 120110019, nome = "Henry Cavil", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD", "ES"]}
 Aluno {id = 120110020, nome = "Leonardo Dicaprio", disciplinas = ["BD","AS"]}

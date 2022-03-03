@@ -4,14 +4,12 @@
 name:                plp-sad
 version:             0.1.0.0
 synopsis:            Serviço de Atendimento ao Discente
--- description:
 homepage:            https://github.com/kmmelcher/plp-sad
 license:             MIT
 license-file:        LICENSE
-author:              Kilian Melcher
+author:              Kilian Melcher, Vinícius Azevedo, Álef Ádonis, Filipe Ramalho, Pedro Adrian
 maintainer:          kilian.melcher@gmail.com
--- copyright:
-category:            Text
+category:            System
 build-type:          Simple
 extra-source-files:  CHANGELOG.md, README.md
 cabal-version:       >=1.10
