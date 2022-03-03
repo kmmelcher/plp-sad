@@ -25,10 +25,11 @@ module Src.Controller.MonitorController where
         putStrLn "\nInsira a matricula do monitor"
         id <- readLn
         alunoCadastrado <- checaExistenciaById "Alunos" id
-        if alunoCadastrado || id == 0
+        monitorCadastrado <- checaExistenciaById "Monitores" id
+        if (alunoCadastrado && monitorCadastrado) || id == 0
             then return id
         else do
-            putStrLn "\nAluno não cadastrado!\n(Digite 0 para voltar ao menu principal)\n"
+            putStrLn "\nMonitor não identificado, tente novamente.\n(Digite 0 para voltar ao menu principal)"
             insereMatricula
 
     insereDisciplina :: Int -> IO String
