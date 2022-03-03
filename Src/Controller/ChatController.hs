@@ -215,20 +215,18 @@ module Src.Controller.ChatController where
             exibeTicketsEmAndamento tickets
             adicionaMensagem (A.id aluno) ticketsEmAndamento
 
-    excluirTicket :: Int -> IO()
-    excluirTicket matAluno = do
-        ticketsIds <- getTicketsAluno matAluno
+    excluirTicket :: Aluno -> IO()
+    excluirTicket aluno = do
+        ticketsIds <- getTicketsAluno (A.id aluno)
         exibeTickets ticketsIds "para exclusão" "existentes"
         putStrLn "Escolha entre os seus Tickets qual será excluido: "
-        sel <- getLine
-        if verificaTicket ticketsIds (read sel)
-            then removeLinha "Tickets" sel
-            else print "Ticket invalido"
-
-    verificaTicket :: [Int] -> Int -> Bool
-    verificaTicket [] x = False
-    verificaTicket (head:tail) x = do
-        (head == x) || verificaTicket tail x
+        input <- getLine
+        if read input `elem` ticketsIds then do
+            removeLinha "Tickets" input
+            putStrLn "Ticket removido com sucesso."
+            else do
+                putStrLn "Id invalido!"
+                excluirTicket aluno
 
     leTicketsDoAluno :: Aluno -> IO()
     leTicketsDoAluno aluno = do

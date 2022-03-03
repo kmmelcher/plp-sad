@@ -144,7 +144,7 @@ module Src.Menu where
         putStrLn "\n== SAD: MENU ALUNO =="
         putStrLn ("ID: " ++ show (A.id aluno) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplinas: " ++ show (A.disciplinas aluno))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket meu\n5) Ler meus tickets \n6) Ler tickets de uma disciplina\n7) Marcar ticket como resolvido\n8) Deslogar"
+        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Ler tickets de uma disciplina\n4) Ler meus tickets\n5) Criar Ticket\n6) Mandar mensagem em um ticket meu\n7) Marcar ticket como resolvido\n8) Excluir ticket\n9) Deslogar"
         opcao <- getLine 
         decideMenuAluno aluno opcao
     
@@ -157,23 +157,26 @@ module Src.Menu where
             desmatriculaAlunoDeDisciplina aluno
             exibeMenuAluno (A.id aluno)
         | opcao == "3" = do
-            adicionaTicket aluno
+            leTicketsDaDisciplinaAluno aluno
             exibeMenuAluno (A.id aluno)
         | opcao == "4" = do
-            adicionaMensagemAluno aluno
-            exibeMenuAluno (A.id aluno)
-        | opcao == "5" = do
             leTicketsDoAluno aluno
             exibeMenuAluno (A.id aluno)
+        | opcao == "5" = do
+            adicionaTicket aluno
+            exibeMenuAluno (A.id aluno)
         | opcao == "6" = do
-            leTicketsDaDisciplinaAluno aluno
+            adicionaMensagemAluno aluno
             exibeMenuAluno (A.id aluno)
         | opcao == "7" = do
             resolveTicket aluno
-            menuPrincipal
+            exibeMenuAluno (A.id aluno)
         | opcao == "8" = do
+            excluirTicket aluno
+            exibeMenuAluno (A.id aluno)
+        | opcao == "9" = do
             putStrLn "Deslogando...\n"
-            menuPrincipal     
+            menuPrincipal
         | otherwise  = do
             putStrLn "Opção inválida!\n"
             exibeMenuAluno (A.id aluno)
