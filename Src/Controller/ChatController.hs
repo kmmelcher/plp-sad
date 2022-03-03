@@ -66,16 +66,18 @@ module Src.Controller.ChatController where
     adicionaMensagem id ticketsValidos = do
         putStrLn "Escolha o ticket no qual deseja inserir a mensagem: "
         idTicket <- readLn
+        putStrLn ""
         if ehTicketValido idTicket ticketsValidos
             then do
-            putStrLn "Digite a mensagem:"
-            conteudo <- getLine
-            idMensagem <- buscaNovoId "Mensagens"
-            tempo <- getCurrentTime >>= return.formatTime defaultTimeLocale "%D %Hh%M"
-            let mensagem = Mensagem (read idMensagem) id conteudo tempo
-            insereMensagemNoTicket idTicket (read idMensagem)
-            adicionaLinha "Mensagens" $ show mensagem
-            putStrLn "Mensagem adicionada com sucesso."
+                exibeMensagensDeTicket idTicket
+                putStr "\nDigite a mensagem: "
+                conteudo <- getLine
+                idMensagem <- buscaNovoId "Mensagens"
+                tempo <- getCurrentTime >>= return.formatTime defaultTimeLocale "%D %Hh%M"
+                let mensagem = Mensagem (read idMensagem) id conteudo tempo
+                insereMensagemNoTicket idTicket (read idMensagem)
+                adicionaLinha "Mensagens" $ show mensagem
+                putStrLn "Mensagem adicionada com sucesso."
         else do
             putStrLn "Ticket inválido!\n"
             adicionaMensagem id ticketsValidos
@@ -454,3 +456,31 @@ module Src.Controller.ChatController where
                     lerTicketsDisciplinaProfessor professor
         else do
                exibeMensagensDisciplina (head (P.disciplinas professor))
+    
+    lerTicketsDisciplina :: P.Professor -> IO()
+    lerTicketsDisciplina professor = do
+        if length (P.disciplinas professor) > 1 then do
+            putStrLn "Insira qual disciplina você deseja visualizar os tickets:"
+            disciplina <- getLine
+            if verificaDisciplina (P.disciplinas professor) disciplina
+                then exibeTicketsDisciplina disciplina
+                else do
+                    putStrLn "\nDisciplina invalida!"
+                    lerTicketsDisciplina professor
+        else do
+               exibeTicketsDisciplina (head (P.disciplinas professor))
+    
+    adicionaMensagemProfessor :: P.Professor -> IO ()
+    adicionaMensagemProfessor professor = do
+        let disciplinasDoProfessor = P.disciplinas professor
+        ticketsValidos <- pegaTicketsDoProfessor disciplinasDoProfessor
+        adicionaMensagem (P.id professor) ticketsValidos
+
+    pegaTicketsDoProfessor :: [String] -> IO [Int]
+    pegaTicketsDoProfessor [] = return []
+    pegaTicketsDoProfessor (head : tail) = do
+        todosOsTickets <- getTicketsDisciplina head
+        ticketsFiltrados <- getTicketsEmAndamento todosOsTickets
+        exibeTickets ticketsFiltrados ("para a disciplina " ++ head) ("da disciplina " ++ head)
+        result <- pegaTicketsDoProfessor tail
+        return (ticketsFiltrados ++ result)

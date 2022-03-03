@@ -1,12 +1,11 @@
 module Src.Controller.ProfessorController where
     import Src.Util.TxtFunctions
-    import Src.Controller.ChatController
     import Src.Model.Ticket
     import Src.Controller.AlunoController
     import qualified Src.Model.Professor as P
     import Control.Exception (evaluate)
 
-    
+
     {- 
     Retorna o professor atravez de seu id
     Parametros:
@@ -24,18 +23,18 @@ module Src.Controller.ProfessorController where
         professor = objeto professor que coném as disciplinas em questão
         disciplina = disciplina a ser verificada
     -}
-    ehDisciplinaDoProfessor :: Professor -> String -> Bool
-    ehDisciplinaDoProfessor professor disciplina = disciplina `elem` (disciplinas professor)
-    
-    solicitaDisciplina :: Professor -> IO(String)
-    solicitaDisciplina professor = 
-        if (length (disciplinas professor) > 1) then do
+    ehDisciplinaDoProfessor :: P.Professor -> String -> Bool
+    ehDisciplinaDoProfessor professor disciplina = disciplina `elem` P.disciplinas professor
+
+    solicitaDisciplina :: P.Professor -> IO String
+    solicitaDisciplina professor =
+        if length (P.disciplinas professor) > 1 then do
             putStrLn "Informe a sigla da disciplina relacionada:"
             disciplina <- getLine
             if ehDisciplinaDoProfessor professor disciplina then return disciplina else do
                 putStrLn "Insira uma sigla válida!\n"
                 solicitaDisciplina professor
-        else return ((disciplinas professor)!!0)
+        else return (head (P.disciplinas professor))
 
     adicionaProfessor :: IO()
     adicionaProfessor = do
@@ -50,36 +49,7 @@ module Src.Controller.ProfessorController where
             adicionaLinha "Professores" profToString
             putStrLn ("Professor cadastrado com sucesso no id " ++ id ++ ". Decore seu id para utilizar o sistema!\n")
 
-    lerTicketsDisciplina :: P.Professor -> IO()
-    lerTicketsDisciplina professor = do
-        if length (P.disciplinas professor) > 1 then do
-            putStrLn "Insira qual disciplina você deseja visualizar os tickets:"
-            disciplina <- getLine
-            if verificaDisciplina (P.disciplinas professor) disciplina
-                then exibeTicketsDisciplina disciplina
-                else do
-                    putStrLn "\nDisciplina invalida!"
-                    lerTicketsDisciplina professor
-        else do
-               exibeTicketsDisciplina (head (P.disciplinas professor))
-
     verificaDisciplina :: [String] -> String -> Bool
     verificaDisciplina [] _ = False
     verificaDisciplina (disciplinaAtual:disciplinasRestantes) disciplina = do
         (disciplinaAtual == disciplina) || verificaDisciplina disciplinasRestantes disciplina
-
-    adicionaMensagemProfessor :: P.Professor -> IO ()
-    adicionaMensagemProfessor professor = do
-        let disciplinasDoProfessor = P.disciplinas professor
-        ticketsValidos <- pegaTicketsDoProfessor disciplinasDoProfessor
-        adicionaMensagem (P.id professor) ticketsValidos
-
-
-    pegaTicketsDoProfessor :: [String] -> IO [Int]
-    pegaTicketsDoProfessor [] = return []
-    pegaTicketsDoProfessor (head : tail) = do
-        todosOsTickets <- getTicketsDisciplina head
-        ticketsFiltrados <- getTicketsEmAndamento todosOsTickets
-        exibeTickets ticketsFiltrados ("para a disciplina " ++ head) ("da disciplina " ++ head)
-        result <- pegaTicketsDoProfessor tail
-        return (ticketsFiltrados ++ result)
