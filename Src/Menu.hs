@@ -34,14 +34,35 @@ module Src.Menu where
     decideMenuCadastro professor opcao 
         | opcao == "1" = do
             disciplina <- solicitaDisciplina professor
-            adicionaAluno disciplina
+            vinculaAluno disciplina
         | opcao == "2" = do
             disciplina <- solicitaDisciplina professor
-            adicionaMonitor disciplina
+            vinculaMonitor disciplina
         | opcao == "3" = putStrLn ""
         | otherwise = do
             putStrLn "Insira um valor válido!\n"
             menuCadastro professor
+    
+    menuRemocao :: Professor -> IO()
+    menuRemocao professor = do
+        putStrLn "\nQuem você deseja desvincular?"
+        putStrLn "1) Desvincular aluno\n2) Desvincular monitor\n3) Voltar para o menu professor"
+        opcao <- getLine
+        putStr "\n"
+        decideMenuRemocao professor opcao
+    
+    decideMenuRemocao :: Professor -> String -> IO()
+    decideMenuRemocao professor opcao
+        | opcao == "1" = do
+            disciplina <- solicitaDisciplina professor
+            desvinculaAluno disciplina
+        | opcao == "2" = do
+            disciplina <- solicitaDisciplina professor
+            desvinculaMonitor disciplina
+        | opcao == "3" = putStrLn ""
+        | otherwise = do
+            putStrLn "Insira um valor válido!\n"
+            menuRemocao professor
 
     menuLogin :: IO()
     menuLogin = do
@@ -102,7 +123,7 @@ module Src.Menu where
             menuCadastro professor
             exibeMenuProfessor (P.id professor)
         | opcao == "4" = do
-            removeMonitor (P.disciplinas professor)
+            menuRemocao professor
             exibeMenuProfessor (P.id professor)
         | opcao == "5" = do
             putStrLn "Deslogando...\n"
@@ -143,37 +164,31 @@ module Src.Menu where
         putStrLn "\n== SAD: MENU ALUNO =="
         putStrLn ("ID: " ++ show (A.id aluno) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplinas: " ++ show (A.disciplinas aluno))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Ler tickets de uma disciplina\n4) Ler meus tickets\n5) Criar Ticket\n6) Mandar mensagem em um ticket meu\n7) Marcar ticket como resolvido\n8) Excluir ticket\n9) Deslogar"
+        putStrLn "1) Ler tickets de uma disciplina\n2) Ler meus tickets\n3) Criar Ticket\n4) Mandar mensagem em um ticket meu\n5) Marcar ticket como resolvido\n6) Excluir ticket\n7) Deslogar"
         opcao <- getLine 
         decideMenuAluno aluno opcao
     
     decideMenuAluno :: Aluno -> String -> IO()
     decideMenuAluno aluno opcao
         | opcao == "1" = do
-            matriculaAlunoEmDisciplina aluno
-            exibeMenuAluno (A.id aluno)
-        | opcao == "2" = do
-            desmatriculaAlunoDeDisciplina aluno
-            exibeMenuAluno (A.id aluno)
-        | opcao == "3" = do
             leTicketsDaDisciplinaAluno aluno
             exibeMenuAluno (A.id aluno)
-        | opcao == "4" = do
+        | opcao == "2" = do
             leTicketsDoAluno aluno
             exibeMenuAluno (A.id aluno)
-        | opcao == "5" = do
+        | opcao == "3" = do
             adicionaTicket aluno
             exibeMenuAluno (A.id aluno)
-        | opcao == "6" = do
+        | opcao == "4" = do
             adicionaMensagemAluno aluno
             exibeMenuAluno (A.id aluno)
-        | opcao == "7" = do
+        | opcao == "5" = do
             resolveTicket aluno
             exibeMenuAluno (A.id aluno)
-        | opcao == "8" = do
+        | opcao == "6" = do
             excluirTicket aluno
             exibeMenuAluno (A.id aluno)
-        | opcao == "9" = do
+        | opcao == "7" = do
             putStrLn "Deslogando...\n"
             menuPrincipal
         | otherwise  = do

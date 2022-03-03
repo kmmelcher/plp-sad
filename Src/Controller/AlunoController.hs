@@ -20,8 +20,8 @@ module Src.Controller.AlunoController where
     Forma de uso:
         Função deve ser chamada e os atributos serão inseridos pelo usuário
     -}
-    adicionaAluno :: String -> IO()
-    adicionaAluno disciplina = do
+    vinculaAluno :: String -> IO()
+    vinculaAluno disciplina = do
         putStrLn "Insira a matricula do aluno (digite 0 para voltar ao seu menu)"
         matricula <- readLn
         if matricula == 0 then return () else do
@@ -42,47 +42,23 @@ module Src.Controller.AlunoController where
                 adicionaLinha "Alunos" $ show aluno
                 putStrLn "Aluno cadastrado com sucesso e incluso na sua disciplina.\n"
 
-    {- 
-    Função que realiza a matricula de um aluno em uma disciplina a partir das entradas do usuário
-    Parametros:
-        aluno = Aluno que deseja realizar a matricula
-    -}
-    matriculaAlunoEmDisciplina :: Aluno -> IO()
-    matriculaAlunoEmDisciplina aluno = do
-        putStrLn "\nEstas são todas as disciplinas disponíveis para matrícula:\n"
-        exibeDisciplinasDisponiveis aluno
-        putStrLn "\nInforme a sigla da disciplina na qual deseja se matricular:"
-        sigla <- getLine
-        siglasCadastradas <- getSiglas
-        if sigla `elem` siglasCadastradas then
-            if sigla `elem` disciplinas aluno then do
-                putStrLn ("Você já está matriculado em " ++ sigla ++ ", tente novamente\n\n")
-                matriculaAlunoEmDisciplina aluno
-            else do
-                let alunoAtualizado = Aluno (A.id aluno) (nome aluno) (sigla : disciplinas aluno)
-                atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
-                putStrLn "Matricula realizada com sucesso!"
-        else do
-            putStrLn "Sigla Inválida , tente novamente.\n\n"
-            matriculaAlunoEmDisciplina aluno
-
-    {- 
-    Função que desmatricula um aluno em alguma disciplina a partir de entradas do usuario (remove uma das disciplinas do array de disciplinas do aluno)
-    Parametros:
-        aluno = Aluno que deseja se desmatricular em alguma disciplina
-    -}
-    desmatriculaAlunoDeDisciplina :: Aluno -> IO()
-    desmatriculaAlunoDeDisciplina aluno = do
-        putStrLn "\nInforme a sigla da disciplina na qual deseja se desmatricular: "
-        sigla <- getLine
-        if sigla `elem` disciplinas aluno then do
-            let disciplinasExcetoMencionada = filter (/= sigla) (disciplinas aluno)
-            let alunoAtualizado = Aluno (A.id aluno) (nome aluno) disciplinasExcetoMencionada
-            atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
-            putStrLn "Cancelamento de matricula realizada com sucesso!\n"
-        else do
-            putStrLn "Insira um valor válido!\n"
-            desmatriculaAlunoDeDisciplina aluno
+    desvinculaAluno :: String -> IO()
+    desvinculaAluno disciplina = do
+        putStrLn "Informe a matrícula do aluno a ser desvinculado de sua disciplina (digite 0 para voltar ao seu menu):"
+        matricula <- readLn
+        if matricula == 0 then return () else do
+            alunoExiste <- checaExistenciaById "Alunos" matricula
+            monitorExisteNaDisciplina <- analisaAlunoComoMonitor matricula disciplina
+            if monitorExisteNaDisciplina then putStrLn "Este aluno é monitor da sua disciplina!\n"
+            else if alunoExiste then do
+                aluno <- getAluno matricula
+                if disciplina `elem` (A.disciplinas aluno) then do
+                    let disciplinasAtualizadas = filter (/= disciplina) (disciplinas aluno)
+                    let alunoAtualizado = Aluno (A.id aluno) (nome aluno) disciplinasAtualizadas
+                    atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
+                    putStrLn "O aluno foi desvinculado com sucesso.\n"
+                else putStrLn "Este aluno não está matriculado na sua disciplina!\n"
+            else putStrLn "Este aluno não está cadastrado no sistema.\n"
     
     {-
     Informa se um aluno cursa uma determinada disciplina.

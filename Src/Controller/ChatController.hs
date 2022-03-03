@@ -436,7 +436,7 @@ module Src.Controller.ChatController where
     lerTicketsDisciplinaProfessor :: Professor -> IO()
     lerTicketsDisciplinaProfessor professor = do
         if length (P.disciplinas professor) > 1 then do
-            putStrLn "Insira a sigla da disciplina na qual você deseja visualizar os tickets:"
+            putStrLn "\nInsira a sigla da disciplina na qual você deseja visualizar os tickets:"
             disciplina <- getLine
             if ehDisciplinaDoProfessor professor disciplina
                 then exibeMensagensDisciplina disciplina
