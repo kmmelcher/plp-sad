@@ -13,18 +13,15 @@ module Src.Menu where
     menuPrincipal = do
         putStrLn "Bem vindo ao Sistema de Atendimento ao Discente!"
         putStrLn "O que deseja fazer?\n"
-        putStrLn "1) Realizar cadastro\n2) Entrar no sistema\n3) Sair"
+        putStrLn "1) Entrar no Sistema\n2) Sair\n"
         opcao <- getLine
         putStr "\n"
         decideMenuPrincipal opcao
     
     decideMenuPrincipal :: String -> IO ()
     decideMenuPrincipal opcao
-        | opcao == "1" = do
-            menuCadastro
-            menuPrincipal
-        | opcao == "2" = menuLogin
-        | opcao == "3" = putStrLn "Saindo..." 
+        | opcao == "1" = menuLogin
+        | opcao == "2" = putStrLn "Saindo..."
         | otherwise = do 
             putStrLn "Insira um valor válido!\n"
             menuPrincipal
@@ -90,7 +87,7 @@ module Src.Menu where
         putStrLn "\n== SAD: MENU PROFESSOR =="
         putStrLn ("ID: " ++ show (P.id professor) ++ " | " ++ "Nome: " ++ P.nome professor ++ " | " ++ "Disciplinas: " ++ show (P.disciplinas professor))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Desvincular Monitor\n4) Deslogar"
+        putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Desvincular Monitor\n4) Menu de cadastro\n5) Deslogar"
         opcao <- getLine
         decideMenuProfessor professor opcao
 
@@ -107,6 +104,9 @@ module Src.Menu where
             exibeMenuProfessor (P.id professor)
         | opcao == "4" = do
             putStrLn "Deslogando...\n"
+            menuPrincipal
+        | opcao == "5" = do
+            menuCadastro
             menuPrincipal
         | otherwise = do 
             putStrLn "Opção inválida!"
