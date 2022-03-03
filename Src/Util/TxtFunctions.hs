@@ -11,7 +11,7 @@ module Src.Util.TxtFunctions where
     Parametros:
         nomeArquivo = nome do arquivo no diretório database
     -}
-    fileToStringArray :: String -> IO([String])
+    fileToStringArray :: String -> IO [String]
     fileToStringArray nomeArquivo = do
         arquivo <- openFile ("database/" ++ nomeArquivo ++ ".txt") ReadMode
         conteudo <- hGetContents arquivo
@@ -26,7 +26,7 @@ module Src.Util.TxtFunctions where
         nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
         idObjeto = O id do objeto que deseja ser buscado
     -}
-    getObjetoById :: String -> Int -> IO(String)
+    getObjetoById :: String -> Int -> IO String
     getObjetoById nomeArquivo objetoId = buscaObjetoByAtributo nomeArquivo "id" (show objetoId ++ ",")
 
     {- 
@@ -43,7 +43,7 @@ module Src.Util.TxtFunctions where
         atributo = O atributo do objeto que deseja ser buscado
         valorAtributo = O valor do atributo do objeto que deseja ser buscado
     -}
-    buscaObjetoByAtributo :: String -> String -> String -> IO(String)
+    buscaObjetoByAtributo :: String -> String -> String -> IO String
     buscaObjetoByAtributo nomeArquivo atributo valorAtributo = do
         conteudoEmLista <- fileToStringArray nomeArquivo
         buscaObjetoByAtributoRecursivo conteudoEmLista atributo valorAtributo
@@ -58,20 +58,20 @@ module Src.Util.TxtFunctions where
         atributo = O atributo do objeto que deseja ser buscado
         valorAtributo = O valor do atributo do objeto que deseja ser buscado
     -}
-    buscaObjetoByAtributoRecursivo :: [String] -> String -> String -> IO(String)
+    buscaObjetoByAtributoRecursivo :: [String] -> String -> String -> IO String
     buscaObjetoByAtributoRecursivo [] _ _ = return ""
     buscaObjetoByAtributoRecursivo (objetoAtual:objetosRestantes) atributo valorAtributo =
         if (atributo ++ " = " ++ valorAtributo) `T.isInfixOf` objetoAtual
             then return objetoAtual
             else buscaObjetoByAtributoRecursivo objetosRestantes atributo valorAtributo
- 
+
     {-
     Checa se um objeto existe na database, retornando True, caso exista, e False, caso contrário.
     Parametros:
         nomeArquivo = o nome do arquivo no diretório database no qual o objeto se encontra
         idObjeto = O id do objeto que deseja ser buscado
     -}
-    checaExistenciaById :: String -> Int -> IO(Bool)
+    checaExistenciaById :: String -> Int -> IO Bool
     checaExistenciaById nomeArquivo idObjeto = do
         existeObjeto <- getObjetoById nomeArquivo idObjeto
         return (existeObjeto /= "")
@@ -83,7 +83,7 @@ module Src.Util.TxtFunctions where
         atributo = O atributo do objeto que deseja ser buscado
         valorAtributo = O valor do atributo do objeto que deseja ser buscado
     -}
-    checaExistenciaByAtributo :: String -> String -> String -> IO(Bool)
+    checaExistenciaByAtributo :: String -> String -> String -> IO Bool
     checaExistenciaByAtributo nomeArquivo atributo valorAtributo = do
         existeObjeto <- buscaObjetoByAtributo nomeArquivo atributo valorAtributo
         return (existeObjeto /= "")
@@ -106,14 +106,14 @@ module Src.Util.TxtFunctions where
     Parametros:
         nomeArquivo: o nome do arquivo a ser buscado um novo id no diretório database
     -}
-    buscaNovoId :: String -> IO(String)
+    buscaNovoId :: String -> IO String
     buscaNovoId nomeArquivo = do
         conteudoEmLista <- fileToStringArray nomeArquivo
-        if (conteudoEmLista == [])
+        if null conteudoEmLista
             then return "1"
             else do
                 let ultimaLinhaEmLista = P.words (last conteudoEmLista)
-                let ultimoId = read (P.take ((P.length (ultimaLinhaEmLista!!3))-1) (ultimaLinhaEmLista!!3)) :: Int
+                let ultimoId = read (P.take (P.length (ultimaLinhaEmLista!!3)-1) (ultimaLinhaEmLista!!3)) :: Int
                 return (show (ultimoId+1))
 
     {-
@@ -177,5 +177,5 @@ module Src.Util.TxtFunctions where
     Parametros:
         texto = texto a ser envolto em aspas
     -}
-    adicionaAspas :: String -> String 
+    adicionaAspas :: String -> String
     adicionaAspas texto = "\"" ++ texto ++ "\""
