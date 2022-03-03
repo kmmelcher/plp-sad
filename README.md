@@ -1,9 +1,11 @@
 <h1 align="center">
-  <img src="http://www.br2n.com/images/sad/sad.gif" width="90px" align="center">&nbsp;&nbsp;
+  <img src="http://www.br2n.com/images/sad/sad.gif" width="100px" align="center">&nbsp;&nbsp;
   SAD
 </h1>
 
 # Serviço de atendimento ao discente (SAD)
+
+![Haskell](https://img.shields.io/badge/Haskell-5e5086?style=for-the-badge&logo=haskell&logoColor=white)
 
 ## Instalação
 
@@ -37,14 +39,49 @@ $ cabal run
 
 # Usando o SAD
 
-```
-Bem vindo ao Sistema de Atendimento ao Discente!
-O que deseja fazer?
 
-1) Realizar cadastro
-2) Entrar no sistema
-3) Sair
-``` 
+### Cadastro
+
+É possível cadastrar alunos, monitores e professores.
+
+```
+Quem você deseja cadastrar?
+1) Cadastrar aluno
+2) Cadastrar monitor
+3) Cadastrar professor
+4) Voltar para o menu principal
+1
+
+Insira o nome do aluno: 
+MATEUS
+Insira a matricula do aluno
+12012547
+Insira as disciplinas do aluno
+["LOAC","OAC","PLP"]
+Aluno cadastrado com sucesso.
+```
+
+### Tickets
+
+```
+== SAD: MENU ALUNO ==
+ID: 120110001 | Nome: Kilian Melcher | Disciplinas: ["OAC","LOAC","PLP","Psoft"]
+Digite o número da ação que deseja executar!
+
+1) Matricular-se em disciplina
+2) Desmatricular-se de disciplina
+3) Criar Ticket
+4) Mandar mensagem em um ticket
+5) Ler tickets de uma disciplina
+6) Marcar ticket como resolvido
+7) Deslogar
+3
+Insira o nome da disciplina que você tem dúvida:
+OAC
+Insira um título para sua dúvida:
+Registradores
+Ticket adicionado com sucesso!
+```
 
 # Autores
 
