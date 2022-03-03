@@ -85,6 +85,10 @@ module Src.Controller.ChatController where
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (idMensagem: T.mensagens ticket) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
+    getTodosOsTickets:: IO [String]
+    getTodosOsTickets = do
+        fileToStringArray "Tickets"
+       
     {- 
     Retorna todos os tickets de uma disciplina
     Parametros
@@ -92,7 +96,7 @@ module Src.Controller.ChatController where
     -}
     getTicketsDisciplina :: String -> IO[Int]
     getTicketsDisciplina disciplina = do
-        tickets <- fileToStringArray "Tickets"
+        tickets <- getTodosOsTickets
         return(comparaDisciplinaDeTodosTickets tickets disciplina)
 
     comparaDisciplinaDeUmTicket :: String -> String -> Bool
@@ -161,7 +165,7 @@ module Src.Controller.ChatController where
         return ()
     exibeTicketsRecursivo (idTicketAtual:idsTicketsRestantes) = do
         ticket <- getTicket idTicketAtual
-        putStrLn (show (T.id ticket) ++ ") " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")")
+        putStrLn (show (T.id ticket) ++ "- " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")")  
         exibeTicketsRecursivo idsTicketsRestantes
 
     checaIdDeTicketEmAndamento :: Int -> IO Bool
