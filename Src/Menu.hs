@@ -11,12 +11,8 @@ module Src.Menu where
 
     menuPrincipal :: IO()
     menuPrincipal = do
-        putStrLn "Bem vindo ao Sistema de Atendimento ao Discente!"
-        putStrLn "O que deseja fazer?\n"
-        putStrLn "1) Entrar no Sistema\n2) Sair\n"
-        opcao <- getLine
-        putStr "\n"
-        decideMenuPrincipal opcao
+        putStrLn "\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):"
+        menuLogin
     
     decideMenuPrincipal :: String -> IO ()
     decideMenuPrincipal opcao
@@ -26,32 +22,33 @@ module Src.Menu where
             putStrLn "Insira um valor válido!\n"
             menuPrincipal
 
-    menuCadastro :: IO ()
-    menuCadastro = do
-        putStrLn "Quem você deseja cadastrar?"
-        putStrLn "1) Cadastrar aluno\n2) Cadastrar monitor\n3) Cadastrar professor\n4) Voltar para o menu principal"
+    menuCadastro :: Professor -> IO ()
+    menuCadastro professor = do
+        putStrLn "\nQuem você deseja vincular?"
+        putStrLn "1) Vincular aluno\n2) Vincular monitor\n3) Voltar para o menu principal"
         opcao <- getLine
         putStr "\n"
-        decideMenuCadastro opcao
+        decideMenuCadastro professor opcao
     
-    decideMenuCadastro :: String -> IO ()
-    decideMenuCadastro opcao 
-        | opcao == "1" = adicionaAluno 
+    decideMenuCadastro :: Professor -> String -> IO ()
+    decideMenuCadastro professor opcao 
+        | opcao == "1" = do
+            disciplina <- solicitaDisciplina professor
+            adicionaAluno disciplina
         | opcao == "2" = adicionaMonitor
-        | opcao == "3" = adicionaProfessor
-        | opcao == "4" = putStrLn ""
+        | opcao == "3" = putStrLn ""
         | otherwise = do
             putStrLn "Insira um valor válido!\n"
-            menuCadastro
+            menuCadastro professor
 
     menuLogin :: IO()
     menuLogin = do
-        putStrLn "Insira sua matrícula (ou seu id, caso seja professor). Para voltar ao menu principal, digite VOLTAR:"
+        putStrLn "Insira seu ID para entrar. Para sair do sistema, digite SAIR:"
 
         input <- getLine
         putStr "\n"
 
-        if input == "VOLTAR" then menuPrincipal else do
+        if input == "SAIR" then putStrLn "Saindo..." else do
             let idPerfil = read input :: Int
 
             ehMonitor <- checaExistenciaById "Monitores" idPerfil
@@ -61,12 +58,13 @@ module Src.Menu where
             decideMenuLogin idPerfil ehMonitor ehProfessor ehAluno
 
     decideMenuLogin :: Int -> Bool -> Bool -> Bool -> IO()
-    decideMenuLogin idPerfil ehMonitor ehProfessor ehAluno = do
-        if ehMonitor then decideMenuAlunoMonitor idPerfil else
-            if ehAluno then exibeMenuAluno idPerfil else
-                if ehProfessor then exibeMenuProfessor idPerfil else do
-                    putStrLn "Matrícula/ID não encontrado. Tente novamente\n\n"
-                    menuLogin
+    decideMenuLogin idPerfil ehMonitor ehProfessor ehAluno
+        | ehMonitor = decideMenuAlunoMonitor idPerfil
+        | ehAluno = exibeMenuAluno idPerfil
+        | ehProfessor = exibeMenuProfessor idPerfil
+        | otherwise = do
+            putStrLn "Matrícula/ID não encontrado. Tente novamente\n\n"
+            menuLogin
 
     decideMenuAlunoMonitor :: Int -> IO()
     decideMenuAlunoMonitor idPerfil = do
@@ -86,7 +84,7 @@ module Src.Menu where
         putStrLn "\n== SAD: MENU PROFESSOR =="
         putStrLn ("ID: " ++ show (P.id professor) ++ " | " ++ "Nome: " ++ P.nome professor ++ " | " ++ "Disciplinas: " ++ show (P.disciplinas professor))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Desvincular Monitor\n4) Menu de cadastro\n5) Deslogar"
+        putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Deslogar"
         opcao <- getLine
         decideMenuProfessor professor opcao
 
@@ -99,11 +97,11 @@ module Src.Menu where
             putStrLn "Respondendo tickets...\n"
             exibeMenuProfessor (P.id professor)
         | opcao == "3" = do
-            removeMonitor (P.disciplinas professor)
+            menuCadastro professor
             exibeMenuProfessor (P.id professor)
         | opcao == "4" = do
-            menuCadastro
-            menuPrincipal
+            removeMonitor (P.disciplinas professor)
+            exibeMenuProfessor (P.id professor)
         | opcao == "5" = do
             putStrLn "Deslogando...\n"
             menuPrincipal

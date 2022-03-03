@@ -13,28 +13,20 @@ module Src.Controller.ProfessorController where
         return (read professorToString :: Professor)
 
     {- 
-    Adiciona um professor ao sistema atravez de entradas do usuario
-    -}
-    adicionaProfessor :: IO()
-    adicionaProfessor = do
-            putStrLn "Insira o nome do professor: "
-            nome <- getLine
-            putStrLn "Insira o nome das disciplinas do professor: "
-            listaDisciplinasStr <- getLine
-            let disciplinas = read listaDisciplinasStr :: [String]
-            id <- buscaNovoId "Professores"
-            let prof = Professor (read id :: Int) nome disciplinas
-            let profToString = show prof
-            adicionaLinha "Professores" profToString
-            putStrLn ("Professor cadastrado com sucesso no id " ++ id ++ ". Decore seu id para utilizar o sistema!\n")
-
-    {- 
     Verifica se uma disciplina está presente num grupo de disciplinas
     Parametros:
         disciplinas = grupo de disciplinas
         disciplina = disciplina a ser verificada
     -}
-    verificaDisciplina :: [String] -> String -> Bool
-    verificaDisciplina [] _ = False
-    verificaDisciplina (disciplinaAtual:disciplinasRestantes) disciplina = do
-        (disciplinaAtual == disciplina) || verificaDisciplina disciplinasRestantes disciplina
+    ehDisciplinaDoProfessor :: Professor -> String -> Bool
+    ehDisciplinaDoProfessor professor disciplina = disciplina `elem` (disciplinas professor)
+    
+    solicitaDisciplina :: Professor -> IO(String)
+    solicitaDisciplina professor = 
+        if (length (disciplinas professor) > 1) then do
+            putStrLn "Informe a sigla da disciplina relacionada:"
+            disciplina <- getLine
+            if ehDisciplinaDoProfessor professor disciplina then return disciplina else do
+                putStrLn "Insira uma sigla válida!\n"
+                solicitaDisciplina professor
+        else return ((disciplinas professor)!!0)

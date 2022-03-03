@@ -438,7 +438,7 @@ module Src.Controller.ChatController where
         if length (P.disciplinas professor) > 1 then do
             putStrLn "Insira a sigla da disciplina na qual você deseja visualizar os tickets:"
             disciplina <- getLine
-            if verificaDisciplina (P.disciplinas professor) disciplina
+            if ehDisciplinaDoProfessor professor disciplina
                 then exibeMensagensDisciplina disciplina
                 else do
                     putStrLn "\nDisciplina invalida!"

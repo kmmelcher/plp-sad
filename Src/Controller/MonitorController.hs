@@ -77,3 +77,17 @@ module Src.Controller.MonitorController where
             else do
                 putStrLn "Este monitor não é de uma disciplina sua! Tente novamente."
                 removeMonitor disciplinasDoProfessor
+    
+    {-
+    Verifica se uma matrícula é referente a um monitor de uma determinada disciplina
+    Parametros:
+        matricula = matricula a ser analisada
+        disciplina = disciplina a ser verificada sobre a existencia do monitor
+    -}
+    verificaMonitor :: Int -> String -> IO(Bool)
+    verificaMonitor matricula disciplina = do
+        monitorExiste <- checaExistenciaById "Monitores" matricula
+        if monitorExiste then do
+            monitor <- getMonitor matricula
+            return (M.disciplina monitor == disciplina)
+        else return False

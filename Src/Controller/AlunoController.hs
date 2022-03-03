@@ -2,6 +2,7 @@ module Src.Controller.AlunoController where
     import Src.Model.Aluno as A
     import Src.Util.TxtFunctions
     import Src.Controller.DisciplinaController as DC
+    import Src.Controller.MonitorController
     
 
     {- 
@@ -19,17 +20,25 @@ module Src.Controller.AlunoController where
     Forma de uso:
         Função deve ser chamada e os atributos serão inseridos pelo usuário
     -}
-    adicionaAluno :: IO()
-    adicionaAluno = do
-        putStrLn "Insira o nome do aluno: "
-        nome <- getLine
+    adicionaAluno :: String -> IO()
+    adicionaAluno disciplina = do
         putStrLn "Insira a matricula do aluno"
         matricula <- readLn
-        putStrLn "Insira as disciplinas do aluno"
-        disciplinas <- readLn
-        let aluno = Aluno matricula nome disciplinas
-        adicionaLinha "Alunos" $ show aluno
-        putStrLn "Aluno cadastrado com sucesso.\n"
+        alunoExiste <- checaExistenciaById "Alunos" matricula
+        monitorExiste <- verificaMonitor matricula disciplina
+        if monitorExiste then putStrLn "Este aluno é monitor de sua disciplina!" else
+            if alunoExiste then do
+                aluno <- getAluno matricula
+                if disciplina `elem` (A.disciplinas aluno) then putStrLn "Este aluno já está na sua diciplina!" else do
+                    let alunoAtualizado = Aluno (A.id aluno) (nome aluno) (disciplina : disciplinas aluno)
+                    atualizaLinhaById "Alunos" (show matricula) (show alunoAtualizado)
+                    putStrLn "Este aluno já está presente no sistema. Cadastro de aluno na disciplina realizado!"
+            else do
+                putStrLn "Este aluno não está cadastrado no SAD. Por favor, informe seu nome:"
+                nome <- getLine
+                let aluno = Aluno matricula nome [disciplina]
+                adicionaLinha "Alunos" $ show aluno
+                putStrLn "Aluno cadastrado com sucesso e incluso na disciplina.\n"
 
     {- 
     Função que realiza a matricula de um aluno em uma disciplina a partir das entradas do usuário
