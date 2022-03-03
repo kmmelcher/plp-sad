@@ -103,10 +103,10 @@ module Src.Menu where
             removeMonitor (P.disciplinas professor)
             exibeMenuProfessor (P.id professor)
         | opcao == "4" = do
-            putStrLn "Deslogando...\n"
+            menuCadastro
             menuPrincipal
         | opcao == "5" = do
-            menuCadastro
+            putStrLn "Deslogando...\n"
             menuPrincipal
         | otherwise = do 
             putStrLn "Opção inválida!"
