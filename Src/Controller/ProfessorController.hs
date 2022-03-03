@@ -13,9 +13,9 @@ module Src.Controller.ProfessorController where
         return (read professorToString :: Professor)
 
     {- 
-    Verifica se uma disciplina está presente num grupo de disciplinas
+    Verifica se uma disciplina pertence ao professor
     Parametros:
-        disciplinas = grupo de disciplinas
+        professor = objeto professor que coném as disciplinas em questão
         disciplina = disciplina a ser verificada
     -}
     ehDisciplinaDoProfessor :: Professor -> String -> Bool

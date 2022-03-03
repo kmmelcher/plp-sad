@@ -14,7 +14,7 @@ module Src.Controller.MonitorController where
         return (read monitorToString :: Monitor)
     
     {- 
-    Adiciona um monitor a partir de dados inseridos pelo usuaário
+    Adiciona um monitor a partir de dados inseridos pelo usuário
     -}
     vinculaMonitor :: String -> IO()
     vinculaMonitor disciplina = do
@@ -23,17 +23,21 @@ module Src.Controller.MonitorController where
         ehAluno <- checaExistenciaById "Alunos" id
         alunoCursaDisciplina <- alunoCursaDisciplina id disciplina
         ehMonitor <- checaExistenciaById "Monitores" id
-        if id == 0 then return ()
-        else if not ehAluno then putStrLn "Este aluno não está cadastrado!\n"
-        else if alunoCursaDisciplina then putStrLn "Este aluno está cursando sua disciplina! Tente novamente\n"
-        else if ehMonitor then putStrLn "Este monitor já esta vinculado a uma disciplina!\n"
-        else do
+        analisaVinculoMonitor ehAluno alunoCursaDisciplina ehMonitor id disciplina     
+    
+    analisaVinculoMonitor :: Bool -> Bool -> Bool -> Int -> String -> IO()
+    analisaVinculoMonitor ehAluno alunoCursaDisciplina ehMonitor id disciplina
+        | id == 0 = return ()
+        | not ehAluno = putStrLn "Este aluno não está cadastrado!\n"
+        | alunoCursaDisciplina = putStrLn "Este aluno está cursando sua disciplina! Tente novamente\n"
+        | ehMonitor = putStrLn "Este monitor já esta vinculado a uma disciplina!\n"
+        | otherwise = do
             putStrLn "Insira os horários de atendimento do monitor"
             horarios <- getLine
             let monitor = Monitor id disciplina horarios
             adicionaLinha "Monitores" $ show monitor
             putStrLn "Monitor cadastrado com sucesso!\n"
-    
+
     desvinculaMonitor :: String -> IO()
     desvinculaMonitor disciplina = do
         putStrLn "Informe a matrícula do monitor a ser desvinculado de sua disciplina (ou digite 0 para voltar ao seu menu):"
@@ -41,12 +45,15 @@ module Src.Controller.MonitorController where
         ehAluno <- checaExistenciaById "Alunos" id
         ehMonitor <- checaExistenciaById "Monitores" id
         ehMonitorDaDisciplina <- analisaAlunoComoMonitor id disciplina
-
-        if id == 0 then return () 
-        else if not ehAluno then putStrLn "Esta matrícula não está cadastrada!\n"
-        else if not ehMonitor then putStrLn "Este monitor não está cadastrado!\n"
-        else if not ehMonitorDaDisciplina then putStrLn "Este monitor não é da disciplina informada!\n"
-        else do
+        analisaDesvinculoMonitor ehAluno ehMonitor ehMonitorDaDisciplina id disciplina
+    
+    analisaDesvinculoMonitor :: Bool -> Bool -> Bool -> Int -> String -> IO()
+    analisaDesvinculoMonitor ehAluno ehMonitor ehMonitorDaDisciplina id disciplina
+        | id == 0 = return () 
+        | not ehAluno = putStrLn "Esta matrícula não está cadastrada!\n"
+        | not ehMonitor = putStrLn "Este monitor não está cadastrado!\n"
+        | not ehMonitorDaDisciplina = putStrLn "Este monitor não é da disciplina informada!\n"
+        | otherwise = do
             removeLinha "Monitores" (show id)
             putStrLn "Monitor desvinculado com sucesso!\n"
 

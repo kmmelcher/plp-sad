@@ -16,19 +16,19 @@ module Src.Controller.AlunoController where
         return (read alunoToString :: Aluno)
 
     {- 
-    Fução que contém as interações com o usuário nescessárias para criação de um novo aluno
-    Forma de uso:
-        Função deve ser chamada e os atributos serão inseridos pelo usuário
+    Vincula o aluno a uma disciplina, interagindo com o usuário para obtenção de informações de entrada
+    Parametros:
+        disciplina = disciplina na qual o aluno será vinculado
     -}
     vinculaAluno :: String -> IO()
     vinculaAluno disciplina = do
         putStrLn "Insira a matricula do aluno (digite 0 para voltar ao seu menu)"
         matricula <- readLn
         if matricula == 0 then return () else do
-            alunoExiste <- checaExistenciaById "Alunos" matricula
-            monitorExisteNaDisciplina <- analisaAlunoComoMonitor matricula disciplina
-            if monitorExisteNaDisciplina then putStrLn "Este aluno é monitor de sua disciplina!"
-            else if alunoExiste then do
+            ehAluno <- checaExistenciaById "Alunos" matricula
+            ehMonitorDaDisciplina <- analisaAlunoComoMonitor matricula disciplina
+            if ehMonitorDaDisciplina then putStrLn "Este aluno é monitor de sua disciplina!"
+            else if ehAluno then do
                     aluno <- getAluno matricula
                     if disciplina `elem` (A.disciplinas aluno) then putStrLn "Este aluno já está na sua diciplina!"
                     else do
@@ -40,7 +40,7 @@ module Src.Controller.AlunoController where
                 nome <- getLine
                 let aluno = Aluno matricula nome [disciplina]
                 adicionaLinha "Alunos" $ show aluno
-                putStrLn "Aluno cadastrado com sucesso e incluso na sua disciplina.\n"
+                putStrLn "Aluno cadastrado com sucesso e incluso na disciplina.\n"
 
     desvinculaAluno :: String -> IO()
     desvinculaAluno disciplina = do

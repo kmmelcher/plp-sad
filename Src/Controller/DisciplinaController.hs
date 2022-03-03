@@ -2,6 +2,7 @@ module Src.Controller.DisciplinaController where
     import Src.Model.Disciplina as D
     import Src.Util.TxtFunctions
     import Src.Model.Aluno as A
+    
     {- 
     Retorna uma disciplina a partir do seu ID
     Parametros:
@@ -33,6 +34,7 @@ module Src.Controller.DisciplinaController where
             then exibeDisciplinasDisponiveisRecursivo disciplinasRestantes aluno else do
             putStrLn (show (D.id disciplina) ++ ") " ++ show (D.nome disciplina) ++ " - " ++ show (sigla disciplina))
             exibeDisciplinasDisponiveisRecursivo disciplinasRestantes aluno
+    
     {- 
     Retorna as siglas de todas as disciplinas
     Parametros:
