@@ -97,7 +97,7 @@ module Src.Menu where
     decideMenuProfessor :: Professor -> String -> IO()
     decideMenuProfessor professor opcao
         | opcao == "1" = do
-            lerTicketsDisciplina professor
+            lerTicketsDisciplinaProfessor professor
             exibeMenuProfessor (P.id professor)
         | opcao == "2" = do
             putStrLn "Respondendo tickets...\n"

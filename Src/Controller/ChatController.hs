@@ -8,6 +8,7 @@ module Src.Controller.ChatController where
     import Src.Model.Monitor as M
     import Src.Model.Professor as P
     import Src.Controller.AlunoController
+    import Src.Controller.ProfessorController
     
     getTicket:: Int -> IO T.Ticket
     getTicket id = do
@@ -115,7 +116,7 @@ module Src.Controller.ChatController where
     exibeTicketsEmAndamento :: [Int] -> IO()
     exibeTicketsEmAndamento tickets = do
         ticketsEmAndamento <- getTicketsEmAndamento tickets
-        exibeTickets ticketsEmAndamento "em andamento criados por você" "e em andamento criados por você:"
+        exibeTickets ticketsEmAndamento "em andamento" "e em andamento"
 
     getTicketsEmAndamento :: [Int] -> IO[Int]
     getTicketsEmAndamento tickets = do
@@ -131,7 +132,6 @@ module Src.Controller.ChatController where
             else
                 getTicketsEmAndamentoRecursivo ticketsRestantes
 
-    
     getTicketsConcluidos :: [Int] -> IO[Int]
     getTicketsConcluidos tickets = do
         getTicketsConcluidosRecursivo tickets
@@ -145,9 +145,6 @@ module Src.Controller.ChatController where
             return (T.id ticket : proximosTickets)
             else
                 getTicketsConcluidosRecursivo ticketsRestantes
-
-
-
 
     {-
     Exibe uma lista de tickets.
@@ -268,19 +265,13 @@ module Src.Controller.ChatController where
         ehMonitor <- checaExistenciaById "Monitores" (autor mensagem)
         ehAluno <- checaExistenciaById "Alunos" (autor mensagem)
         if ehProf then do 
-            professor <- pegaProfessor (autor mensagem)
+            professor <- getProfessor (autor mensagem)
             putStrLn ("[" ++ (horario mensagem) ++ "] " ++ "(PROFESSOR) " ++ (P.nome professor) ++ " - " ++ (conteudo mensagem)) 
         else do 
             aluno <- getAluno (autor mensagem)
             if ehMonitor then
                 putStrLn ("[" ++ (horario mensagem) ++ "] " ++ "(MONITOR) " ++ (A.nome aluno) ++ " - " ++ (conteudo mensagem)) 
             else putStrLn ("[" ++ (horario mensagem) ++ "] " ++ "(ALUNO) " ++ (A.nome aluno) ++ " - " ++ (conteudo mensagem)) 
-    
-    -- Peguei de forma temporaria do ProfessorController para nao precisar importar (tá dando import ciclico) 
-    pegaProfessor:: Int -> IO Professor
-    pegaProfessor id = do
-        professorToString <- getObjetoById "Professores" id
-        return (read professorToString :: Professor)
     
     leTicketsDaDisciplinaAluno :: Aluno -> IO()
     leTicketsDaDisciplinaAluno aluno = do
@@ -303,3 +294,16 @@ module Src.Controller.ChatController where
             if idTicket `elem` ticketsDisciplina then exibeMensagensDeTicket idTicket else do
                 putStrLn "Insira um valor válido!"
                 exibeMensagensDisciplina disciplina
+    
+    lerTicketsDisciplinaProfessor :: Professor -> IO()
+    lerTicketsDisciplinaProfessor professor = do
+        if length (P.disciplinas professor) > 1 then do
+            putStrLn "Insira a sigla da disciplina na qual você deseja visualizar os tickets:"
+            disciplina <- getLine
+            if verificaDisciplina (P.disciplinas professor) disciplina
+                then exibeTicketsDisciplina disciplina
+                else do
+                    putStrLn "\nDisciplina invalida!"
+                    lerTicketsDisciplinaProfessor professor
+        else do
+               exibeTicketsDisciplina (head (P.disciplinas professor))

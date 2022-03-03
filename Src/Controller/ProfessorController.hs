@@ -1,7 +1,7 @@
 module Src.Controller.ProfessorController where
     import Src.Model.Professor
     import Src.Util.TxtFunctions
-    import Src.Controller.ChatController
+    
 
     getProfessor:: Int -> IO Professor
     getProfessor id = do
@@ -20,19 +20,6 @@ module Src.Controller.ProfessorController where
             let profToString = show prof
             adicionaLinha "Professores" profToString
             putStrLn ("Professor cadastrado com sucesso no id " ++ id ++ ". Decore seu id para utilizar o sistema!\n")
-
-    lerTicketsDisciplina :: Professor -> IO()
-    lerTicketsDisciplina professor = do
-        if length (disciplinas professor) > 1 then do
-            putStrLn "Insira a sigla da disciplina na qual você deseja visualizar os tickets:"
-            disciplina <- getLine
-            if verificaDisciplina (disciplinas professor) disciplina
-                then exibeTicketsDisciplina disciplina
-                else do
-                    putStrLn "\nDisciplina invalida!"
-                    lerTicketsDisciplina professor
-        else do
-               exibeTicketsDisciplina (head (disciplinas professor))
 
     verificaDisciplina :: [String] -> String -> Bool
     verificaDisciplina [] _ = False
