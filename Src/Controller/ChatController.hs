@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Use <&>" #-}
 module Src.Controller.ChatController where
-    import Src.Model.Mensagem
+    import Src.Model.Mensagem as MSG
     import Src.Model.Aluno as A
     import qualified Src.Model.Ticket as T
     import Src.Util.TxtFunctions
@@ -11,7 +11,9 @@ module Src.Controller.ChatController where
     import Src.Model.Professor as P
     import Src.Controller.AlunoController
     import Src.Controller.ProfessorController
-
+    import Src.Model.Ticket (Ticket)
+    import Src.Model.Disciplina
+    
     getTicket:: Int -> IO T.Ticket
     getTicket id = do
         ticketToString <- getObjetoById "Tickets" id
@@ -148,6 +150,7 @@ module Src.Controller.ChatController where
             else
                 getTicketsConcluidosRecursivo ticketsRestantes
 
+
     {-
     Exibe uma lista de tickets.
     Checa se a lista de tickets é vazia, nesse caso é avisado ao usuário.
@@ -244,14 +247,15 @@ module Src.Controller.ChatController where
     exibeMensagensDeTicket :: Int -> IO()
     exibeMensagensDeTicket idTicket = do
         mensagens <- getMensagensDoTicket idTicket
-        exibeMensagensDoTicketRecursivo mensagens
+        ticket <- getTicket idTicket
+        exibeMensagensDoTicketRecursivo mensagens (T.disciplina ticket)
 
-    exibeMensagensDoTicketRecursivo :: [IO Mensagem] -> IO()
-    exibeMensagensDoTicketRecursivo [] = return ()
-    exibeMensagensDoTicketRecursivo (mensagemAtualIO:mensagensRestantesIO) = do
+    exibeMensagensDoTicketRecursivo :: [IO Mensagem] -> String -> IO()
+    exibeMensagensDoTicketRecursivo [] x = return ()
+    exibeMensagensDoTicketRecursivo (mensagemAtualIO:mensagensRestantesIO) disciplina = do
         mensagemAtual <- mensagemAtualIO
-        exibeMensagem mensagemAtual
-        exibeMensagensDoTicketRecursivo mensagensRestantesIO
+        exibeMensagem mensagemAtual disciplina
+        exibeMensagensDoTicketRecursivo mensagensRestantesIO disciplina
 
     getMensagensDoTicket :: Int -> IO[IO Mensagem]
     getMensagensDoTicket idTicket = do
@@ -259,17 +263,19 @@ module Src.Controller.ChatController where
         let mensagensTicket = T.mensagens ticket
         return(map getMensagem mensagensTicket)
 
-    exibeMensagem :: Mensagem -> IO()
-    exibeMensagem mensagem = do
+    exibeMensagem :: Mensagem -> String ->IO()
+    exibeMensagem mensagem disciplina = do
         ehProf <- checaExistenciaById "Professores" (autor mensagem)
         ehMonitor <- checaExistenciaById "Monitores" (autor mensagem)
-        ehAluno <- checaExistenciaById "Alunos" (autor mensagem)
+        monitorStr <- getObjetoById "Monitores" (autor mensagem)
+        let monitor = read monitorStr :: Monitor
+
         if ehProf then do
             professor <- getProfessor (autor mensagem)
             putStrLn ("[" ++ horario mensagem ++ "] " ++ "(PROFESSOR) " ++ P.nome professor ++ " - " ++ conteudo mensagem)
         else do
             aluno <- getAluno (autor mensagem)
-            if ehMonitor then
+            if ehMonitor && (M.disciplina monitor == disciplina) then
                 putStrLn ("[" ++ horario mensagem ++ "] " ++ "(MONITOR) " ++ A.nome aluno ++ " - " ++ conteudo mensagem)
             else putStrLn ("[" ++ horario mensagem ++ "] " ++ "(ALUNO) " ++ A.nome aluno ++ " - " ++ conteudo mensagem)
 
@@ -288,12 +294,14 @@ module Src.Controller.ChatController where
         tickets <- getTicketsDisciplina disciplina
         if null tickets then exibeTicketsDisciplina disciplina else do
             exibeTicketsDisciplina disciplina
-            putStrLn "Deseja visualizar as mensagens de qual ticket?"
+            putStrLn "Insira o id do Ticket que deseja visualizar ou 0 para sair"
             idTicket <- readLn
-            ticketsDisciplina <- getTicketsDisciplina disciplina
-            if idTicket `elem` ticketsDisciplina then exibeMensagensDeTicket idTicket else do
-                putStrLn "Insira um valor válido!"
-                exibeMensagensDisciplina disciplina
+            if idTicket == 0 then return ()
+            else do
+                ticketsDisciplina <- getTicketsDisciplina disciplina
+                if idTicket `elem` ticketsDisciplina then exibeMensagensDeTicket idTicket else do
+                    putStrLn "Insira um valor válido!"
+                    exibeMensagensDisciplina disciplina
 
     lerTicketsDisciplinaProfessor :: Professor -> IO()
     lerTicketsDisciplinaProfessor professor = do
@@ -301,18 +309,10 @@ module Src.Controller.ChatController where
             putStrLn "Insira a sigla da disciplina na qual você deseja visualizar os tickets:"
             disciplina <- getLine
             if verificaDisciplina (P.disciplinas professor) disciplina
-                then exibeTicketsDisciplina disciplina
+                then exibeMensagensDisciplina disciplina
                 else do
                     putStrLn "\nDisciplina invalida!"
                     lerTicketsDisciplinaProfessor professor
         else do
-               exibeTicketsDisciplina (head (P.disciplinas professor))
-        putStr "Insira o id do Ticket que deseja visualizar ou 0 para sair: "
-        idTicket <- readLn
-        if idTicket == 0
-            then return ()
-            else do
-                ticket <- getTicket idTicket
-                if verificaDisciplina (P.disciplinas professor) (T.disciplina ticket)
-                    then exibeMensagensDeTicket idTicket
-                    else putStrLn "id de Ticket Inválido ou não pertence a disciplina selecionada"
+               exibeMensagensDisciplina (head (P.disciplinas professor))
+

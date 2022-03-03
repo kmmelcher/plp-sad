@@ -126,7 +126,7 @@ module Src.Menu where
     decideMenuMonitor :: Monitor -> String -> IO()
     decideMenuMonitor monitor opcao
         | opcao == "1" = do
-            exibeTicketsDisciplina (disciplina monitor)
+            exibeMensagensDisciplina (disciplina monitor)
             exibeMenuMonitor (M.id monitor)
         | opcao == "2" = do
             adicionaMensagemMonitor monitor
