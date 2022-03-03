@@ -34,7 +34,6 @@ module Src.Menu where
         putStr "\n"
         decideMenuCadastro opcao
     
-
     decideMenuCadastro :: String -> IO ()
     decideMenuCadastro opcao 
         | opcao == "1" = adicionaAluno 
