@@ -163,7 +163,7 @@ module Src.Menu where
             adicionaMensagemAluno aluno
             exibeMenuAluno (A.id aluno)
         | opcao == "5" = do
-            leMensagensTicketAluno aluno
+            leTicketsDoAluno aluno
             exibeMenuAluno (A.id aluno)
         | opcao == "6" = do
             putStrLn "Func n implementada."

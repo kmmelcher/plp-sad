@@ -233,8 +233,8 @@ module Src.Controller.ChatController where
     verificaTicket (head:tail) x = do
         (head == x) || verificaTicket tail x
 
-    leMensagensTicketAluno :: Aluno -> IO()
-    leMensagensTicketAluno aluno = do
+    leTicketDoAluno :: Aluno -> IO()
+    leTicketDoAluno aluno = do
         ticketsAluno <- (getTicketsAluno (A.id aluno))
         if null ticketsAluno then exibeTickets ticketsAluno "de sua autoria" "criados por você" else do
             exibeTickets ticketsAluno "de sua autoria" "criados por você"
@@ -242,7 +242,7 @@ module Src.Controller.ChatController where
             idTicket <- readLn
             if idTicket `elem` ticketsAluno then exibeMensagens idTicket else do 
                 putStrLn "Id de ticket invalido!"
-                leMensagensTicketAluno aluno
+                leTicketDoAluno aluno
 
     exibeMensagens :: Int -> IO()
     exibeMensagens idTicket = do 
