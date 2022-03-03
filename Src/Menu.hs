@@ -173,8 +173,8 @@ module Src.Menu where
                 putStrLn "Insira o id do ticket que vc deseja ler as mensagens: "
                 idTicket <- readLn
                 if idTicket `elem` ticketsAluno then do
-                exibeMensagensTicket idTicket 
-                menuPrincipal
+                    exibeMensagensTicket idTicket 
+                    menuPrincipal
                 else do 
                     putStrLn "Id de ticket invalido. Insira outro valor"
                     decideMenuAluno aluno opcao

@@ -24,7 +24,7 @@ module Src.Controller.ProfessorController where
     lerTicketsDisciplina :: Professor -> IO()
     lerTicketsDisciplina professor = do
         if length (disciplinas professor) > 1 then do
-            putStrLn "Insira qual disciplina você deseja visualizar os tickets:"
+            putStrLn "Insira a sigla da disciplina na qual você deseja visualizar os tickets:"
             disciplina <- getLine
             if verificaDisciplina (disciplinas professor) disciplina
                 then exibeTicketsDisciplina disciplina

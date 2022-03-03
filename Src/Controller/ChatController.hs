@@ -104,7 +104,7 @@ module Src.Controller.ChatController where
     getTicketsDisciplinaRecursivo :: [String] -> String -> IO[Int]
     getTicketsDisciplinaRecursivo [] _ = return ([])
     getTicketsDisciplinaRecursivo (ticketAtual:ticketsRestantes) disciplina = do
-        ticket <- getTicket (read ticketAtual)
+        let ticket = (read ticketAtual :: T.Ticket)
         if (T.disciplina ticket) == disciplina
             then do
                 proximos <- getTicketsDisciplinaRecursivo ticketsRestantes disciplina
