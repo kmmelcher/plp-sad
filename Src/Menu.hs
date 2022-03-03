@@ -117,7 +117,7 @@ module Src.Menu where
             lerTicketsDisciplinaProfessor professor
             exibeMenuProfessor (P.id professor)
         | opcao == "2" = do
-            putStrLn "Respondendo tickets...\n"
+            adicionaMensagemProfessor professor
             exibeMenuProfessor (P.id professor)
         | opcao == "3" = do
             menuCadastro professor

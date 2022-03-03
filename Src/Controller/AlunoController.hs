@@ -24,13 +24,14 @@ module Src.Controller.AlunoController where
     vinculaAluno disciplina = do
         putStrLn "Insira a matricula do aluno (digite 0 para voltar ao seu menu)"
         matricula <- readLn
+
         if matricula == 0 then return () else do
             ehAluno <- checaExistenciaById "Alunos" matricula
             ehMonitorDaDisciplina <- analisaAlunoComoMonitor matricula disciplina
             if ehMonitorDaDisciplina then putStrLn "Este aluno é monitor de sua disciplina!"
             else if ehAluno then do
                     aluno <- getAluno matricula
-                    if disciplina `elem` (A.disciplinas aluno) then putStrLn "Este aluno já está na sua diciplina!"
+                    if disciplina `elem` A.disciplinas aluno then putStrLn "Este aluno já está na sua diciplina!"
                     else do
                         let alunoAtualizado = Aluno (A.id aluno) (nome aluno) (disciplina : disciplinas aluno)
                         atualizaLinhaById "Alunos" (show matricula) (show alunoAtualizado)
