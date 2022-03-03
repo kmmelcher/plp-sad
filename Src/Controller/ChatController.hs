@@ -305,3 +305,12 @@ module Src.Controller.ChatController where
                     lerTicketsDisciplinaProfessor professor
         else do
                exibeTicketsDisciplina (head (P.disciplinas professor))
+        putStr "Insira o id do Ticket que deseja visualizar ou 0 para sair: "
+        idTicket <- readLn
+        if idTicket == 0 
+            then return ()
+            else do
+                ticket <- getTicket idTicket
+                if verificaDisciplina (P.disciplinas professor) (T.disciplina ticket)
+                    then exibeMensagensDeTicket idTicket
+                    else putStrLn "id de Ticket Inválido ou não pertence a disciplina selecionada"
