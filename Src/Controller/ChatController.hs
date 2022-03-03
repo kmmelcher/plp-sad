@@ -8,7 +8,7 @@ module Src.Controller.ChatController where
     import Src.Model.Monitor as M
     import Src.Model.Professor as P
     import Src.Controller.AlunoController
-
+    
     getTicket:: Int -> IO T.Ticket
     getTicket id = do
         ticketToString <- getObjetoById "Tickets" id
@@ -21,7 +21,7 @@ module Src.Controller.ChatController where
 
     adicionaTicket :: Aluno -> IO()
     adicionaTicket aluno = do
-        putStrLn "Insira o nome da disciplina que você tem dúvida:"
+        putStrLn "\nInsira a sigla da disciplina na qual deseja se desmatricular:"
         disciplinaTicket <-  getLine
         if disciplinaTicket `elem` (A.disciplinas aluno) then do
             putStrLn "Insira um título para sua dúvida:"
@@ -29,9 +29,10 @@ module Src.Controller.ChatController where
             id <- buscaNovoId "Tickets"
             let ticket = T.Ticket (read id) titulo [] "Em Andamento" (A.id aluno) disciplinaTicket
             adicionaLinha "Tickets" $ show ticket
-            putStrLn "Ticket adicionado com sucesso!"
+            putStrLn "\nTicket adicionado com sucesso!"
         else do
-            putStrLn ("Você não está matriculado na disciplina " ++ disciplinaTicket)
+            putStrLn ("Você não possui está cadastrado nesta disciplina! Tente novamente.")
+            adicionaTicket aluno
 
     adicionaMensagem :: Int -> [Int] -> IO()
     adicionaMensagem id ticketsValidos = do
@@ -114,7 +115,7 @@ module Src.Controller.ChatController where
     exibeTicketsEmAndamento :: [Int] -> IO()
     exibeTicketsEmAndamento tickets = do
         ticketsEmAndamento <- getTicketsEmAndamento tickets
-        exibeTickets ticketsEmAndamento "em andamento" "em andamento da sua disciplina:"
+        exibeTickets ticketsEmAndamento "em andamento criados por você" "e em andamento criados por você:"
 
     getTicketsEmAndamento :: [Int] -> IO[Int]
     getTicketsEmAndamento tickets = do
@@ -211,12 +212,11 @@ module Src.Controller.ChatController where
 
     adicionaMensagemAluno :: Aluno -> IO()
     adicionaMensagemAluno aluno = do
-        putStrLn "Foram identificados os seguintes tickets desse autor: "
         tickets <- getTicketsAluno (A.id aluno)
         ticketsEmAndamento <- getTicketsEmAndamento tickets
-        exibeTicketsEmAndamento tickets
-        print tickets
-        adicionaMensagem (A.id aluno) ticketsEmAndamento
+        if null ticketsEmAndamento then exibeTicketsEmAndamento tickets else do
+            exibeTicketsEmAndamento tickets
+            adicionaMensagem (A.id aluno) ticketsEmAndamento
 
     excluirTicket :: Int -> IO()
     excluirTicket matAluno = do
@@ -233,44 +233,48 @@ module Src.Controller.ChatController where
     verificaTicket (head:tail) x = do
         (head == x) || verificaTicket tail x
 
-    exibeMensagensTicket :: Int -> IO()
-    exibeMensagensTicket idTicket = do 
-        mensagens <- getMensagensTicket idTicket 
-        exibeMensagensTicketRecursivo mensagens
+    leMensagensTicketAluno :: Aluno -> IO()
+    leMensagensTicketAluno aluno = do
+        ticketsAluno <- (getTicketsAluno (A.id aluno))
+        if null ticketsAluno then exibeTickets ticketsAluno "de sua autoria" "criados por você" else do
+            exibeTickets ticketsAluno "de sua autoria" "criados por você"
+            putStrLn "Insira o id do ticket que deseja ler as mensagens: "
+            idTicket <- readLn
+            if idTicket `elem` ticketsAluno then exibeMensagens idTicket else do 
+                putStrLn "Id de ticket invalido!"
+                leMensagensTicketAluno aluno
+
+    exibeMensagens :: Int -> IO()
+    exibeMensagens idTicket = do 
+        mensagens <- getMensagensDoTicket idTicket 
+        exibeMensagensDoTicketRecursivo mensagens
     
-    exibeMensagensTicketRecursivo :: [IO Mensagem] -> IO()
-    exibeMensagensTicketRecursivo [] = return ()
-    exibeMensagensTicketRecursivo (mensagemAtual:mensagensRestantes) = do
+    exibeMensagensDoTicketRecursivo :: [IO Mensagem] -> IO()
+    exibeMensagensDoTicketRecursivo [] = return ()
+    exibeMensagensDoTicketRecursivo (mensagemAtualIO:mensagensRestantesIO) = do
+        mensagemAtual <- mensagemAtualIO
         exibeMensagem mensagemAtual
-        exibeMensagensTicketRecursivo mensagensRestantes
+        exibeMensagensDoTicketRecursivo mensagensRestantesIO
     
-    getMensagensTicket :: Int -> IO[IO Mensagem]
-    getMensagensTicket idTicket = do 
+    getMensagensDoTicket :: Int -> IO[IO Mensagem]
+    getMensagensDoTicket idTicket = do 
         ticket <- getTicket idTicket
         let mensagensTicket = T.mensagens ticket
         return(map getMensagem mensagensTicket)
 
-    exibeMensagem :: IO Mensagem -> IO() 
-    exibeMensagem mensagemIO = do
-        mensagem <- mensagemIO 
-        let autorMsg = (autor mensagem)
-        let conteudoMsg = (conteudo mensagem)
-        let horarioMsg = (horario mensagem)
-        ehProf <- checaExistenciaById "Professores" autorMsg 
-        ehMonitor <- checaExistenciaById "Monitores" autorMsg
-        ehAluno <- checaExistenciaById "Alunos" autorMsg
+    exibeMensagem :: Mensagem -> IO() 
+    exibeMensagem mensagem = do
+        ehProf <- checaExistenciaById "Professores" (autor mensagem)
+        ehMonitor <- checaExistenciaById "Monitores" (autor mensagem)
+        ehAluno <- checaExistenciaById "Alunos" (autor mensagem)
         if ehProf then do 
-            prof <- pegaProfessor autorMsg
-            let nomeProf = (P.nome prof)
-            putStrLn ("Autor: " ++ nomeProf ++ "\n")
-            putStrLn ("Mensagem: " ++ conteudoMsg ++ "\n")
-        else if (ehMonitor || ehAluno) then do 
-            aluno <- getAluno autorMsg
-            let nomeAluno = (A.nome aluno)
-            putStrLn ("Autor: " ++ nomeAluno ++ "\n")
-            putStrLn ("Mensagem: " ++ conteudoMsg ++ "\n")
-        else do
-            putStrLn ("Erro: Mensagem com autor nao cadastrado") 
+            professor <- pegaProfessor (autor mensagem)
+            putStrLn ("[" ++ (horario mensagem) ++ "] " ++ "(PROFESSOR) " ++ (P.nome professor) ++ " - " ++ (conteudo mensagem)) 
+        else do 
+            aluno <- getAluno (autor mensagem)
+            if ehMonitor then
+                putStrLn ("[" ++ (horario mensagem) ++ "] " ++ "(MONITOR) " ++ (A.nome aluno) ++ " - " ++ (conteudo mensagem)) 
+            else putStrLn ("[" ++ (horario mensagem) ++ "] " ++ "(ALUNO) " ++ (A.nome aluno) ++ " - " ++ (conteudo mensagem)) 
     
     -- Peguei de forma temporaria do ProfessorController para nao precisar importar (tá dando import ciclico) 
     pegaProfessor:: Int -> IO Professor

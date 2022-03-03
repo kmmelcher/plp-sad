@@ -43,7 +43,7 @@ module Src.Menu where
         | opcao == "1" = adicionaAluno 
         | opcao == "2" = adicionaMonitor
         | opcao == "3" = adicionaProfessor
-        | opcao == "4" = menuPrincipal
+        | opcao == "4" = putStrLn ""
         | otherwise = do
             putStrLn "Insira um valor válido!\n"
             menuCadastro
@@ -144,7 +144,7 @@ module Src.Menu where
         putStrLn "\n== SAD: MENU ALUNO =="
         putStrLn ("ID: " ++ show (A.id aluno) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplinas: " ++ show (A.disciplinas aluno))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket\n5) Ler mensagens de um ticket \n6) Ler tickets de uma disciplina\n7) Marcar ticket como resolvido\n8) Deslogar"
+        putStrLn "1) Matricular-se em disciplina\n2) Desmatricular-se de disciplina\n3) Criar Ticket\n4) Mandar mensagem em um ticket meu\n5) Ler meus tickets \n6) Ler tickets de uma disciplina\n7) Marcar ticket como resolvido\n8) Deslogar"
         opcao <- getLine 
         decideMenuAluno aluno opcao
     
@@ -161,23 +161,10 @@ module Src.Menu where
             exibeMenuAluno (A.id aluno)
         | opcao == "4" = do
             adicionaMensagemAluno aluno
-            menuPrincipal
+            exibeMenuAluno (A.id aluno)
         | opcao == "5" = do
-            putStrLn "Estes sao os tickets abertos por vc:"
-            ticketsAluno <- (getTicketsAluno (A.id aluno))
-            print(ticketsAluno)
-            if null ticketsAluno then do 
-                putStrLn "Vc n tem nenhum ticket aberto. Voltando ao menu"
-                exibeMenuAluno (A.id aluno) 
-            else do
-                putStrLn "Insira o id do ticket que vc deseja ler as mensagens: "
-                idTicket <- readLn
-                if idTicket `elem` ticketsAluno then do
-                    exibeMensagensTicket idTicket 
-                    menuPrincipal
-                else do 
-                    putStrLn "Id de ticket invalido. Insira outro valor"
-                    decideMenuAluno aluno opcao
+            leMensagensTicketAluno aluno
+            exibeMenuAluno (A.id aluno)
         | opcao == "6" = do
             putStrLn "Func n implementada."
             menuPrincipal

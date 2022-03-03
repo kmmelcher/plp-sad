@@ -22,9 +22,7 @@ module Src.Controller.AlunoController where
 
     matriculaAlunoEmDisciplina :: Aluno -> IO()
     matriculaAlunoEmDisciplina aluno = do
-        putStrLn "Você está matriculado nas seguintes disciplinas:"
-        putStrLn (show (disciplinas aluno))
-        putStrLn "Estas são todas as disciplinas disponíveis para matrícula:\n"
+        putStrLn "\nEstas são todas as disciplinas disponíveis para matrícula:\n"
         exibeDisciplinasDisponiveis aluno
         putStrLn "\nInforme a sigla da disciplina na qual deseja se matricular:"
         sigla <- getLine
@@ -38,14 +36,12 @@ module Src.Controller.AlunoController where
                 atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
                 putStrLn "Matricula realizada com sucesso!"
         else do
-            putStrLn "Sigla Inválida , tente novamente\n\n"
+            putStrLn "Sigla Inválida , tente novamente.\n\n"
             matriculaAlunoEmDisciplina aluno
 
     desmatriculaAlunoDeDisciplina :: Aluno -> IO()
     desmatriculaAlunoDeDisciplina aluno = do
-        putStrLn "\nVocê está matriculado nas seguintes disciplinas:\n"
-        print (show (disciplinas aluno))
-        putStrLn "Informe a sigla da disciplina na qual deseja se desmatricular: "
+        putStrLn "\nInforme a sigla da disciplina na qual deseja se desmatricular: "
         sigla <- getLine
         if sigla `elem` disciplinas aluno then do
             let disciplinasExcetoMencionada = filter (/= sigla) (disciplinas aluno)
@@ -53,5 +49,5 @@ module Src.Controller.AlunoController where
             atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
             putStrLn "Cancelamento de matricula realizada com sucesso!\n"
         else do
-            putStrLn "Insira um valor válido!\n\n"
+            putStrLn "Insira um valor válido!\n"
             desmatriculaAlunoDeDisciplina aluno

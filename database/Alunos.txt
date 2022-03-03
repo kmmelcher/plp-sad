@@ -13,8 +13,8 @@ Aluno {id = 120110012, nome = "Renata Glasc", disciplinas = ["ES", "SO", "Redes"
 Aluno {id = 120110013, nome = "Morgana Silva", disciplinas = ["OAC", "LOAC", "PLP", "Psoft"]}
 Aluno {id = 120110014, nome = "Gabriela Cattuzo", disciplinas = ["OAC", "LOAC", "PLP", "Psoft"]}
 Aluno {id = 120110015, nome = "Fatima Bernardes", disciplinas = ["SO", "Redes", "PLP", "Psoft", "BD"]}
-Aluno {id = 120110016, nome = "Sasha Grey", disciplinas = ["SO", "Redes", "PLP", "Psoft", "BD"]}
-Aluno {id = 120110017, nome = "Mia Kalifa", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
+Aluno {id = 120110016, nome = "Maria Rita", disciplinas = ["SO", "Redes", "PLP", "Psoft", "BD"]}
+Aluno {id = 120110017, nome = "Melina Carvalho", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
 Aluno {id = 120110018, nome = "Emma Wattson", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"]}
 Aluno {id = 120110019, nome = "Henry Cavil", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD", "ES"]}
 Aluno {id = 120110020, nome = "Leonardo Dicaprio", disciplinas = ["BD","AS"]}
