@@ -166,8 +166,8 @@ module Src.Menu where
             leTicketsDoAluno aluno
             exibeMenuAluno (A.id aluno)
         | opcao == "6" = do
-            putStrLn "Func n implementada."
-            menuPrincipal
+            leTicketsDaDisciplinaAluno aluno
+            exibeMenuAluno (A.id aluno)
         | opcao == "7" = do
             resolveTicket aluno
             menuPrincipal
