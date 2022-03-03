@@ -25,7 +25,7 @@ module Src.Menu where
     menuCadastro :: Professor -> IO ()
     menuCadastro professor = do
         putStrLn "\nQuem você deseja vincular?"
-        putStrLn "1) Vincular aluno\n2) Vincular monitor\n3) Voltar para o menu principal"
+        putStrLn "1) Vincular aluno\n2) Vincular monitor\n3) Voltar para o menu professor"
         opcao <- getLine
         putStr "\n"
         decideMenuCadastro professor opcao
@@ -35,7 +35,9 @@ module Src.Menu where
         | opcao == "1" = do
             disciplina <- solicitaDisciplina professor
             adicionaAluno disciplina
-        | opcao == "2" = adicionaMonitor
+        | opcao == "2" = do
+            disciplina <- solicitaDisciplina professor
+            adicionaMonitor disciplina
         | opcao == "3" = putStrLn ""
         | otherwise = do
             putStrLn "Insira um valor válido!\n"

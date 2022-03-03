@@ -1,6 +1,7 @@
 module Src.Controller.MonitorController where
     import Src.Model.Monitor as M
     import Src.Util.TxtFunctions
+    import Src.Controller.AlunoController
     
     {- 
     Retorna o monitor a partir do seu ID
@@ -15,12 +16,22 @@ module Src.Controller.MonitorController where
     {- 
     Adiciona um monitor a partir de dados inseridos pelo usuaário
     -}
-    adicionaMonitor :: IO()
-    adicionaMonitor = do
-        id <- insereMatricula
-        disciplina <- insereDisciplina id
-        if disciplina == "VOLTAR"
-            then putStrLn "Cadastro cancelado.\n"
+    adicionaMonitor :: String -> IO()
+    adicionaMonitor disciplina = do
+        putStrLn "Insira a matricula do aluno (digite 0 para voltar ao seu menu):"
+        id <- readLn
+        ehAluno <- checaExistenciaById "Alunos" id
+        alunoCursaDisciplina <- alunoCursaDisciplina id disciplina
+        ehMonitor <- checaExistenciaById "Monitores" id
+        if id == 0 then return ()
+        else if not ehAluno then do
+            putStrLn "Este aluno não está cadastrado! Tente novamente\n"
+            adicionaMonitor disciplina
+        else if alunoCursaDisciplina then do
+            putStrLn "Este aluno está cursando sua disciplina! Tente novamente\n"
+        else if ehMonitor then do
+            putStrLn "Este monitor já esta vinculado a uma disciplina!\n"
+            adicionaMonitor disciplina
         else do
             putStrLn "Insira os horários de atendimento do monitor"
             horarios <- getLine
@@ -40,7 +51,7 @@ module Src.Controller.MonitorController where
         if (alunoCadastrado && monitorCadastrado) || id == 0
             then return id
         else do
-            putStrLn "\nMonitor não identificado, tente novamente.\n(Digite 0 para voltar ao menu principal)"
+            putStrLn "\nMonitor não identificado, tente novamente.\n(Digite 0 para voltar ao seu menu)"
             insereMatricula
 
     {- 
@@ -77,17 +88,3 @@ module Src.Controller.MonitorController where
             else do
                 putStrLn "Este monitor não é de uma disciplina sua! Tente novamente."
                 removeMonitor disciplinasDoProfessor
-    
-    {-
-    Verifica se uma matrícula é referente a um monitor de uma determinada disciplina
-    Parametros:
-        matricula = matricula a ser analisada
-        disciplina = disciplina a ser verificada sobre a existencia do monitor
-    -}
-    verificaMonitor :: Int -> String -> IO(Bool)
-    verificaMonitor matricula disciplina = do
-        monitorExiste <- checaExistenciaById "Monitores" matricula
-        if monitorExiste then do
-            monitor <- getMonitor matricula
-            return (M.disciplina monitor == disciplina)
-        else return False
