@@ -53,8 +53,7 @@ module Src.Controller.AlunoController where
             else if alunoExiste then do
                 aluno <- getAluno matricula
                 if disciplina `elem` (A.disciplinas aluno) then do
-                    let disciplinasAtualizadas = filter (/= disciplina) (disciplinas aluno)
-                    let alunoAtualizado = Aluno (A.id aluno) (nome aluno) disciplinasAtualizadas
+                    let alunoAtualizado = Aluno (A.id aluno) (nome aluno) (filter (/= disciplina) (disciplinas aluno))
                     atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
                     putStrLn "O aluno foi desvinculado com sucesso.\n"
                 else putStrLn "Este aluno não está matriculado na sua disciplina!\n"
