@@ -30,7 +30,11 @@ module Src.Controller.AlunoController where
         exibeDisciplinasDisponiveis aluno
         putStrLn "\nInforme a sigla da disciplina na qual deseja se matricular:"
         sigla <- getLine
+<<<<<<< HEAD
+        siglasCadastradas <- DC.retornarTodasSiglas
+=======
         siglasCadastradas <- getSiglas
+>>>>>>> origin/main
         if sigla `elem` siglasCadastradas then
             if sigla `elem` disciplinas aluno then do
                 putStrLn ("Você já está matriculado em " ++ sigla ++ ", tente novamente\n\n")
