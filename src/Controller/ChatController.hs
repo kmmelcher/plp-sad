@@ -232,7 +232,6 @@ module Controller.ChatController where
     -- Checa se um ticket está em andamento. 
     --  > Parametros:
     --    id = Id do ticket a ser analisado
-    -}
     checaIdDeTicketEmAndamento :: Int -> IO Bool
     checaIdDeTicketEmAndamento id = do
         existeTicket <- checaExistenciaById "Tickets" id
