@@ -21,3 +21,4 @@ Aluno {id = 120110020, nome = "Leonardo Dicaprio", disciplinas = ["BD","AS"]}
 Aluno {id = 119110021, nome = "Antonio Carlos", disciplinas = ["SO","AS","Psoft","IP"]}
 Aluno {id = 119231444, nome = "Manuel Silva", disciplinas = ["SO","AS","Redes","IP"]}
 Aluno {id = 119232555, nome = "Paulo Costa", disciplinas = ["LOAC","AS","Redes","IP"]}
+Aluno {id = 111111110, nome = "Matue", disciplinas = []}
