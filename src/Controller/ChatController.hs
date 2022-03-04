@@ -57,20 +57,20 @@ module Controller.ChatController where
     -}
     adicionaMensagem :: Int -> [Int] -> IO()
     adicionaMensagem id ticketsValidos = do
-        putStrLn "Escolha o ticket no qual deseja inserir a mensagem: "
+        putStrLn "\nEscolha o ticket no qual deseja inserir a mensagem: "
         idTicket <- readLn
-        putStrLn ""
+        putStr "\n"
         if ehTicketValido idTicket ticketsValidos
             then do
                 exibeMensagensDeTicket idTicket
-                putStr "\nDigite a mensagem: "
+                putStrLn "Digite a mensagem: "
                 conteudo <- getLine
                 idMensagem <- buscaNovoId "Mensagens"
                 tempo <- getCurrentTime >>= return.formatTime defaultTimeLocale "%D %Hh%M"
                 let mensagem = Mensagem (read idMensagem) id conteudo tempo
                 insereMensagemNoTicket idTicket (read idMensagem)
                 adicionaLinha "Mensagens" $ show mensagem
-                putStrLn "Mensagem adicionada com sucesso."
+                putStrLn "\nMensagem adicionada com sucesso."
         else do
             putStrLn "Ticket inválido!\n"
             adicionaMensagem id ticketsValidos
@@ -347,8 +347,9 @@ module Controller.ChatController where
     exibeMensagensDeTicket :: Int -> IO()
     exibeMensagensDeTicket idTicket = do
         mensagens <- getMensagensDoTicket idTicket
-        ticket <- getTicket idTicket
-        exibeMensagensDoTicketRecursivo mensagens (T.disciplina ticket)
+        if null mensagens then putStrLn "Ainda não há mensagens nesse ticket!\n" else do
+            ticket <- getTicket idTicket
+            exibeMensagensDoTicketRecursivo mensagens (T.disciplina ticket)
 
     {- 
     Função auxiliar de exibeMensagensDeTicket
@@ -422,8 +423,7 @@ module Controller.ChatController where
             idTicket <- readLn
             if idTicket == 0 then return ()
             else do
-                ticketsDisciplina <- getTicketsDisciplina disciplina
-                if idTicket `elem` ticketsDisciplina then exibeMensagensDeTicket idTicket else do
+                if idTicket `elem` tickets then exibeMensagensDeTicket idTicket else do
                     putStrLn "Insira um valor válido!"
                     exibeMensagensDisciplina disciplina
 
@@ -460,15 +460,8 @@ module Controller.ChatController where
     
     adicionaMensagemProfessor :: P.Professor -> IO ()
     adicionaMensagemProfessor professor = do
-        let disciplinasDoProfessor = P.disciplinas professor
-        ticketsValidos <- pegaTicketsDoProfessor disciplinasDoProfessor
-        adicionaMensagem (P.id professor) ticketsValidos
-
-    pegaTicketsDoProfessor :: [String] -> IO [Int]
-    pegaTicketsDoProfessor [] = return []
-    pegaTicketsDoProfessor (head : tail) = do
-        todosOsTickets <- getTicketsDisciplina head
-        ticketsFiltrados <- getTicketsEmAndamento todosOsTickets
-        exibeTickets ticketsFiltrados ("para a disciplina " ++ head) ("da disciplina " ++ head)
-        result <- pegaTicketsDoProfessor tail
-        return (ticketsFiltrados ++ result)
+        disciplina <- solicitaDisciplina professor
+        ticketsDisciplina <- getTicketsDisciplina disciplina
+        ticketsValidos <- getTicketsEmAndamento ticketsDisciplina
+        exibeTickets ticketsValidos ("em andamento em " ++ disciplina) ("em " ++ disciplina)
+        if null ticketsValidos then return () else adicionaMensagem (P.id professor) ticketsValidos

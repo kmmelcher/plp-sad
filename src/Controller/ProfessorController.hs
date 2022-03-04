@@ -26,7 +26,7 @@ module Controller.ProfessorController where
     solicitaDisciplina :: P.Professor -> IO String
     solicitaDisciplina professor =
         if length (P.disciplinas professor) > 1 then do
-            putStrLn "Informe a sigla da disciplina relacionada:"
+            putStrLn "\nInforme a sigla da disciplina relacionada:"
             disciplina <- getLine
             if ehDisciplinaDoProfessor professor disciplina then return disciplina else do
                 putStrLn "Insira uma sigla válida!\n"

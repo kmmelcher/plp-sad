@@ -107,7 +107,7 @@ module Menu where
         putStrLn "\n== SAD: MENU PROFESSOR =="
         putStrLn ("ID: " ++ show (P.id professor) ++ " | " ++ "Nome: " ++ P.nome professor ++ " | " ++ "Disciplinas: " ++ show (P.disciplinas professor))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Exibir tickets\n2) Responder Tickets em progresso\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Deslogar"
+        putStrLn "1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Deslogar"
         opcao <- getLine
         decideMenuProfessor professor opcao
 
