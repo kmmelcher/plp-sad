@@ -84,7 +84,12 @@ module Menu where
     decideMenuLogin :: Int -> Bool -> Bool -> Bool -> IO()
     decideMenuLogin idPerfil ehMonitor ehProfessor ehAluno
         | ehMonitor = do
-            decideMenuAlunoMonitor idPerfil
+            aluno <- getAluno idPerfil
+            autenticacao <- autenticaAluno aluno
+            if autenticacao then decideMenuAlunoMonitor idPerfil
+                else do
+                    putStrLn "Senha incorreta\n"
+                    menuLogin
         | ehAluno = do
             aluno <- getAluno idPerfil
             autenticacao <- autenticaAluno aluno
@@ -93,7 +98,13 @@ module Menu where
                     putStrLn "Senha incorreta\n"
                     menuLogin
         | ehProfessor = do
-            exibeMenuProfessor idPerfil
+            professor <- getProfessor idPerfil
+            autenticacao <- autenticaProfessor professor
+            if autenticacao then exibeMenuProfessor idPerfil
+                else do
+                    putStrLn "Senha incorreta\n"
+                    menuLogin
+
         | otherwise = do
             putStrLn "Matrícula/ID não encontrado. Tente novamente\n\n"
             menuLogin
@@ -209,3 +220,9 @@ module Menu where
         putStrLn "Insira a senha de acesso:"
         senha <- getLine
         return (A.senha aluno == encripta senha (A.nome aluno))
+
+    autenticaProfessor :: Professor -> IO Bool
+    autenticaProfessor professor = do
+        putStrLn "Insira a senha de acesso:"
+        senha <- getLine
+        return (P.senha professor == encripta senha (P.nome professor))

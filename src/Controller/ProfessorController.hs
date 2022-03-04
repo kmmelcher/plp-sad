@@ -7,7 +7,8 @@ module Controller.ProfessorController where
     import Model.Ticket
     import Controller.AlunoController
     import Model.Professor as P
-
+    import Util.EncriptFunctions (encripta)
+    
      
     -- Retorna o professor atravez de seu id.
     --  > Parametros:
@@ -46,8 +47,10 @@ module Controller.ProfessorController where
             putStrLn "Insira o nome das disciplinas do professor: "
             listaDisciplinasStr <- getLine
             let disciplinas = read listaDisciplinasStr :: [String]
+            putStrLn "Insira a senha de acesso: "
+            senha <- getLine
             id <- buscaNovoId "Professores"
-            let prof = P.Professor (read id :: Int) nome disciplinas
+            let prof = P.Professor (read id :: Int) nome disciplinas (encripta senha nome)
             let profToString = show prof
             adicionaLinha "Professores" profToString
             putStrLn ("Professor cadastrado com sucesso no id " ++ id ++ ". Decore seu id para utilizar o sistema!\n")
