@@ -127,7 +127,7 @@ module Menu where
         putStrLn "\n== SAD: MENU PROFESSOR =="
         putStrLn ("ID: " ++ show (P.id professor) ++ " | " ++ "Nome: " ++ P.nome professor ++ " | " ++ "Disciplinas: " ++ show (P.disciplinas professor))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Deslogar"
+        putStrLn "1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Alterar senha de acesso\n6) Deslogar"
         opcao <- getLine
         decideMenuProfessor professor opcao
 
@@ -146,6 +146,9 @@ module Menu where
             menuRemocao professor
             exibeMenuProfessor (P.id professor)
         | opcao == "5" = do
+            menuTrocarSenhaProfessor professor
+            exibeMenuProfessor (P.id professor)
+        | opcao == "6" = do
             putStrLn "Deslogando...\n"
             menuPrincipal
         | otherwise = do
@@ -226,3 +229,11 @@ module Menu where
         putStrLn "Insira a senha de acesso:"
         senha <- getLine
         return (P.senha professor == encripta senha (P.nome professor))
+
+    menuTrocarSenhaProfessor :: Professor -> IO ()
+    menuTrocarSenhaProfessor professor = do
+        putStrLn "Digite a sua nova senha: "
+        senha <- getLine
+        let professorAtualizado = Professor (P.id professor) (P.nome professor) (P.disciplinas professor) (encripta senha (P.nome professor))
+        atualizaLinhaById "Professores" (show (P.id professor)) (show professorAtualizado)
+        putStrLn "Senha alterada com sucesso\n"

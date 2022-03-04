@@ -6,5 +6,5 @@ Professor {id = 5, nome = "Campelo", disciplinas = ["LEDA", "BD"], senha = "5360
 Professor {id = 6, nome = "Fubica", disciplinas = ["SO"], senha = "560013338108781071099991115580501298711172"}
 Professor {id = 7, nome = "Manel", disciplinas = ["SO"], senha = "6160110581221010302109088855111551221011514"}
 Professor {id = 8, nome = "Reinaldo", disciplinas = ["Redes"], senha = "656011514116551122097971242011500123219348"}
-Professor {id = 9, nome = "Adalberto", disciplinas = ["EDA", "LEDA"], senha = "5200114001076711016989811615131101287612654"}
+Professor {id = 9, nome = "Adalberto", disciplinas = ["EDA","LEDA"], senha = "5200114001076711016989811615131101287612654"}
 Professor {id = 10, nome = "Gaudêncio", disciplinas = ["P2"], senha = "56801105812987102002363412650113851165512654"}
