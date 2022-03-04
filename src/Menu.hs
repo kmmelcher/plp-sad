@@ -187,7 +187,7 @@ module Menu where
         putStrLn "\n== SAD: MENU ALUNO =="
         putStrLn ("ID: " ++ show (A.id aluno) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplinas: " ++ show (A.disciplinas aluno))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Ler tickets de uma disciplina\n2) Ler meus tickets\n3) Criar Ticket\n4) Mandar mensagem em um ticket meu\n5) Marcar ticket como resolvido\n6) Excluir ticket\n7) Deslogar"
+        putStrLn "1) Ler tickets de uma disciplina\n2) Ler meus tickets\n3) Criar Ticket\n4) Mandar mensagem em um ticket meu\n5) Marcar ticket como resolvido\n6) Excluir ticket\n7) Trocar senha de acesso\n8) Deslogar"
         opcao <- getLine
         decideMenuAluno aluno opcao
 
@@ -212,6 +212,9 @@ module Menu where
             excluirTicket aluno
             exibeMenuAluno (A.id aluno)
         | opcao == "7" = do
+            menuTrocarSenhaAluno aluno
+            exibeMenuAluno (A.id aluno)
+        | opcao == "8" = do
             putStrLn "Deslogando...\n"
             menuPrincipal
         | otherwise  = do
@@ -236,4 +239,12 @@ module Menu where
         senha <- getLine
         let professorAtualizado = Professor (P.id professor) (P.nome professor) (P.disciplinas professor) (encripta senha (P.nome professor))
         atualizaLinhaById "Professores" (show (P.id professor)) (show professorAtualizado)
+        putStrLn "Senha alterada com sucesso\n"
+    
+    menuTrocarSenhaAluno :: Aluno -> IO ()
+    menuTrocarSenhaAluno aluno = do
+        putStrLn "Digite a sua nova senha: "
+        senha <- getLine
+        let alunoAtualizado = Aluno (A.id aluno) (A.nome aluno) (A.disciplinas aluno) (encripta senha (A.nome aluno))
+        atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
         putStrLn "Senha alterada com sucesso\n"

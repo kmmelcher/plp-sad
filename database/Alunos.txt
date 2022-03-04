@@ -3,7 +3,7 @@ Aluno {id = 120110002, nome = "Pedro Adrian", disciplinas = ["SO", "Redes", "PLP
 Aluno {id = 120110003, nome = "Alef Carlos", disciplinas = ["EDA", "LEDA", "IP", "PLP"], senha = "42251166411817112203552"}
 Aluno {id = 120110004, nome = "Vinicius Azevedo", disciplinas = ["OAC", "LOAC", "PLP", "Psoft", "BD"], senha = "559011340128701155010989"}
 Aluno {id = 120110005, nome = "Filipe Ramalho", disciplinas = ["PLP", "BD", "AS", "Redes", "SO"], senha = "455011340126361155012432"}
-Aluno {id = 120110006, nome = "Luiggy Ferreira", disciplinas = ["OAC", "LOAC", "PLP", "Psoft"], senha = "494012636122851133011433"}
+Aluno {id = 120110006, nome = "Luiggy Ferreira", disciplinas = ["OAC","LOAC","PLP","Psoft"], senha = "494012636122851133011433"}
 Aluno {id = 120110007, nome = "Robervaldo", disciplinas = ["BD","AS"], senha = "533011988114661111012654"}
 Aluno {id = 120110008, nome = "Roberto Carlos", disciplinas = ["SO", "Redes", "AS"], senha = "533011988114661111012654"}
 Aluno {id = 120110009, nome = "Roberto Miranda", disciplinas = ["OAC", "LOAC", "PLP"], senha = "533011988114661111012654"}

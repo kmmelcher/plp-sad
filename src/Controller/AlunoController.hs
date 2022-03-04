@@ -43,9 +43,7 @@ module Controller.AlunoController where
             else do
                 putStrLn "Este aluno não está cadastrado no SAD. Por favor, informe seu nome:"
                 nome <- getLine
-                putStrLn "Agora, insira a senha de acesso do aluno: "
-                senha <- getLine
-                let aluno = Aluno matricula nome [disciplina] (encripta senha nome)
+                let aluno = Aluno matricula nome [disciplina] (encripta "Aluno" nome)
                 adicionaLinha "Alunos" $ show aluno
                 putStrLn "Aluno cadastrado com sucesso e incluso na disciplina.\n"
 
