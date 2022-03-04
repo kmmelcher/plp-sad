@@ -242,8 +242,11 @@ module Controller.ChatController where
     -}
     checaIdDeTicketEmAndamento :: Int -> IO Bool
     checaIdDeTicketEmAndamento id = do
-        ticket <- getTicket id
-        return (T.status ticket == "Em Andamento")
+        existeTicket <- checaExistenciaById "Tickets" id
+        if existeTicket then do
+            ticket <- getTicket id
+            return (T.status ticket == "Em Andamento")
+        else return False
 
     {- 
     Atualiza o status de um ticket para resolvido
@@ -264,18 +267,19 @@ module Controller.ChatController where
     resolveTicket :: Aluno -> IO()
     resolveTicket aluno = do
         ticketsAluno <- getTicketsAluno (A.id aluno)
-        putStrLn "Estes são os seus tickets com status \"Em andamento\"\n"
-        exibeTicketsEmAndamento ticketsAluno
-        putStrLn "\ninsira o id do ticket que deseja marcar como concluído"
-        input <- getLine
-        let id = read input :: Int
-        idValido <- checaIdDeTicketEmAndamento id
-        if idValido then do
-            atualizaTicketStatus id
-            putStrLn "Ticket alterado com sucesso.\n"
-             else do
-            putStrLn "Insira um id válido!"
-            resolveTicket aluno
+        ticketsEmAndamento <- getTicketsEmAndamento ticketsAluno
+        if ticketsEmAndamento /= [] then do
+            exibeTickets ticketsEmAndamento "em andamento de sua autoria" "de sua autoria em andamento."
+            putStrLn "\ninsira o id do ticket que deseja marcar como concluído"
+            id <- readLn
+            idValido <- checaIdDeTicketEmAndamento id
+            if idValido then do
+                atualizaTicketStatus id
+                putStrLn "Ticket alterado com sucesso.\n"
+                else do
+                putStrLn "Insira um id válido!\n"
+                resolveTicket aluno
+        else putStrLn "Ainda não há tickets em andamento de sua autoria.\n"
 
     {- 
     Função para um monitor adicionar uma mensagem a um ticket atraves de entradas do usuário
@@ -313,16 +317,27 @@ module Controller.ChatController where
     excluirTicket :: Aluno -> IO()
     excluirTicket aluno = do
         ticketsIds <- getTicketsAluno (A.id aluno)
-        exibeTickets ticketsIds "para exclusão" "existentes"
+        exibeTickets ticketsIds "para exclusão" "de sua autoria"
         putStrLn "Escolha entre os seus Tickets qual será excluido: "
-        input <- getLine
-        if read input `elem` ticketsIds then do
-            removeLinha "Tickets" input
+        id <- getLine
+        if read id `elem` ticketsIds then do
+            removeMensagensTicket (read id)
+            removeLinha "Tickets" id
             putStrLn "Ticket removido com sucesso."
             else do
                 putStrLn "Id invalido!"
                 excluirTicket aluno
 
+    removeMensagensTicket :: Int -> IO()
+    removeMensagensTicket ticketId = do
+        ticket <- getTicket ticketId
+        removeMensagensTicketRecursivo (mensagens ticket)
+    
+    removeMensagensTicketRecursivo :: [Int] -> IO()
+    removeMensagensTicketRecursivo [] = return ()
+    removeMensagensTicketRecursivo (mensagemAtual:mensagensRestantes) = do
+        removeLinha "Mensagens" (show mensagemAtual)
+        removeMensagensTicketRecursivo mensagensRestantes
     {- 
     Função que mostra todos os tickets de um aluno e depois mostra as mensgens de um ticket especifico
     Parametros:
