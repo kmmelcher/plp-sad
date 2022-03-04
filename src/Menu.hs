@@ -5,6 +5,7 @@ module Menu where
     import Controller.MonitorController
     import Controller.ProfessorController
     import Util.TxtFunctions
+    import Util.EncriptFunctions
     import Model.Monitor as M
     import Model.Professor as P
     import Model.Aluno as A
@@ -13,12 +14,12 @@ module Menu where
     menuPrincipal = do
         putStrLn "\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):"
         menuLogin
-    
+
     decideMenuPrincipal :: String -> IO ()
     decideMenuPrincipal opcao
         | opcao == "1" = menuLogin
         | opcao == "2" = putStrLn "Saindo..."
-        | otherwise = do 
+        | otherwise = do
             putStrLn "Insira um valor válido!\n"
             menuPrincipal
 
@@ -29,9 +30,9 @@ module Menu where
         opcao <- getLine
         putStr "\n"
         decideMenuCadastro professor opcao
-    
+
     decideMenuCadastro :: Professor -> String -> IO ()
-    decideMenuCadastro professor opcao 
+    decideMenuCadastro professor opcao
         | opcao == "1" = do
             disciplina <- solicitaDisciplina professor
             vinculaAluno disciplina
@@ -42,7 +43,7 @@ module Menu where
         | otherwise = do
             putStrLn "Insira um valor válido!\n"
             menuCadastro professor
-    
+
     menuRemocao :: Professor -> IO()
     menuRemocao professor = do
         putStrLn "\nQuem você deseja desvincular?"
@@ -50,7 +51,7 @@ module Menu where
         opcao <- getLine
         putStr "\n"
         decideMenuRemocao professor opcao
-    
+
     decideMenuRemocao :: Professor -> String -> IO()
     decideMenuRemocao professor opcao
         | opcao == "1" = do
@@ -82,9 +83,28 @@ module Menu where
 
     decideMenuLogin :: Int -> Bool -> Bool -> Bool -> IO()
     decideMenuLogin idPerfil ehMonitor ehProfessor ehAluno
-        | ehMonitor = decideMenuAlunoMonitor idPerfil
-        | ehAluno = exibeMenuAluno idPerfil
-        | ehProfessor = exibeMenuProfessor idPerfil
+        | ehMonitor = do
+            aluno <- getAluno idPerfil
+            autenticacao <- autenticaAluno aluno
+            if autenticacao then decideMenuAlunoMonitor idPerfil
+                else do
+                    putStrLn "Senha incorreta\n"
+                    menuLogin
+        | ehAluno = do
+            aluno <- getAluno idPerfil
+            autenticacao <- autenticaAluno aluno
+            if autenticacao then exibeMenuAluno idPerfil
+                else do
+                    putStrLn "Senha incorreta\n"
+                    menuLogin
+        | ehProfessor = do
+            professor <- getProfessor idPerfil
+            autenticacao <- autenticaProfessor professor
+            if autenticacao then exibeMenuProfessor idPerfil
+                else do
+                    putStrLn "Senha incorreta\n"
+                    menuLogin
+
         | otherwise = do
             putStrLn "Matrícula/ID não encontrado. Tente novamente\n\n"
             menuLogin
@@ -96,7 +116,7 @@ module Menu where
         putStrLn ("Como deseja entrar no sistema?\n\n1) Entrar como Aluno\n2) Entrar como Monitor de " ++ disciplina monitor)
         escolha <- getLine
         putStr "\n"
-        if escolha == "1" then exibeMenuAluno idPerfil else 
+        if escolha == "1" then exibeMenuAluno idPerfil else
             if escolha == "2" then exibeMenuMonitor idPerfil else do
                 putStrLn "Insira um valor válido!"
                 decideMenuAlunoMonitor idPerfil
@@ -107,7 +127,7 @@ module Menu where
         putStrLn "\n== SAD: MENU PROFESSOR =="
         putStrLn ("ID: " ++ show (P.id professor) ++ " | " ++ "Nome: " ++ P.nome professor ++ " | " ++ "Disciplinas: " ++ show (P.disciplinas professor))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Deslogar"
+        putStrLn "1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Alterar senha de acesso\n6) Deslogar"
         opcao <- getLine
         decideMenuProfessor professor opcao
 
@@ -126,9 +146,12 @@ module Menu where
             menuRemocao professor
             exibeMenuProfessor (P.id professor)
         | opcao == "5" = do
+            menuTrocarSenhaProfessor professor
+            exibeMenuProfessor (P.id professor)
+        | opcao == "6" = do
             putStrLn "Deslogando...\n"
             menuPrincipal
-        | otherwise = do 
+        | otherwise = do
             putStrLn "Opção inválida!"
             exibeMenuProfessor (P.id professor)
 
@@ -140,7 +163,7 @@ module Menu where
         putStrLn ("ID: " ++ show (M.id monitor) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplina: " ++ M.disciplina monitor)
         putStrLn "Digite o número da ação que deseja executar!\n"
         putStrLn "1) Exibir todos os tickets\n2) Responder tickets em andamento\n3) Deslogar"
-        opcao <- getLine 
+        opcao <- getLine
         decideMenuMonitor monitor opcao
 
     decideMenuMonitor :: Monitor -> String -> IO()
@@ -164,10 +187,10 @@ module Menu where
         putStrLn "\n== SAD: MENU ALUNO =="
         putStrLn ("ID: " ++ show (A.id aluno) ++ " | " ++ "Nome: " ++ A.nome aluno ++ " | " ++ "Disciplinas: " ++ show (A.disciplinas aluno))
         putStrLn "Digite o número da ação que deseja executar!\n"
-        putStrLn "1) Ler tickets de uma disciplina\n2) Ler meus tickets\n3) Criar Ticket\n4) Mandar mensagem em um ticket meu\n5) Marcar ticket como resolvido\n6) Excluir ticket\n7) Deslogar"
-        opcao <- getLine 
+        putStrLn "1) Ler tickets de uma disciplina\n2) Ler meus tickets\n3) Criar Ticket\n4) Mandar mensagem em um ticket meu\n5) Marcar ticket como resolvido\n6) Excluir ticket\n7) Trocar senha de acesso\n8) Deslogar"
+        opcao <- getLine
         decideMenuAluno aluno opcao
-    
+
     decideMenuAluno :: Aluno -> String -> IO()
     decideMenuAluno aluno opcao
         | opcao == "1" = do
@@ -189,8 +212,39 @@ module Menu where
             excluirTicket aluno
             exibeMenuAluno (A.id aluno)
         | opcao == "7" = do
+            menuTrocarSenhaAluno aluno
+            exibeMenuAluno (A.id aluno)
+        | opcao == "8" = do
             putStrLn "Deslogando...\n"
             menuPrincipal
         | otherwise  = do
             putStrLn "Opção inválida!\n"
             exibeMenuAluno (A.id aluno)
+
+    autenticaAluno :: Aluno -> IO Bool
+    autenticaAluno aluno = do
+        putStrLn "Insira a senha de acesso:"
+        senha <- getLine
+        return (A.senha aluno == encripta senha (A.nome aluno))
+
+    autenticaProfessor :: Professor -> IO Bool
+    autenticaProfessor professor = do
+        putStrLn "Insira a senha de acesso:"
+        senha <- getLine
+        return (P.senha professor == encripta senha (P.nome professor))
+
+    menuTrocarSenhaProfessor :: Professor -> IO ()
+    menuTrocarSenhaProfessor professor = do
+        putStrLn "Digite a sua nova senha: "
+        senha <- getLine
+        let professorAtualizado = Professor (P.id professor) (P.nome professor) (P.disciplinas professor) (encripta senha (P.nome professor))
+        atualizaLinhaById "Professores" (show (P.id professor)) (show professorAtualizado)
+        putStrLn "Senha alterada com sucesso\n"
+    
+    menuTrocarSenhaAluno :: Aluno -> IO ()
+    menuTrocarSenhaAluno aluno = do
+        putStrLn "Digite a sua nova senha: "
+        senha <- getLine
+        let alunoAtualizado = Aluno (A.id aluno) (A.nome aluno) (A.disciplinas aluno) (encripta senha (A.nome aluno))
+        atualizaLinhaById "Alunos" (show (A.id aluno)) (show alunoAtualizado)
+        putStrLn "Senha alterada com sucesso\n"

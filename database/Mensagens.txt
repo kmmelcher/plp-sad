@@ -1,26 +1,26 @@
 Mensagem {id = 1, autor = 120110001, conteudo = "Boa tarde, Estou com duvida na questao pratica 3", horario = "02/24/22 14h00"}
 Mensagem {id = 2, autor = 120110001, conteudo = "Como faco para ler uma lista de inteiros da entrada?", horario = "02/24/22 14h03"}
-Mensagem {id = 3, autor = 120110008, conteudo = "Oi, É só fazer o input <- getLine e depois  read input :: [[Int]]", horario = "02/24/22 14h05"}
+Mensagem {id = 3, autor = 120110008, conteudo = "Oi, E so fazer o input <- getLine e depois  read input :: [[Int]]", horario = "02/24/22 14h05"}
 Mensagem {id = 4, autor = 120110001, conteudo = "Obrigado , deu certo aqui", horario = "02/24/22 14h55"}
 Mensagem {id = 5, autor = 120110005, conteudo = "Como converto IO Int para Int?", horario = "04/24/22 13h50"}
 Mensagem {id = 6, autor = 120110008, conteudo = "Utilizando o operador <- dentro de um bloco DO", horario = "03/01/22 18h01"}
 Mensagem {id = 7, autor = 120110001, conteudo = "Gostaria de saber em que situacoes utilizar mux ou demux nos circuitos combinacionais", horario = "03/01/22 19h12"}
 Mensagem {id = 8, autor = 120110002, conteudo = "O mux serve para selecionar uma de suas diversas entradas para a sua saida.", horario = "03/01/22 20h02"}
-Mensagem {id = 9, autor = 120110002, conteudo = "Já o demux faz a operacao inversa, ou seja recebe uma entrada e seleciona qual de suas saidas ira receber o sinal de entrada", horario = "03/01/22 20h03"}
-Mensagem {id = 10, autor = 120110002, conteudo = "Boa tarde manuel, uma duvida sobre UML, para que tenhamos composicao ou agregacao, é necessário uma colecao de objetos? Ex: lista de compras, ou poderia ser tbm no caso de algum objeto que tivesse apenas um atributo compra", horario = "03/02/22 16h25"}
+Mensagem {id = 9, autor = 120110002, conteudo = "Ja o demux faz a operacao inversa, ou seja recebe uma entrada e seleciona qual de suas saidas ira receber o sinal de entrada", horario = "03/01/22 20h03"}
+Mensagem {id = 10, autor = 120110002, conteudo = "Boa tarde manuel, uma duvida sobre UML, para que tenhamos composicao ou agregacao, e necessário uma colecao de objetos? Ex: lista de compras, ou poderia ser tbm no caso de algum objeto que tivesse apenas um atributo compra", horario = "03/02/22 16h25"}
 Mensagem {id = 11, autor = 119231444, conteudo = "boa tarde, pode ser apenas um atributo, nao necessariamente precisa ser uma colecao", horario = "03/02/22 16h50"}
 Mensagem {id = 12, autor = 120110002, conteudo = "Entendi, ai no caso da composicao, o atributo vai existir somente naquela classe?", horario = "03/02/22 16h54"}
 Mensagem {id = 13, autor = 119231444, conteudo = "isso, ja na agregacao o atributo é utilizado por mais de uma classe", horario = "03/02/22 17h00"}
 Mensagem {id = 14, autor = 120110005, conteudo = "boa noite , nao estou conseguindo entrar na maquina virtual utilizando o ssh, alguem pode me ajudar no privado?", horario = "03/02/22 17h02"}
 Mensagem {id = 15, autor = 120110002, conteudo = "Posso usar consultas Aninhadas nesse roteiro", horario = "03/02/22 16h18"}
-Mensagem {id = 16, autor = 120110011, conteudo = "Apenas nas questões 14 e 15", horario = "03/02/22 16h21"}
+Mensagem {id = 16, autor = 120110011, conteudo = "Apenas nas questoes 14 e 15", horario = "03/02/22 16h21"}
 Mensagem {id = 17, autor = 120110002, conteudo = "OK, valeu!", horario = "03/02/22 16h21"}
 Mensagem {id = 18, autor = 120110017, conteudo = "Olá, boa noite, estou com duvida em como o pipeline ajuda em um Processador", horario = "03/02/22 18h47"}
 Mensagem {id = 19, autor = 120110005, conteudo = "Como que um semaforo lida com as regiões criticas?", horario = "03/02/22 18h49"}
 Mensagem {id = 20, autor = 120110004, conteudo = "Como implemento uma arvore AVL?", horario = "03/02/22 18h50"}
-Mensagem {id = 21, autor = 120110010, conteudo = "Utilizando uma comando especial do processador que faz a comparação com um operação chamada test-and-set, que realiza 2 operções em um unico ciclo de clock, permitindo que a região critíca seja implementada", horario = "03/02/22 18h52"}
+Mensagem {id = 21, autor = 120110010, conteudo = "Utilizando uma comando especial do processador que faz a comparação com um operacao chamada test-and-set, que realiza 2 operacoes em um unico ciclo de clock, permitindo que a regiao critíca seja implementada", horario = "03/02/22 18h52"}
 Mensagem {id = 22, autor = 120110002, conteudo = "O pipeline ajuda com a diminição do espaço fisico utilizado pelo processador, pois realiza calculos repetidos atraves do tempo e não sobre o espaço", horario = "03/02/22 18h52"}
-Mensagem {id = 23, autor = 120110005, conteudo = "Entendi não, pode explicar melhor?", horario = "03/02/22 18h55"}
+Mensagem {id = 23, autor = 120110005, conteudo = "Entendi nao, pode explicar melhor?", horario = "03/02/22 18h55"}
 Mensagem {id = 24, autor = 120110011, conteudo = "nao", horario = "03/04/22 03h29"}
 Mensagem {id = 25, autor = 119231444, conteudo = "Deve ser usado como notacao de atributos de classes nas quais, para uma instancia da classe em questao, devem haver dois ou mais (many) atributos relacionados", horario = "03/04/22 03h42"}
 Mensagem {id = 26, autor = 120110004, conteudo = "Caraca o home eh brabo valeu tamo junto eh nois", horario = "03/04/22 03h43"}
