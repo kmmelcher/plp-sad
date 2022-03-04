@@ -28,7 +28,8 @@ executable plp-sad
     Model.Monitor,
     Model.Professor,
     Model.Ticket,
-    Util.TxtFunctions
+    Util.TxtFunctions,
+    Util.EncriptFunctions
     Menu
   build-depends:       
     base,
