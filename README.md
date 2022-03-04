@@ -42,23 +42,23 @@ $ cabal run
 
 ### Cadastro
 
-É possível cadastrar alunos, monitores e professores.
+É possível cadastrar alunos e monitores.
 
 ```
-Quem você deseja cadastrar?
-1) Cadastrar aluno
-2) Cadastrar monitor
-3) Cadastrar professor
-4) Voltar para o menu principal
+Quem você deseja vincular?
+1) Vincular aluno
+2) Vincular monitor
+3) Voltar para o menu professor
 1
 
-Insira o nome do aluno: 
-MATEUS
-Insira a matricula do aluno
-12012547
-Insira as disciplinas do aluno
-["LOAC","OAC","PLP"]
-Aluno cadastrado com sucesso.
+
+Informe a sigla da disciplina relacionada:
+OAC
+Insira a matricula do aluno (digite 0 para voltar ao seu menu)
+123456789
+Este aluno não está cadastrado no SAD. Por favor, informe seu nome:
+Samuel
+Aluno cadastrado com sucesso e incluso na disciplina.
 ```
 
 ### Tickets
@@ -68,18 +68,21 @@ Aluno cadastrado com sucesso.
 ID: 120110001 | Nome: Kilian Melcher | Disciplinas: ["OAC","LOAC","PLP","Psoft"]
 Digite o número da ação que deseja executar!
 
-1) Matricular-se em disciplina
-2) Desmatricular-se de disciplina
+1) Ler tickets de uma disciplina
+2) Ler meus tickets
 3) Criar Ticket
-4) Mandar mensagem em um ticket
-5) Ler tickets de uma disciplina
-6) Marcar ticket como resolvido
-7) Deslogar
+4) Mandar mensagem em um ticket meu
+5) Marcar ticket como resolvido
+6) Excluir ticket
+7) Trocar senha de acesso
+8) Deslogar
 3
-Insira o nome da disciplina que você tem dúvida:
+
+Insira a sigla da disciplina na qual deseja criar o ticket:
 OAC
 Insira um título para sua dúvida:
 Registradores
+
 Ticket adicionado com sucesso!
 ```
 
