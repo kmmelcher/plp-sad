@@ -1,3 +1,6 @@
+-- O módulo ChatController fornece todas as funcionalidades necessárias de interação para lidar com o usuário.
+-- Funciona para interações diretas com o usuário e para utilizar os Tipos Mensagem e Ticket.
+
 module Controller.ChatController where
     import Model.Mensagem as MSG
     import Model.Aluno as A
@@ -11,29 +14,28 @@ module Controller.ChatController where
     import Controller.ProfessorController
     import Model.Ticket (Ticket)
     import Model.Disciplina
-    
+     
+    -- Função que retorna um  Ticket com base em seu id.
+    --  > Parametros:
+    --    id = id do ticket desejado
     getTicket:: Int -> IO T.Ticket
     getTicket id = do
         ticketToString <- getObjetoById "Tickets" id
         return (read ticketToString :: T.Ticket)
     
-    {- 
-    Função que retorna um objeto do tipo Mensagem a partir de um ID fornecido
-    Parametros:
-        id = id da mensagem desejada
-    -}
+    -- Função que retorna um objeto do tipo Mensagem a partir de um ID fornecido.
+    --  > Parametros:
+    --    id = id da mensagem desejada
     getMensagem:: Int -> IO Mensagem
     getMensagem id = do
         mensagemToString <- getObjetoById "Mensagens" id
         return (read mensagemToString :: Mensagem)
 
-    {- 
-    Adiciona um ticket com um aluno como autor
-    Forma de uso:
-        A função deverá ser chamada com o aluno autor como parametro e as demais entradas nescessárias são fornecidas pelo usuário
-    Parametros:
-        aluno = O aluno autor do ticket
-    -}
+    -- Adiciona um ticket com um aluno como autor.
+    --  > Forma de uso:
+    --    A função deverá ser chamada com o aluno autor como parametro e as demais entradas nescessárias são fornecidas pelo usuário
+    --  > Parametros:
+    --    aluno = aluno autor do ticket
     adicionaTicket :: Aluno -> IO()
     adicionaTicket aluno = do
         putStrLn "\nInsira a sigla da disciplina na qual deseja criar o ticket:"
@@ -49,12 +51,10 @@ module Controller.ChatController where
             putStrLn "Você não possui está cadastrado nesta disciplina! Tente novamente."
             adicionaTicket aluno
     
-    {- 
-        Função que adiciona uma mensagem à um ticket existente
-    Parametros:
-        id = id do Autor da mensagem
-        ticketsValidos = Tickets em que esse autor pode mandar mensagens
-    -}
+    -- Função que adiciona uma mensagem à um ticket existente.
+    --  > Parametros:
+    --    id = id do Autor da mensagem
+    --    ticketsValidos = Tickets em que esse autor pode mandar mensagens
     adicionaMensagem :: Int -> [Int] -> IO()
     adicionaMensagem id ticketsValidos = do
         putStrLn "Escolha o ticket no qual deseja inserir a mensagem: "
@@ -75,29 +75,26 @@ module Controller.ChatController where
             putStrLn "Ticket inválido!\n"
             adicionaMensagem id ticketsValidos
 
-    {- 
-    Função que avalia se um ticket pertence ao grupo de tickets válidos recebidos
-    Parametros:
-        ticketId = id do ticket à ser analisado
-        ticketsValidos = grupo de tickets válidos 
-    -}
+    -- Função que avalia se um ticket pertence ao grupo de tickets válidos recebidos.
+    --  > Parametros:
+    --    ticketId = id do ticket à ser analisado
+    --    ticketsValidos = grupo de tickets válidos 
     ehTicketValido :: Int -> [Int] -> Bool
     ehTicketValido ticketId ticketsValidos = ticketId `elem` ticketsValidos
     
-    {- 
-    Retorna os ids de todos os tickets de um aluno
-    Parametros:
-        matricula = A matricula do aluno
-    -}
-    -- Não poderia retornar um array de tickets?
+    -- Retorna os ids de todos os tickets de um aluno.
+    --  > Parametros:
+    --    matricula = matricula do aluno
     getTicketsAluno :: Int -> IO[Int]
     getTicketsAluno matricula = do
         tickets <- fileToStringArray "Tickets"
         getTicketsAlunoRecursivo tickets matricula
 
-    {- 
-    Função auxiliar de getTicketsAluno que retorna os tickets de um aluno
-    -}
+    
+    -- Função recursiva, responsável por construir um array de inteiros contendo os tickets do Aluno.
+    --  > Parametros:
+    --    (ticketAtual:ticketsRestantes) = array de strings contendo todos os Tickets existentes 
+    --    matricula = matricula do aluno
     getTicketsAlunoRecursivo :: [String] -> Int -> IO [Int]
     getTicketsAlunoRecursivo [] _ = return []
     getTicketsAlunoRecursivo (ticketAtual:ticketsRestantes) matricula = do
@@ -107,46 +104,45 @@ module Controller.ChatController where
             return (T.id ticket : proximos)
             else return proximos
 
-    {- 
-    Insere uma mensagem em um Ticket.
-    Parametros
-        idTicket : ticket no qual voce quer inserir a mensagem.
-        idMensagem: Mensagem a ser inserida no Ticket.
-    -}
+     
+    -- Insere uma mensagem em um Ticket.
+    --  > Parametros
+    --    idTicket = id do ticket no qual voce quer inserir a mensagem.
+    --    idMensagem = Mensagem a ser inserida no Ticket.
     insereMensagemNoTicket :: Int -> Int -> IO()
     insereMensagemNoTicket idTicket idMensagem = do
         ticket <- getTicket idTicket
         let ticketAtualizado = T.Ticket idTicket (T.titulo ticket) (T.mensagens ticket ++ [idMensagem]) (T.status ticket) (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show idTicket) (show ticketAtualizado)
 
-    {-
-    Exibe todos os tickets de uma disciplina.
-    Parâmetros:
-        nomeDisciplina: Nome da disciplina a ser exibida.
-    -}
+    
+    -- Exibe todos os tickets de uma disciplina.
+    --  > Parâmetros:
+    --    nomeDisciplina = Nome da disciplina a ser exibida.
     exibeTicketsDisciplina :: String -> IO()
     exibeTicketsDisciplina nomeDisciplina = do
         tickets <- getTicketsDisciplina nomeDisciplina
         exibeTickets tickets "nesta disciplina" ("da disciplina: " ++ nomeDisciplina)
 
+    -- Função que retorna um array com todos os tickets.
     getTodosOsTickets:: IO [String]
     getTodosOsTickets = do
         fileToStringArray "Tickets"
 
-    {- 
-    Retorna todos os tickets de uma disciplina
-    Parametros
-        disciplina: qual o nome da disciplina dos tickets que queremos retornar
-    -}
+     
+    -- Retorna todos os tickets de uma disciplina.
+    --  > Parametros:
+    --    disciplina = nome da disciplina dos tickets 
     getTicketsDisciplina :: String -> IO[Int]
     getTicketsDisciplina disciplina = do
-
         tickets <- fileToStringArray "Tickets"
         getTicketsDisciplinaRecursivo tickets disciplina
 
-    {- 
-    Função auxiliar de getTicketsDisciplina
-    -}
+    
+    -- Função recursiva, responsável por construir um array de inteiros contendo os tickets com base na disciplina.
+    --  > Parametros:
+    --    (ticketAtual:ticketsRestantes) = array de strings contendo todos os Tickets existentes 
+    --    disciplina = nome da disciplina dos tickets
     getTicketsDisciplinaRecursivo :: [String] -> String -> IO[Int]
     getTicketsDisciplinaRecursivo [] _ = return []
     getTicketsDisciplinaRecursivo (ticketAtual:ticketsRestantes) disciplina = do
@@ -157,28 +153,26 @@ module Controller.ChatController where
                 return (T.id ticket : proximos)
             else getTicketsDisciplinaRecursivo ticketsRestantes disciplina
 
-    {- 
-    Mostra no terminal os tickets em andamento dentre os tickets com os ids presentes na entrada
-    Parametros:
-        tickets = Os tickets que serão analisados
-    -}
+     
+    -- Exibe os tickets em andamento dentre os tickets com os ids presentes na entrada.
+    --  > Parametros:
+    --    tickets = array de inteiros com os ids de todos os tickets existentes
     exibeTicketsEmAndamento :: [Int] -> IO()
     exibeTicketsEmAndamento tickets = do
         ticketsEmAndamento <- getTicketsEmAndamento tickets
         exibeTickets ticketsEmAndamento "em andamento" "e em andamento"
     
-    {- 
-    Retorna um array com os ids dos tickets que estão em andamento
-    Parametros:
-        tickets = grupo de tickets a serem analisados
-    -}
+     
+    -- Retorna um array com os ids dos tickets que estão em andamento.
+    --  > Parametros:
+    --    tickets = grupo de tickets a serem analisados
     getTicketsEmAndamento :: [Int] -> IO[Int]
     getTicketsEmAndamento tickets = do
         getTicketsEmAndamentoRecursivo tickets
 
-    {- 
-    Função auxiliar de getTicketsEmAndamento
-    -}
+    -- Função recursiva, responsável por construir um array de inteiros contendo os tickets em andamento.
+    --  > Parametros:
+    --    (ticketAtual:ticketsRestantes) = array de strings contendo todos os Tickets existentes 
     getTicketsEmAndamentoRecursivo :: [Int] -> IO [Int]
     getTicketsEmAndamentoRecursivo [] = return []
     getTicketsEmAndamentoRecursivo (ticketAtual:ticketsRestantes) = do
@@ -189,18 +183,16 @@ module Controller.ChatController where
             else
                 getTicketsEmAndamentoRecursivo ticketsRestantes
     
-    {- 
-    Retorna um array com os ids dos tickets que estão concluidos
-    Parametros:
-        tickets = Os tickets a serem analisados
-    -}
+    -- Retorna um array com os ids dos tickets que estão concluidos.
+    --  > Parametros:
+    --    tickets = tickets a serem analisados
     getTicketsConcluidos :: [Int] -> IO[Int]
     getTicketsConcluidos tickets = do
         getTicketsConcluidosRecursivo tickets
 
-    {- 
-    Função auxiliar de getTicketsConcluidos
-    -}
+    -- Função recursiva, responsável por construir um array de inteiros contendo os tickets resolvidos.
+    --  > Parametros:
+    --    (ticketAtual:ticketsRestantes) = array de strings contendo todos os Tickets existentes 
     getTicketsConcluidosRecursivo :: [Int] -> IO [Int]
     getTicketsConcluidosRecursivo [] = return []
     getTicketsConcluidosRecursivo (ticketAtual:ticketsRestantes) = do
@@ -211,10 +203,12 @@ module Controller.ChatController where
             else
                 getTicketsConcluidosRecursivo ticketsRestantes
 
-    {-
-    Exibe uma lista de tickets.
-    Checa se a lista de tickets é vazia, nesse caso é avisado ao usuário.
-    -}
+
+    -- Exibe uma lista de tickets.
+    --  > Parametros: 
+    --    tickets = array de int contendo os ids de tickets
+    --    mensagemSemTicket = string contendo mensagem caso não haja tickets
+    --    mensagemComTicket = string contendo mensagem caso haja ticket(s)
     exibeTickets :: [Int] -> String -> String -> IO()
     exibeTickets tickets mensagemSemTicket mensagemComTickets = do
         if null tickets
@@ -223,9 +217,9 @@ module Controller.ChatController where
             putStrLn ("\nEstes são os tickets existentes " ++ mensagemComTickets ++ "\n")
             exibeTicketsRecursivo tickets
 
-    {-
-    Itera recursivamente sobre uma lista de tickets exibindo cada um.
-    -}
+    -- Função recursiva, responsável por construir um array de inteiros contendo os tickets.
+    --  > Parametros:
+    --    (ticketAtual:ticketsRestantes) = array de strings contendo todos os Tickets existentes 
     exibeTicketsRecursivo :: [Int] -> IO()
     exibeTicketsRecursivo [] = do
         putStr "\n"
@@ -234,33 +228,29 @@ module Controller.ChatController where
         ticket <- getTicket idTicketAtual
         putStrLn (show (T.id ticket) ++ "- " ++ T.titulo ticket ++ " (" ++ T.status ticket ++ ")")  
         exibeTicketsRecursivo idsTicketsRestantes
-
-    {- 
-    Checa se um ticket está em andamento 
-    Parametros:
-        id = Id do ticket a ser analisado
+ 
+    -- Checa se um ticket está em andamento. 
+    --  > Parametros:
+    --    id = Id do ticket a ser analisado
     -}
     checaIdDeTicketEmAndamento :: Int -> IO Bool
     checaIdDeTicketEmAndamento id = do
         ticket <- getTicket id
         return (T.status ticket == "Em Andamento")
 
-    {- 
-    Atualiza o status de um ticket para resolvido
-    Parametros:
-        id = Id do ticket a ser atualizado
-    -}
+    -- Atualiza o status de um ticket para resolvido.
+    --  > Parametros:
+    --    id = Id do ticket a ser atualizado
     atualizaTicketStatus :: Int -> IO()
     atualizaTicketStatus id = do
         ticket <- getTicket id
         let novoTicket = T.Ticket (T.id ticket) (T.titulo ticket) (T.mensagens ticket) "Resolvido" (T.autor ticket) (T.disciplina ticket)
         atualizaLinhaById "Tickets" (show id) (show novoTicket)
 
-    {- 
-    Função com as interçaões com usuario nescessárias para a resolução de um ticket
-    Parametros:
-        aluno = O aluno que possui o ticket que será resolvido
-    -}
+    
+    -- Função com as interações com usuário nescessárias para a resolução de um ticket.
+    --  > Parametros:
+    --    aluno =  aluno que possui o ticket que será resolvido
     resolveTicket :: Aluno -> IO()
     resolveTicket aluno = do
         ticketsAluno <- getTicketsAluno (A.id aluno)
@@ -277,11 +267,9 @@ module Controller.ChatController where
             putStrLn "Insira um id válido!"
             resolveTicket aluno
 
-    {- 
-    Função para um monitor adicionar uma mensagem a um ticket atraves de entradas do usuário
-    Parametros:
-        monitor = O monitor que irá enviar a mensagem
-    -}
+    -- Função para um monitor adicionar uma mensagem a um ticket atraves de entradas do usuário.
+    --  > Parametros:
+    --    monitor = monitor que irá enviar a mensagem
     adicionaMensagemMonitor :: Monitor -> IO()
     adicionaMensagemMonitor monitor = do
         tickets <- getTicketsDisciplina (M.disciplina monitor)
@@ -291,12 +279,10 @@ module Controller.ChatController where
             then return ()
         else do
             adicionaMensagem (M.id monitor) ticketsEmAndamento
-
-    {- 
-    Fução para um aluno inserir uma mensagem em um dos seus tickets atravez de entradas do usuario
-    Parametros:
-        aluno = O aluno que irá enviar a mensagem
-    -}
+ 
+    -- Função para um aluno inserir uma mensagem em um dos seus tickets atravez de entradas do usuário.
+    --  > Parametros:
+    --    aluno = O aluno que irá enviar a mensagem
     adicionaMensagemAluno :: Aluno -> IO()
     adicionaMensagemAluno aluno = do
         tickets <- getTicketsAluno (A.id aluno)
@@ -304,12 +290,10 @@ module Controller.ChatController where
         if null ticketsEmAndamento then exibeTicketsEmAndamento tickets else do
             exibeTicketsEmAndamento tickets
             adicionaMensagem (A.id aluno) ticketsEmAndamento
-
-    {- 
-    Função que permite um aluno excluir um de seus tickets atravez de entradas do usuário
-    Parametros:
-        aluno = o aluno que irá excluir o ticket
-    -}
+ 
+    -- Função que permite um aluno excluir um de seus tickets atraves de entradas do usuário.
+    --  > Parametros:
+    --    aluno = aluno que irá excluir o ticket
     excluirTicket :: Aluno -> IO()
     excluirTicket aluno = do
         ticketsIds <- getTicketsAluno (A.id aluno)
@@ -322,12 +306,10 @@ module Controller.ChatController where
             else do
                 putStrLn "Id invalido!"
                 excluirTicket aluno
-
-    {- 
-    Função que mostra todos os tickets de um aluno e depois mostra as mensgens de um ticket especifico
-    Parametros:
-        aluno = O aluno dono dos tickets
-    -}
+ 
+    -- Função que mostra todos os tickets de um aluno e depois mostra as mensagens de um ticket especifico
+    --  > Parametros:
+    --    aluno = aluno dono dos tickets
     leTicketsDoAluno :: Aluno -> IO()
     leTicketsDoAluno aluno = do
         ticketsAluno <- getTicketsAluno (A.id aluno)
@@ -339,20 +321,19 @@ module Controller.ChatController where
                 putStrLn "Id de ticket invalido!"
                 leTicketsDoAluno aluno
 
-    {- 
-    Função para exibir as mensgens de um ticket em forma de chat
-    Parametros:
-        idTicket = o id do ticket que contem as mensagens
-    -}
+    -- Função para exibir as mensagens de um ticket em forma de chat
+    --  > Parametros:
+    --    idTicket = id do ticket que contem as mensagens
     exibeMensagensDeTicket :: Int -> IO()
     exibeMensagensDeTicket idTicket = do
         mensagens <- getMensagensDoTicket idTicket
         ticket <- getTicket idTicket
         exibeMensagensDoTicketRecursivo mensagens (T.disciplina ticket)
 
-    {- 
-    Função auxiliar de exibeMensagensDeTicket
-    -}
+    -- Função recursiva, responsável por construir e exibir um array de inteiros contendo as mensagens dos tickets.
+    --  > Parametros:
+    --    (ticketAtual:ticketsRestantes) = array de strings contendo todos os Tickets existentes 
+    --    disciplina = disciplina do ticket que contem a mensagem
     exibeMensagensDoTicketRecursivo :: [IO Mensagem] -> String -> IO()
     exibeMensagensDoTicketRecursivo [] x = return ()
     exibeMensagensDoTicketRecursivo (mensagemAtualIO:mensagensRestantesIO) disciplina = do
@@ -360,23 +341,20 @@ module Controller.ChatController where
         exibeMensagem mensagemAtual disciplina
         exibeMensagensDoTicketRecursivo mensagensRestantesIO disciplina
 
-    {- 
-    Retorna os Ids de todas as mensgens de um ticket
-    Parametros:
-        idTicket = id do ticket que contem as mensagens
-    -}
+    -- Retorna os Ids de todas as mensgens de um ticket.
+    --  > Parametros:
+    --    idTicket = id do ticket que contem as mensagens
     getMensagensDoTicket :: Int -> IO[IO Mensagem]
     getMensagensDoTicket idTicket = do
         ticket <- getTicket idTicket
         let mensagensTicket = T.mensagens ticket
         return(map getMensagem mensagensTicket)
 
-    {- 
-    Mostra o texto de uma mensagem juntamente com o autor e o horario
-    Parametros:
-        mensagem = Mensagem que será mostrada
-        disciplina = a disciplina do ticket que contem a mensagem
-    -}
+    
+    -- Mostra o texto de uma mensagem juntamente com o autor e o horario.
+    --  > Parametros:
+    --    mensagem = Mensagem que será mostrada
+    --    disciplina = disciplina do ticket que contem a mensagem
     exibeMensagem :: Mensagem -> String ->IO()
     exibeMensagem mensagem disciplina = do
         ehProf <- checaExistenciaById "Professores" (MSG.autor mensagem)
@@ -393,11 +371,10 @@ module Controller.ChatController where
                 putStrLn ("[" ++ horario mensagem ++ "] " ++ "(MONITOR) " ++ A.nome aluno ++ " - " ++ conteudo mensagem)
             else putStrLn ("[" ++ horario mensagem ++ "] " ++ "(ALUNO) " ++ A.nome aluno ++ " - " ++ conteudo mensagem)
 
-    {- 
-    Mostra as mensagens de um dos tickets do aluno atravez de entradas do usuario
-    Parametros:
-        aluno = Aluno que possui os tickets
-    -}
+     
+    -- Mostra as mensagens de um dos tickets do aluno atraves de entradas do usuário.
+    --  > Parametros:
+    --    aluno = Aluno que possui os tickets
     leTicketsDaDisciplinaAluno :: Aluno -> IO()
     leTicketsDaDisciplinaAluno aluno = do
         putStrLn "\nInforme a sigla da disciplina na qual deseja visualizar os tickets:"
@@ -408,11 +385,9 @@ module Controller.ChatController where
             putStrLn "\nEsta sigla não é valida ou é referente a uma disciplina na qual você não está matrículado!\n"
             leTicketsDaDisciplinaAluno aluno
 
-    {- 
-    Mostra as mensagens de uma disciplina expecifica
-    Parametros:
-        disciplina = sigla da disciplina desejada
-    -}
+    -- Mostra as mensagens de uma disciplina especifica.
+    --  > Parametros:
+    --    disciplina = sigla da disciplina desejada
     exibeMensagensDisciplina :: String -> IO()
     exibeMensagensDisciplina disciplina = do
         tickets <- getTicketsDisciplina disciplina
@@ -427,11 +402,9 @@ module Controller.ChatController where
                     putStrLn "Insira um valor válido!"
                     exibeMensagensDisciplina disciplina
 
-    {- 
-    Mostra as mensgens de um dos tickets de uma das disciplinas do professor atravez de entradas do usuario
-    Parametros:
-        professor = professor a ser analisado
-    -}
+    -- Mostra as mensagens de um dos tickets de uma das disciplinas do professor atraves de entradas do usuário.
+    --  > Parametros:
+    --    professor = professor a ser analisado
     lerTicketsDisciplinaProfessor :: Professor -> IO()
     lerTicketsDisciplinaProfessor professor = do
         if length (P.disciplinas professor) > 1 then do
@@ -445,6 +418,9 @@ module Controller.ChatController where
         else do
                exibeMensagensDisciplina (head (P.disciplinas professor))
     
+    -- Lê tickets da disciplina do professor.
+    --  > Parametros:
+    --    professor = Professor que possui as disciplinas 
     lerTicketsDisciplina :: P.Professor -> IO()
     lerTicketsDisciplina professor = do
         if length (P.disciplinas professor) > 1 then do
@@ -458,11 +434,15 @@ module Controller.ChatController where
         else do
                exibeTicketsDisciplina (head (P.disciplinas professor))
     
+    -- Adiciona mensagem no ticket da disciplina do professor
+    --  > Parametros:
+    --    professor = Professor que possui as disciplinas 
     adicionaMensagemProfessor :: P.Professor -> IO ()
     adicionaMensagemProfessor professor = do
         let disciplinasDoProfessor = P.disciplinas professor
         ticketsValidos <- pegaTicketsDoProfessor disciplinasDoProfessor
         adicionaMensagem (P.id professor) ticketsValidos
+
 
     pegaTicketsDoProfessor :: [String] -> IO [Int]
     pegaTicketsDoProfessor [] = return []
