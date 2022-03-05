@@ -11,5 +11,4 @@ Monitor {id = 120110012, disciplina = "Psoft", horarios = "TER 12-14 QUI 14-16"}
 Monitor {id = 120110010, disciplina = "SO", horarios = "QUA 14-16 QUI 14-16"}
 Monitor {id = 120110009, disciplina = "IP", horarios = "SEG 16-18 QUI 14-16"}
 Monitor {id = 120110017, disciplina = "Redes", horarios = "QUA 16-18 QUI 14-16"}
-Monitor {id = 111111110, disciplina = "PLP", horarios = "SEG 16H-18"}
 Monitor {id = 119231444, disciplina = "Psoft", horarios = "DIAS DE PASCOA 16H - 20H"}
