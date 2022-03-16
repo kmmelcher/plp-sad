@@ -1,3 +1,6 @@
+
+:- use_module('model/aluno.pl', [cadastra_aluno/5] ). % Exemplo de importação
+
 menuPrincipal :- write('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):'),
                  menuLogin.
 
@@ -15,7 +18,7 @@ decideMenu(_) :- write('\nEntrada Inválida! '),
 exibeMenuProfessor :- write('\n== SAD: MENU PROFESSOR =='),
                       write('\nID: | Nome: | Disciplinas: '),
                       write('\nDigite o número da ação que deseja executar!'),
-                      write('\n1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Alterar senha de acesso\n6) Deslogar\n'),
+                      write('\n1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Alterar senha de acesso\n6) Cadastrar\n7) Deslogar\n'),
                       read(Opcao),
                       decideMenuProfessor(Opcao).
 
@@ -29,7 +32,10 @@ decideMenuProfessor(4) :- menuRemocao, !.
 
 decideMenuProfessor(5) :- menuTrocarSenhaProfessor, !.
 
-decideMenuProfessor(6) :- write('\nDeslogando...'),
+decideMenuProfessor(6) :-
+    aluno:cadastra_aluno(1, 'Vinicius', 'aluno123', ['OAC'], aluno), !. % Exemplo de uso
+
+decideMenuProfessor(7) :- write('\nDeslogando...'),
                           menuPrincipal, !.
 decideMenuProfessor(_) :- write('\nEntrada Inválida! '),
                           exibeMenuProfessor.
@@ -47,7 +53,6 @@ decideMenuCadastro(3) :- exibeMenuProfessor, !.
 
 decideMenuCadastro(_) :- write('\nEntrada Inválida! '),
                          menuCadastro.
-
 
 menuRemocao :- write('\nQuem você deseja desvincular?'),
                write('\n1) Desvincular aluno\n2) Desvincular monitor\n3) Voltar para o menu professor\n'),
