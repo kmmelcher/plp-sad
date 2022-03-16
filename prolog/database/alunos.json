@@ -1,0 +1,14 @@
+[
+    {
+        "id" : "120110407",
+        "nome" : "Álef Ádonis",
+        "disciplinas" : ["PLP", "Filosofia Moderna"],
+        "senha" : "123"
+    },
+    {
+        "id" : "120110408",
+        "nome" : "Constantino Octuadecimo Pereira",
+        "disciplinas" : ["PLP", "Mecânica Básica", "Agropesca"],
+        "senha" : "321"
+    }
+]
