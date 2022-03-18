@@ -33,15 +33,15 @@ showObjects(FilePath) :-
 		readJSON(FilePath, Result),
 		showObjectsAux(Result).
 
-saveAlumn(String, Matricula, Nome, Disciplinas) :- 
+addAlumn(String, Matricula, Nome, Disciplinas) :- 
     readJSON(String, File),
-    alumnsToJSON(File, ListaAgentesJSON),
-    alumnToJSON(Matricula, Nome, Disciplinas, AgenteJSON),
-    append(ListaAgentesJSON, [AgenteJSON], Saida),
+    alumnsToJSON(File, ListaObjectsJSON),
+    alumnToJSON(Matricula, Nome, Disciplinas, ObjectJSON),
+    append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(String, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-% Criando representação em formato String de um agente em JSON
+% Criando representação em formato String de um Object em JSON
 alumnToJSON(Matricula, Nome, Disciplinas, Out) :-
     swritef(Out, '{"id": "%w", "nome":"%w","disciplinas":"%w", "senha":""}', [Matricula, Nome, Disciplinas]).
 
@@ -50,3 +50,15 @@ alumnsToJSON([], []).
 alumnsToJSON([H|T], [X|Out]) :- 
     alumnToJSON(H.id, H.nome, H.disciplinas, X), 
     alumnsToJSON(T, Out).
+
+% Removendo 
+removeObjectJSON([], _, []).
+removeObjectJSON([H|T], H.id, T).
+removeObjectJSON([H|T], Id, [H|Out]) :- removeObjectJSON(T, Id, Out).
+
+removeAlumn(String, Id) :-
+   readJSON(String, File),
+   removeObjectJSON(File, Id, SaidaParcial),
+   alumnsToJSON(SaidaParcial, Saida),
+   getFilePath(String, FilePath),
+   open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
