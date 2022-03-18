@@ -1,14 +1,26 @@
 [
-    {
-        "id" : "120110407",
-        "nome" : "Álef Ádonis",
-        "disciplinas" : ["PLP", "Filosofia Moderna"],
-        "senha" : "123"
-    },
-    {
-        "id" : "120110408",
-        "nome" : "Constantino Octuadecimo Pereira",
-        "disciplinas" : ["PLP", "Mecânica Básica", "Agropesca"],
-        "senha" : "321"
-    }
+  {
+    "id": "120110407",
+    "nome": "Álef Ádonis",
+    "disciplinas": "[PLP, Filosofia Moderna]",
+    "senha": ""
+  },
+  {
+    "id": "120110408",
+    "nome": "Constantino Octuadecimo Pereira",
+    "disciplinas": "[PLP,Mecânica Básica,Agropesca]",
+    "senha": ""
+  },
+  {
+    "id": "1209080201",
+    "nome": "Eterobaldo Nascimento Pinto da Silva Neto",
+    "disciplinas": "[OAC, LOAC, Principios da Metafisica Moderna, I.A]",
+    "senha": ""
+  },
+  {
+    "id": "12090802",
+    "nome": "Otavio Neto",
+    "disciplinas": "[OAC, LOAC, TCC, I.A]",
+    "senha": ""
+  }
 ]
