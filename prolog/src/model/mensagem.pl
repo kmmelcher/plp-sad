@@ -1,4 +1,4 @@
-:- module('mensagem', [adiciona_mensagem/5]).
+:- module('mensagem', [adiciona_mensagem/4]).
 
-adiciona_mensagem(Id, Autor, Conteudo, Horario, NovaMensagem) :-
+adiciona_mensagem(Autor, Conteudo, Horario, NovaMensagem) :-
     writeln("Mensagem adicionada.").

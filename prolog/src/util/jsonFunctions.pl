@@ -3,8 +3,9 @@
 getIDs([], ListaIDs, Result):- append([0], ListaIDs, Result).
 getIDs([H|T], ListaIDs, Result):-
     atom_number(H.id, X),
-    append([X], ListaIDs, Result),
-    getIDs(T,Result, Aux).
+    getIDs(T,ListaIDs, ResultAux),
+    append([X], ResultAux, Result).
+    
 
 max([Max], Max).
 max([Head | List], Max) :-
@@ -123,16 +124,6 @@ professoresToJSON([H|T], [X|Out]) :-
     professorToJSON(H.id, H.nome, H.disciplinas, X), 
     professoresToJSON(T, Out).
 
-addProfessor(Nome, Disciplinas) :- 
-    NomeArquivo = "professores",
-    buscaNovoID(NomeArquivo, ID),
-    readJSON(NomeArquivo, File),
-    professoresToJSON(File, ListaObjectsJSON),
-    professorToJSON(ID, Nome, Disciplinas, ObjectJSON),
-    append(ListaObjectsJSON, [ObjectJSON], Saida),
-    getFilePath(NomeArquivo, FilePath),
-    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
-
 %-------------------------- Funções de Monitores--------------------------%
 
 showMonitoresAux([]):- halt.
@@ -153,7 +144,6 @@ showMonitor(Id) :-
     write("Nome: "), writeln(H.nome), 
     write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
     write("Horários: "), showRecursevily(H.horarios),  nl.
-
 
 atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("monitores", Id, Object),
@@ -188,17 +178,17 @@ removeMonitor(Id) :-
 
 %-------------------------- Funções de Ticket--------------------------%
 
-showticketAux([]):- halt.
-showticketAux([H|T]) :- 
+showTicketAux([]):- halt.
+showTicketAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome), 
     write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
     write("Horários: "), showRecursevily(H.horarios),  nl, 
-    showticketAux(T).
+    showTicketAux(T).
 
-showticket() :-
+showTicket() :-
     readJSON("ticket", Result),
-    showticketAux(Result).
+    showTicketAux(Result).
 
 showTicket(Id) :-
     getObjetoByID("ticket", Id, H),
@@ -236,3 +226,50 @@ removeTicket(Id) :-
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 %-------------------------- Funções de Mensagens --------------------------%
+
+showMensagensAux([]):- halt.
+showMensagensAux([H|T]) :- 
+    write("Matricula: "), writeln(H.id),
+    write("Nome: "), writeln(H.nome), 
+    write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
+    write("Horários: "), showRecursevily(H.horarios),  nl, 
+    showMensagensAux(T).
+
+showMensagens() :-
+    readJSON("mensagens", Result),
+    showMensagensAux(Result).
+
+showMensagens(Id) :-
+    getObjetoByID("mensagens", Id, H),
+    write("Id: "), writeln(H.id),
+    write("Titulo: "), writeln(H.titulo), 
+    write("Autor: "), writeln(H.autor), 
+    write("Mensagens: "), showRecursevily(H.mensagens), nl,
+    write("Status: "), writeln(H.status),
+    write("Disciplina: "), writeln(H.disciplina).
+
+mensagemToJSON(ID, Autor, Conteudo, Horario, Out) :-
+    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w","senha":""}', [ID, Autor, Conteudo, Horario]).
+
+mensagensToJSON([], []).
+mensagensToJSON([H|T], [X|Out]) :- 
+    mensagemToJSON(H.id, H.autor,H.conteudo, H.horario, X), 
+    mensagensToJSON(T, Out).
+
+addMensagem(Autor, Conteudo, Horario, ID) :- 
+    NomeArquivo = "mensagens",
+    buscaNovoID(NomeArquivo, ID),
+    readJSON(NomeArquivo, File),
+    mensagensToJSON(File, ListaObjectsJSON),
+    mensagemToJSON(ID, Autor, Conteudo, Horario, ObjectJSON),
+    append(ListaObjectsJSON, [ObjectJSON], Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+removeMensagem(Id) :-
+    NomeArquivo = "mensagens",
+    readJSON(NomeArquivo, File),
+    removeObjectJSON(File, Id, SaidaParcial),
+    mensagensToJSON(SaidaParcial, Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
