@@ -60,21 +60,56 @@
     "horario": "19-11-2021 18:20:04"
   },
   { "id": 13,
+    "autor": 120110002,
+    "conteudo": "Pode usar consultas aninhadas nesse roteiro?",
+    "horario": "19-11-2021 18:20:05"
+  },
+  { "id": 14,
+    "autor": 119210015,
+    "conteudo": "Apenas nas questões 14 e 15",
+    "horario": "19-11-2021 18:20:35"
+  },
+  { "id": 15,
+    "autor": 120110002,
+    "conteudo": "Entendi, valeu!",
+    "horario": "19-11-2021 18:21:03"
+  },
+  { "id": 16,
+    "autor": 120110003,
+    "conteudo": "Boa noite, uma duvida sobre UML, para que tenhamos composicao ou agregacao, e necessario uma colecao de objetos? Ex: lista de compras, ou poderia ser tbm no caso de algum objeto que tivesse apenas um atributo compra",
+    "horario": "19-11-2021 18:21:30"
+  },
+  { "id": 17,
+    "autor": 118210007,
+    "conteudo": "boa tarde, pode ser apenas um atributo, nao necessariamente precisa ser uma colecao",
+    "horario": "19-11-2021 18:22:03"
+  },
+  { "id": 18,
+    "autor": 120110003,
+    "conteudo": "Entendi, ai no caso da composicao, o atributo vai existir somente naquela classe?",
+    "horario": "19-11-2021 18:23:30"
+  },
+  { "id": 19,
+    "autor": 118210007,
+    "conteudo": "isso, ja na agregacao o atributo eh utilizado por mais de uma classe",
+    "horario": "19-11-2021 18:24:04"
+  },
+  { "id": 20,
     "autor": 119210016,
     "conteudo": "Algum monitor disponivel?",
     "horario": "19-11-2021 19:02:04"
   },
-  { "id": 14,
+  { "id": 21,
     "autor": 119210015,
     "conteudo": "Oi , boa noite , Pode falar a sua dúvida",
     "horario": "19-11-2021 19:10:04"
   },
-  { "id": 15,
+  { "id": 22,
     "autor": 119210016,
     "conteudo": "Então, eu não estou conseguindo entender essa forma normal de Boyce Codd, tem como Vc me explicar melhor?",
     "horario": "19-11-2021 19:11:15"
   },
-  { "id": 16,
+  { "id": 23,
     "autor": 120110005,
     "conteudo": "Boa noite, estou tendo um erro na minha aplicação, onde é retornado um erro de código 0 na criação do Json de um objeto, que eu não estou entendendo o motivo. Alguém pode me ajudar?",
     "horario": "19-11-2021 19:12:07"

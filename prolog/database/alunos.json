@@ -94,5 +94,35 @@
     "nome": "Aline Castro Garcia",
     "disciplinas": ["Psoft","PLP","OAC","LOAC","BD"],
     "senha": ""
+  },
+  {
+    "id": 120210017,
+    "nome": "Roberto Miranda",
+    "disciplinas": ["OAC","LOAC","PLP"],
+    "senha": ""
+  },
+  {
+    "id": 120210018,
+    "nome": "Renata Glasc",
+    "disciplinas": ["ES","SO","Redes"],
+    "senha": ""
+  },
+  {
+    "id": 120210019,
+    "nome": "Antonio Carlos",
+    "disciplinas": ["PLP","SO","AS","Redes","IP"],
+    "senha": ""
+  },
+  {
+    "id": 120210020,
+    "nome": "Paulo Costa",
+    "disciplinas": ["LOAC","AS","Redes","IP"],
+    "senha": ""
+  },
+  {
+    "id": 120210021,
+    "nome": "Henry Cavil",
+    "disciplinas": ["OAC","LOAC","PLP","Psoft","BD","ES"],
+    "senha": ""
   }
 ]
