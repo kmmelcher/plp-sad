@@ -1,20 +1,26 @@
 [
   {
+    "id": "12090802",
+    "nome": "Otavio Neto",
+    "disciplinas": "[OAC, LOAC, TCC, I.A]",
+    "senha": ""
+  },
+  {
+    "id": "12040701",
+    "nome": "Polonio Garibaldo Smith",
+    "disciplinas": "[OAC]",
+    "senha": ""
+  },
+  {
     "id": "120110407",
-    "nome": "Álef Ádonis",
+    "nome": "Carlos Emanoel DeLa Mancha",
     "disciplinas": "[PLP, Filosofia Moderna]",
     "senha": ""
   },
   {
-    "id": "1209080201",
+    "id": "12090801",
     "nome": "Eterobaldo Nascimento Pinto da Silva Neto",
-    "disciplinas": "[OAC, LOAC, Principios da Metafisica Moderna, I.A]",
-    "senha": ""
-  },
-  {
-    "id": "12090802",
-    "nome": "Otavio Neto",
-    "disciplinas": "[OAC, LOAC, TCC, I.A]",
+    "disciplinas": "[Aerodinamica, Paralelismo de Robos, Semantica e Oratoria]",
     "senha": ""
   }
 ]
