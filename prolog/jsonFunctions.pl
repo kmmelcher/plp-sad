@@ -39,13 +39,17 @@ removeObjectJSON([], _, []).
 removeObjectJSON([H|T], H.id, T).
 removeObjectJSON([H|T], Id, [H|Out]) :- removeObjectJSON(T, Id, Out).
 
-
+getObjetoRecursivamente([], _, "").
 getObjetoRecursivamente([H|T], Id, Out):-
-    (H.id =@= Id -> Out is H);(getObjetoRecursivamente(T, Id, Out)).
+     (H.id = Id -> Out = H);(getObjetoRecursivamente(T, Id, Out)).
 
-getObjetoById(NomeArquivo, Id, Out):-
+% getObjetoById(NomeArquivo, Id, Out):-
+%     readJSON(NomeArquivo, File),
+%     getObjetoRecursivamente(File, Id, Out). 
+
+getObjetoByID(NomeArquivo, Id, Result):-
     readJSON(NomeArquivo, File),
-    getObjetoRecursivamente(File, Id, Out). 
+    getObjetoRecursivamente(File, Id, Result).
 
 %-------------------------- Funções de Alunos--------------------------%
 
@@ -149,9 +153,10 @@ addMonitor(Nome, Disciplinas, Horarios) :-
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-removeAluno(NomeArquivo, Id) :-
+removeMonitor(NomeArquivo, Id) :-
     readJSON(NomeArquivo, File),
     removeObjectJSON(File, Id, SaidaParcial),
     monitoresToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
