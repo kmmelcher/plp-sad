@@ -187,3 +187,52 @@ removeMonitor(Id) :-
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 %-------------------------- Funções de Ticket--------------------------%
+
+showticketAux([]):- halt.
+showticketAux([H|T]) :- 
+    write("Matricula: "), writeln(H.id),
+    write("Nome: "), writeln(H.nome), 
+    write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
+    write("Horários: "), showRecursevily(H.horarios),  nl, 
+    showticketAux(T).
+
+showticket() :-
+    readJSON("ticket", Result),
+    showticketAux(Result).
+
+showTicket(Id) :-
+    getObjetoByID("ticket", Id, H),
+    write("Id: "), writeln(H.id),
+    write("Titulo: "), writeln(H.titulo), 
+    write("Autor: "), writeln(H.autor), 
+    write("Mensagens: "), showRecursevily(H.mensagens), nl,
+    write("Status: "), writeln(H.status),
+    write("Disciplina: "), writeln(H.disciplina).
+
+ticketToJSON(ID, Titulo, Autor, Mensagens, Status, Disciplina, Out) :-
+    swritef(Out, '{"id":"%w", "titulo":"%w","autor":"%w","mensagens":"%w","status":"%w","disciplina":"%w","senha":""}', [ID, Titulo, Autor, Mensagens, Status, Disciplina]).
+
+ticketToJSON([], []).
+ticketToJSON([H|T], [X|Out]) :- 
+    ticketToJSON(H.id, H.titulo,H.autor,H.mensagens, H.status,H.disciplina, X), 
+    ticketToJSON(T, Out).
+
+addTicket(Titulo, Autor, Mensagens, Status, Disciplina) :- 
+    NomeArquivo = "ticket",
+    buscaNovoID(NomeArquivo, ID),
+    readJSON(NomeArquivo, File),
+    ticketToJSON(File, ListaObjectsJSON),
+    ticketToJSON(ID, Titulo, Autor, Mensagens, Status, Disciplina, ObjectJSON),
+    append(ListaObjectsJSON, [ObjectJSON], Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+removeTicket(Id) :-
+    NomeArquivo = "ticket",
+    readJSON(NomeArquivo, File),
+    removeObjectJSON(File, Id, SaidaParcial),
+    ticketToJSON(SaidaParcial, Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+%-------------------------- Funções de Mensagens --------------------------%
