@@ -21,4 +21,4 @@ Aluno {id = 120110020, nome = "Leonardo Dicaprio", disciplinas = ["BD","AS"], se
 Aluno {id = 119110021, nome = "Antonio Carlos", disciplinas = ["PLP","SO","AS","Psoft","IP"], senha = "422511880135721221012210"}
 Aluno {id = 119231444, nome = "Manuel Silva", disciplinas = ["SO","AS","Redes","IP"], senha = "500510476128701287011211"}
 Aluno {id = 119232555, nome = "Paulo Costa", disciplinas = ["LOAC","AS","Redes","IP"], senha = "520010476136891188012321"}
-Aluno {id = 111111110, nome = "Matue", disciplinas = ["OAC"], senha = "500510476135721287011211"}
+

@@ -11,4 +11,3 @@ Disciplina {id = 10, sigla = "EDA", nome = "Estrutura de Dados e Algoritmos"}
 Disciplina {id = 11, sigla = "LEDA", nome = "Laboratorio de Estrutura de Dados e Algoritmos"}
 Disciplina {id = 12, sigla = "AS", nome = "Analise de Sistemas"}
 Disciplina {id = 13, sigla = "P2", nome = "Programacao 2"}
-Disciplina {id = 14, sigla = "AA", nome = "Algoritmos Avançados"}

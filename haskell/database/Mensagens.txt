@@ -23,4 +23,4 @@ Mensagem {id = 22, autor = 120110002, conteudo = "O pipeline ajuda com a dimini√
 Mensagem {id = 23, autor = 120110005, conteudo = "Entendi nao, pode explicar melhor?", horario = "03/02/22 18h55"}
 Mensagem {id = 24, autor = 120110011, conteudo = "nao", horario = "03/04/22 03h29"}
 Mensagem {id = 25, autor = 119231444, conteudo = "Deve ser usado como notacao de atributos de classes nas quais, para uma instancia da classe em questao, devem haver dois ou mais (many) atributos relacionados", horario = "03/04/22 03h42"}
-Mensagem {id = 26, autor = 120110004, conteudo = "Caraca o home eh brabo valeu tamo junto eh nois", horario = "03/04/22 03h43"}
+
