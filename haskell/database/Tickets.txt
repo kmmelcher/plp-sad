@@ -1,0 +1,10 @@
+Ticket {id = 1, titulo = "lendo lista da entrada", mensagens = [1, 2, 3, 4], status = "Resolvido", autor = 120110001, disciplina = "PLP"}
+Ticket {id = 2, titulo = "Como converter tipo IO?", mensagens = [5,6], status = "Em Andamento", autor = 120110005, disciplina = "PLP"}
+Ticket {id = 3, titulo = "Consultas Aninhadas", mensagens = [15,16,17], status = "Resolvido", autor = 120110002, disciplina = "BD"}
+Ticket {id = 4, titulo = "pipeline", mensagens = [18,22], status = "Em Andamento", autor = 120110002, disciplina = "OAC"}
+Ticket {id = 5, titulo = "Regiao critica", mensagens = [19,21,23], status = "Em Andamento", autor = 120110005, disciplina = "SO"}
+Ticket {id = 6, titulo = "AVL", mensagens = [20], status = "Em Andamento", autor = 120110002, disciplina = "EDA"}
+Ticket {id = 7, titulo = "Qual a diferenca de mux e demux?", mensagens = [7,8,9], status = "Resolvido", autor = 120110338, disciplina = "OAC"}
+Ticket {id = 8, titulo = "duvida sobre relacionamentos no diagrama uml", mensagens = [10,11,12,13], status = "Em Andamento", autor = 120110002, disciplina = "Psoft"}
+Ticket {id = 9, titulo = "nao estou conseguindo entrar no sistema", mensagens = [14,24], status = "Em Andamento", autor = 120110258, disciplina = "BD"}
+Ticket {id = 10, titulo = "Quando devo usar a notacao @OneToMany?", mensagens = [25,26], status = "Resolvido", autor = 120110004, disciplina = "Psoft"}
