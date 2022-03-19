@@ -1,0 +1,10 @@
+Professor {id = 1, nome = "Joseana", disciplinas = ["OAC", "LOAC"], senha = "592012654127651030297971265011155821412654"}
+Professor {id = 2, nome = "Everton", disciplinas = ["Psoft", "PLP"], senha = "5520134521121111628117161276512650765913452"}
+Professor {id = 3, nome = "Fabio", disciplinas = ["Psoft"], senha = "5600110581087810710112118050111551087811970"}
+Professor {id = 4, nome = "Areli", disciplinas = ["IP"], senha = "5200129961121111016106057475131101121112312"}
+Professor {id = 5, nome = "Campelo", disciplinas = ["LEDA", "BD"], senha = "5360110581209911424102011242012765743711058"}
+Professor {id = 6, nome = "Fubica", disciplinas = ["SO"], senha = "560013338108781071099991115580501298711172"}
+Professor {id = 7, nome = "Manel", disciplinas = ["SO"], senha = "6160110581221010302109088855111551221011514"}
+Professor {id = 8, nome = "Reinaldo", disciplinas = ["Redes"], senha = "656011514116551122097971242011500123219348"}
+Professor {id = 9, nome = "Adalberto", disciplinas = ["EDA","LEDA"], senha = "5200114001076711016989811615131101287612654"}
+
