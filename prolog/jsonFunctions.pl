@@ -43,16 +43,16 @@ getObjetoRecursivamente([], _, "").
 getObjetoRecursivamente([H|T], Id, Out):-
      (H.id = Id -> Out = H);(getObjetoRecursivamente(T, Id, Out)).
 
-% getObjetoById(NomeArquivo, Id, Out):-
-%     readJSON(NomeArquivo, File),
-%     getObjetoRecursivamente(File, Id, Out). 
-
 getObjetoByID(NomeArquivo, Id, Result):-
     readJSON(NomeArquivo, File),
     getObjetoRecursivamente(File, Id, Result).
 
-%-------------------------- Funções de Alunos--------------------------%
+checaExistencia(NomeArquivo, Id):-
+    readJSON(NomeArquivo, File),
+    getObjetoRecursivamente(File, Id, Result),
+    Result \= "".
 
+%-------------------------- Funções de Alunos--------------------------%
 showAlunosAux([]):- halt.
 showAlunosAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
@@ -63,6 +63,17 @@ showAlunosAux([H|T]) :-
 showAlunos() :-
 		readJSON("alunos", Result),
 		showAlunosAux(Result).
+
+showAluno(Id) :-
+    getObjetoByID("alunos", Id, H),
+    write("Matricula: "), write(H.id),
+    write(" | Nome: "), write(H.nome), 
+    write(" | Disciplinas: "), showRecursevily(H.disciplinas), nl, nl.
+
+atualizaAtributoAluno(Id, Atributo, ConteudoAtualizado):-
+    getObjetoByID("alunos", Id, Object),
+    (Atributo = "nome" ->  removeAluno(Id), addAluno(Object.id, ConteudoAtualizado, Object.disciplinas ); 
+     Atributo = "disciplinas" -> removeAluno(Id), addAluno(Object.id, Object.nome, ConteudoAtualizado)).
 
 addAluno(Matricula, Nome, Disciplinas) :- 
     NomeArquivo = "alunos",
@@ -83,7 +94,8 @@ alunosToJSON([H|T], [X|Out]) :-
     alunoToJSON(H.id, H.nome, H.disciplinas, X), 
     alunosToJSON(T, Out).
 
-removeAluno(NomeArquivo, Id) :-
+removeAluno(Id) :-
+    NomeArquivo = "alunos",
    readJSON(NomeArquivo, File),
    removeObjectJSON(File, Id, SaidaParcial),
    alunosToJSON(SaidaParcial, Saida),
@@ -125,38 +137,53 @@ addProfessor(Nome, Disciplinas) :-
 
 showMonitoresAux([]):- halt.
 showMonitoresAux([H|T]) :- 
-    write("Id: "), writeln(H.id),
+    write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome), 
     write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
     write("Horários: "), showRecursevily(H.horarios),  nl, 
     showMonitoresAux(T).
 
 showMonitores() :-
-		readJSON("monitores", Result),
-		showMonitoresAux(Result).
+    readJSON("monitores", Result),
+    showMonitoresAux(Result).
+
+showMonitor(Id) :-
+    getObjetoByID("monitores", Id, H),
+    write("Matricula: "), write(H.id),
+    write("Nome: "), writeln(H.nome), 
+    write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
+    write("Horários: "), showRecursevily(H.horarios),  nl.
+
+
+atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
+    getObjetoByID("monitores", Id, Object),
+    (Atributo = "nome" ->  removeMonitor(Id), addMonitor(Object.id, ConteudoAtualizado, Object.disciplinas, Object.horarios); 
+     Atributo = "disciplinas" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, ConteudoAtualizado, Object.horarios);
+     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
 
 monitorToJSON(Id, Nome, Disciplinas, Horarios, Out) :-
-    swritef(Out, '{"id": "%w", "nome":"%w","disciplinas":"%w", "horarios":"%w" "senha":""}', [Id, Nome, Disciplinas, Horarios]).
+    swritef(Out, '{"id":"%w", "nome":"%w","disciplinas":"%w","horarios":"%w","senha":""}', [Id, Nome, Disciplinas, Horarios]).
 
 monitoresToJSON([], []).
 monitoresToJSON([H|T], [X|Out]) :- 
     monitorToJSON(H.id, H.nome, H.disciplinas, H.horarios, X), 
     monitoresToJSON(T, Out).
 
-addMonitor(Nome, Disciplinas, Horarios) :- 
+addMonitor(Matricula, Nome, Disciplinas, Horarios) :- 
     NomeArquivo = "monitores",
-    buscaNovoID(NomeArquivo, ID),
     readJSON(NomeArquivo, File),
     monitoresToJSON(File, ListaObjectsJSON),
-    monitorToJSON(ID, Nome, Disciplinas, Horarios, ObjectJSON),
+    monitorToJSON(Matricula, Nome, Disciplinas, Horarios, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-removeMonitor(NomeArquivo, Id) :-
+removeMonitor(Id) :-
+    NomeArquivo = "monitores",
     readJSON(NomeArquivo, File),
     removeObjectJSON(File, Id, SaidaParcial),
     monitoresToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
+%-------------------------- Funções de Ticket--------------------------%
