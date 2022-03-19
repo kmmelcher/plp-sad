@@ -1,0 +1,37 @@
+[
+  { "id": 1,
+    "autor": 120110002,
+    "titulo": "Erro na sintetização do circuito na FPGA",
+    "mensagens": [1,2,3,4,5,6],
+    "status": "Resolvido",
+    "disciplina": "LOAC"
+  },
+  { "id": 2,
+    "autor": 120110004,
+    "titulo": "Como faço para ler uma lista de inteiros da entrada?",
+    "mensagens": [7,8,9],
+    "status": "Resolvido",
+    "disciplina": "PLP"
+  },
+  { "id": 3,
+    "autor": 119210010,
+    "titulo": "Algoritmos de escalonamento em discos rigidos",
+    "mensagens": [10,11,12],
+    "status": "Resolvido",
+    "disciplina": "SO"
+  },
+  { "id": 4,
+    "autor": 119210016,
+    "titulo": "Duvida sobre normalizacao",
+    "mensagens": [13,14,15],
+    "status": "Em Andamento",
+    "disciplina": "BD"
+  },
+  { "id": 5,
+    "autor": 120110005,
+    "titulo": "Erro ao retornar o Json no Swagger",
+    "mensagens": [16],
+    "status": "Em Andamento",
+    "disciplina": "Psoft"
+  }
+]
