@@ -187,11 +187,11 @@ showTicketAux([H|T]) :-
     showTicketAux(T).
 
 showTicket() :-
-    readJSON("ticket", Result),
+    readJSON("tickets", Result),
     showTicketAux(Result).
 
 showTicket(Id) :-
-    getObjetoByID("ticket", Id, H),
+    getObjetoByID("tickets", Id, H),
     write("Id: "), writeln(H.id),
     write("Titulo: "), writeln(H.titulo), 
     write("Autor: "), writeln(H.autor), 
@@ -208,7 +208,7 @@ ticketToJSON([H|T], [X|Out]) :-
     ticketToJSON(T, Out).
 
 addTicket(Titulo, Autor, Mensagens, Status, Disciplina) :- 
-    NomeArquivo = "ticket",
+    NomeArquivo = "tickets",
     buscaNovoID(NomeArquivo, ID),
     readJSON(NomeArquivo, File),
     ticketToJSON(File, ListaObjectsJSON),
@@ -218,7 +218,7 @@ addTicket(Titulo, Autor, Mensagens, Status, Disciplina) :-
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 removeTicket(Id) :-
-    NomeArquivo = "ticket",
+    NomeArquivo = "tickets",
     readJSON(NomeArquivo, File),
     removeObjectJSON(File, Id, SaidaParcial),
     ticketToJSON(SaidaParcial, Saida),
