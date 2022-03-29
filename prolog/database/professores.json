@@ -1,67 +1,67 @@
 [
   { "id": "1",
     "nome": "Joseana",
-    "disciplinas": ["OAC","LOAC"],
+    "disciplinas": ["oac","loac"],
     "senha": ""
   },
   { "id": "2",
     "nome": "Everton",
-    "disciplinas": ["Psoft","PLP"],
+    "disciplinas": ["psoft","plp"],
     "senha": ""
   },
   { "id": "3",
     "nome": "Fabio",
-    "disciplinas": ["Psoft"],
+    "disciplinas": ["psoft"],
     "senha": ""
   },
   { "id": "4",
     "nome": "Areli",
-    "disciplinas": ["IP"],
+    "disciplinas": ["ip"],
     "senha": ""
   },
   { "id": "5",
     "nome": "Campelo",
-    "disciplinas": ["LEDA","BD"],
+    "disciplinas": ["leda","bd"],
     "senha": ""
   },
   { "id": "6",
     "nome": "Fubica",
-    "disciplinas": ["SO"],
+    "disciplinas": ["so"],
     "senha": ""
   },
   { "id": "7",
     "nome": "Manel",
-    "disciplinas": ["SO"],
+    "disciplinas": ["so"],
     "senha": ""
   },
   { "id": "8",
     "nome": "Reinaldo",
-    "disciplinas": ["Redes"],
+    "disciplinas": ["redes"],
     "senha": ""
   },
   { "id": "9",
     "nome": "Adalberto",
-    "disciplinas": ["EDA","LEDA"],
+    "disciplinas": ["eda","leda"],
     "senha": ""
   },
   { "id": "10",
     "nome": "Gaudêncio",
-    "disciplinas": ["P2","LP2"],
+    "disciplinas": ["p2","lp2"],
     "senha": ""
   },
   { "id": "11",
     "nome": "Eliane",
-    "disciplinas": ["AS"],
+    "disciplinas": ["as"],
     "senha": ""
   },
   { "id": "12",
     "nome": "Rohit",
-    "disciplinas": ["AA","ES"],
+    "disciplinas": ["aa","es"],
     "senha": ""
   },
   { "id": "13",
     "nome": "Eanes",
-    "disciplinas": ["FMCC2"],
+    "disciplinas": ["fmcc2"],
     "senha": ""
   }
 ]
