@@ -278,3 +278,13 @@ removeMensagem(Id) :-
     mensagensToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+%-------------------------- Funções de Disciplinas --------------------------%
+
+getDisciplinaRecursivamente([], _, "").
+getDisciplinaRecursivamente([H|T], Sigla, Out):-
+     (H.sigla = Sigla -> Out = H);(getObjetoRecursivamente(T, Sigla, Out)).
+
+getDisciplinaBySigla(Disciplina, Result):-
+    readJSON("disciplinas", File),
+    getDisciplinaRecursivamente(File, Disciplina, Result).
