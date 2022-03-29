@@ -1,3 +1,4 @@
+:- use_module('controller/MonitorController.pl', [adiciona_monitor/0]).
 
 :- use_module('model/aluno.pl', [cadastra_aluno/5] ). % Exemplo de importação
 
@@ -24,7 +25,7 @@ exibeMenuProfessor :- write('\n== SAD: MENU PROFESSOR =='),
 
 decideMenuProfessor(1) :- exibeMenuProfessor, !.
 
-decideMenuProfessor(2) :- exibeMenuProfessor, !.
+decideMenuProfessor(2) :- exibeMenuProfessor, !.    
 
 decideMenuProfessor(3) :- menuCadastro, !.
 
@@ -47,7 +48,8 @@ menuCadastro :- write('\nQuem você deseja vincular?'),
 
 decideMenuCadastro(1) :- exibeMenuProfessor, !.
 
-decideMenuCadastro(2) :- exibeMenuProfessor, !.
+decideMenuCadastro(2) :-
+    vinculaMonitor().
 
 decideMenuCadastro(3) :- exibeMenuProfessor, !.
 
