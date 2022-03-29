@@ -15,9 +15,9 @@ ticketsDoAluno([H|T],Matricula, Tickets):-
 
 exibeTicketsAluno(Matricula):-
     getTicketsAluno(Matricula, Tickets),
-    exibir(Tickets).
+    exibirTickets(Tickets).
 
-exibir([]).
-exibir([H|T]):-
+exibirTickets([]).
+exibirTickets([H|T]):-
     swritef(Out, "%w) %w (%w)", [H.id, H.titulo, H.status]), write(Out), nl,
-    exibir(T).
+    exibirTickets(T).
