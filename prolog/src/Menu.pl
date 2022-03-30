@@ -10,8 +10,14 @@ menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Disc
                  menuLogin().
 
 menuLogin() :-   writeln("Insira seu ID para entrar. Para sair do sistema, digite 'sair': "),
-               read(Id), % TODO FALTA FUNCIONALIDADE DE SENHA
+               read(Id),
                decideMenu(Id).
+
+menuAutenticacao(Objeto):-
+    write("Insira a sua Senha:"),
+    read(Senha),
+    encripta(Senha, Objeto.nome, SenhaEncriptada),
+    SenhaEncriptada = Objeto.senha.
 
 decideMenu(sair):- halt(0).
 decideMenu(Id) :- 
@@ -41,16 +47,19 @@ perguntaDisciplina(Disciplinas):-
 
 %----------------------------------------------------- PROFESSOR -----------------------------------------------------%
 
-exibeMenuProfessor(Id) :-
+exibeMenuProfessor(Id):-
     getProfessor(Id, Professor),
-
+    menuAutenticacao(Professor),
     writeln('\n== SAD: MENU PROFESSOR =='),
     swritef(Out, "\nID: %w | Nome: %w | Disciplinas: %w\n", [Professor.id, Professor.nome, Professor.disciplinas]), write(Out),
     writeln('Digite o numero da acao que deseja executar!\n'),
     writeln('1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Alterar senha de acesso\n6) Deslogar\n'),
     read(Opcao),
     decideMenuProfessor(Opcao, Professor),
-    exibeMenuProfessor(Id).
+    exibeMenuProfessor(Id)
+    ;
+    writeln("Senha incorreta"),
+    menuLogin().
 
 decideMenuProfessor(1, Professor) :- perguntaDisciplina(Professor.disciplinas).
 
