@@ -202,7 +202,7 @@ showTicket(Id) :-
     write("Disciplina: "), writeln(H.disciplina).
 
 ticketToJSON(ID, Titulo, Autor, Mensagens, Status, Disciplina, Out) :-
-    swritef(Out, '{"id":"%w", "titulo":"%w","autor":"%w","mensagens":"%w","status":"%w","disciplina":"%w","senha":""}', [ID, Titulo, Autor, Mensagens, Status, Disciplina]).
+    swritef(Out, '{"id":"%w", "titulo":"%w","autor":"%w","mensagens":%w,"status":"%w","disciplina":"%w"}', [ID, Titulo, Autor, Mensagens, Status, Disciplina]).
 
 ticketToJSON([], []).
 ticketToJSON([H|T], [X|Out]) :- 
@@ -226,6 +226,12 @@ removeTicket(Id) :-
     ticketToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
+    getObjetoByID("tickets", Id, Object),
+    write(Object.mensagens),
+    (Atributo = "mensagens" ->  append(Object.mensagens, [ConteudoAtualizado], NovasMensagens), removeTicket(Id), addTicket(Object.id, Object.titulo, NovasMensagens, Object.status, Object.disciplina); 
+    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.titulo, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
 
 %-------------------------- Funções de Mensagens --------------------------%
 
