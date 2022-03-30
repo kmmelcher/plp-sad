@@ -1,128 +1,128 @@
 [
-  {
-    "id": "120110001",
-    "nome": "Alef Adonis",
-    "disciplinas": ["plp","leda","ip","psoft"],
-    "senha": ""
-  },
-  {
-    "id": "120110002",
-    "nome": "Vinicius da Silva",
-    "disciplinas": ["oac","loac","bd","ip","psoft","plp"],
-    "senha": ""
-  },
-  {
-    "id": "120110003",
-    "nome": "Pedro Adrian Pereira",
-    "disciplinas": ["psoft","plp","so","redes","bd"],
-    "senha": ""
-  },
-  {
-    "id": "120110004",
-    "nome": "Kilian Macedo Melcher",
-    "disciplinas": ["psoft","plp","oac","loac","bd"],
-    "senha": ""
-  },
-  {
-    "id": "120110005",
-    "nome": "Filipe da Silva Ramalho",
-    "disciplinas": ["plp","redes","bd","as"],
-    "senha": ""
-  },
-  {
-    "id": "119210006",
-    "nome": "Luiggy Ferreira Dias",
-    "disciplinas": ["redes","bd","as","so"],
-    "senha": ""
-  },
-  {
-    "id": "118210007",
-    "nome": "Tadeu Macedo Henrique",
-    "disciplinas": ["so","as","es","aa"],
-    "senha": ""
-  },
-  {
-    "id": "119210008",
-    "nome": "Caio Artur Luiz",
-    "disciplinas": ["oac","loac","eda","leda"],
-    "senha": ""
-  },
-  {
-    "id": "120220009",
-    "nome": "Maria Luiza Dias",
-    "disciplinas": ["fmcc2","p2","lp2","aa"],
-    "senha": ""
-  },
-  {
-    "id": "119210010",
-    "nome": "Juliana Almeida Alves",
-    "disciplinas": ["so","es","as","redes"],
-    "senha": ""
-  },
-  {
-    "id": "119210011",
-    "nome": "Yuri Marques Neto",
-    "disciplinas": ["so","redes","es","ip","bd"],
-    "senha": ""
-  },
-  {
-    "id": "120110012",
-    "nome": "Abraao César Lima",
-    "disciplinas": ["plp","psoft","bd","oac","loac"],
-    "senha": ""
-  },
-  {
-    "id": "120220013",
-    "nome": "Eduardo Caio Almeida",
-    "disciplinas": ["fmcc2","p2","lp2","aa"],
-    "senha": ""
-  },
-  {
-    "id": "119210014",
-    "nome": "Clara Duarte Batista",
-    "disciplinas": ["plp","redes","bd","as"],
-    "senha": ""
-  },
-  {
-    "id": "119210015",
-    "nome": "Luiza Souza Martins",
-    "disciplinas": ["so","es","as","redes"],
-    "senha": ""
-  },
-  {
-    "id": "120210016",
-    "nome": "Aline Castro Garcia",
-    "disciplinas": ["psoft","plp","oac","loac","bd"],
-    "senha": ""
-  },
-  {
-    "id": "120210017",
-    "nome": "Roberto Miranda",
-    "disciplinas": ["oac","loac","plp"],
-    "senha": ""
-  },
-  {
-    "id": "120210018",
-    "nome": "Renata Glasc",
-    "disciplinas": ["es","so","redes"],
-    "senha": ""
-  },
-  {
-    "id": "120210019",
-    "nome": "Antonio Carlos",
-    "disciplinas": ["plp","so","as","redes","ip"],
-    "senha": ""
-  },
-  {
-    "id": "120210020",
-    "nome": "Paulo Costa",
-    "disciplinas": ["loac","as","redes","ip"],
-    "senha": ""
-  },
-  {
-    "id": "120210021",
-    "nome": "Henry Cavil",
-    "disciplinas": ["oac","loac","plp","psoft","bd","es"],
-    "senha": ""
-  }
+    {
+        "id": "120110002",
+        "nome": "Vinicius da Silva",
+        "disciplinas": "[oac,loac,bd,ip,psoft,plp]",
+        "senha": ""
+    },
+    {
+        "id": "120110003",
+        "nome": "Pedro Adrian Pereira",
+        "disciplinas": "[psoft,plp,so,redes,bd]",
+        "senha": ""
+    },
+    {
+        "id": "120110004",
+        "nome": "Kilian Macedo Melcher",
+        "disciplinas": "[psoft,plp,oac,loac,bd]",
+        "senha": ""
+    },
+    {
+        "id": "120110005",
+        "nome": "Filipe da Silva Ramalho",
+        "disciplinas": "[plp,redes,bd,as]",
+        "senha": ""
+    },
+    {
+        "id": "119210006",
+        "nome": "Luiggy Ferreira Dias",
+        "disciplinas": "[redes,bd,as,so]",
+        "senha": ""
+    },
+    {
+        "id": "118210007",
+        "nome": "Tadeu Macedo Henrique",
+        "disciplinas": "[so,as,es,aa]",
+        "senha": ""
+    },
+    {
+        "id": "119210008",
+        "nome": "Caio Artur Luiz",
+        "disciplinas": "[oac,loac,eda,leda]",
+        "senha": ""
+    },
+    {
+        "id": "120220009",
+        "nome": "Maria Luiza Dias",
+        "disciplinas": "[fmcc2,p2,lp2,aa]",
+        "senha": ""
+    },
+    {
+        "id": "119210010",
+        "nome": "Juliana Almeida Alves",
+        "disciplinas": "[so,es,as,redes]",
+        "senha": ""
+    },
+    {
+        "id": "119210011",
+        "nome": "Yuri Marques Neto",
+        "disciplinas": "[so,redes,es,ip,bd]",
+        "senha": ""
+    },
+    {
+        "id": "120110012",
+        "nome": "Abraao César Lima",
+        "disciplinas": "[plp,psoft,bd,oac,loac]",
+        "senha": ""
+    },
+    {
+        "id": "120220013",
+        "nome": "Eduardo Caio Almeida",
+        "disciplinas": "[fmcc2,p2,lp2,aa]",
+        "senha": ""
+    },
+    {
+        "id": "119210014",
+        "nome": "Clara Duarte Batista",
+        "disciplinas": "[plp,redes,bd,as]",
+        "senha": ""
+    },
+    {
+        "id": "119210015",
+        "nome": "Luiza Souza Martins",
+        "disciplinas": "[so,es,as,redes]",
+        "senha": ""
+    },
+    {
+        "id": "120210016",
+        "nome": "Aline Castro Garcia",
+        "disciplinas": "[psoft,plp,oac,loac,bd]",
+        "senha": ""
+    },
+    {
+        "id": "120210017",
+        "nome": "Roberto Miranda",
+        "disciplinas": "[oac,loac,plp]",
+        "senha": ""
+    },
+    {
+        "id": "120210018",
+        "nome": "Renata Glasc",
+        "disciplinas": "[es,so,redes]",
+        "senha": ""
+    },
+    {
+        "id": "120210019",
+        "nome": "Antonio Carlos",
+        "disciplinas": "[plp,so,as,redes,ip]",
+        "senha": ""
+    },
+    {
+        "id": "120210020",
+        "nome": "Paulo Costa",
+        "disciplinas": "[loac,as,redes,ip]",
+        "senha": ""
+    },
+    {
+        "id": "120210021",
+        "nome": "Henry Cavil",
+        "disciplinas": "[oac,loac,plp,psoft,bd,es]",
+        "senha": ""
+    },
+    {
+        "id": "120110001",
+        "nome": "Alef Adonis",
+        "disciplinas": "[plp,leda,ip,psoft]",
+        "senha": "25086234302503822896111152342123320257402408410530"
+    }
 ]

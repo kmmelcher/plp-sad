@@ -1,9 +1,10 @@
-:- module('Menu', [menuPrincipal/0]).
+%:- module('Menu', [menuPrincipal/0]).
 :- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2]).
-:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
+:- use_module('controller/chatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2]).
 :- use_module('controller/AlunoController.pl', [getAluno/2]).
-:- use_module('util/jsonFunctions', [checaExistencia/2, getObjetoByID/3]).
+:- use_module('util/jsonFunctions.pl', [checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3]).
+:- use_module('util/EncriptFunctions.pl', [encripta/3]).
 
 menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):'),
                  menuLogin().
@@ -16,15 +17,18 @@ decideMenu(sair):- halt(0).
 decideMenu(Id) :- 
     atom_string(Id, IdString),
     (
-      jsonFunctions:checaExistencia("professores", IdString) -> exibeMenuProfessor(IdString);
-      jsonFunctions:checaExistencia("monitores", IdString) -> exibeMenuAlunoMonitor(IdString);
-      jsonFunctions:checaExistencia("alunos", IdString) -> exibeMenuAluno(IdString);
+      checaExistencia("professores", IdString) -> exibeMenuProfessor(IdString);
+      checaExistencia("monitores", IdString) -> exibeMenuAlunoMonitor(IdString);
+      checaExistencia("alunos", IdString) -> exibeMenuAluno(IdString);
       write("Insira um valor válido!\n"),
       menuLogin()
     ).
 
-menuTrocarSenha():- 
-    writeln('Digite sua nova senha:').
+menuTrocarSenhaAluno(Matricula):-
+    writeln('Digite sua nova senha:'),
+    read(Senha),
+    encripta(Senha, "Aluno", SenhaEncriptada),
+    atualizaAtributoAluno(Matricula, "Senha", SenhaEncriptada).
 
 perguntaDisciplina(Disciplinas):-
     length(Disciplinas, Size), Size > 1,
@@ -62,7 +66,7 @@ decideMenuProfessor(3, Professor):- menuCadastroProfessor(Professor).
 
 decideMenuProfessor(4, Professor):- menuRemocaoProfessor(Professor).
 
-decideMenuProfessor(5, _):- menuTrocarSenha().
+decideMenuProfessor(5, _).
 
 decideMenuProfessor(6, _) :- writeln('Deslogando...'), menuPrincipal().
 
@@ -128,7 +132,7 @@ decideMenuMonitor(1, Monitor) :- exibeTicketsDisciplina(Monitor.disciplina).
 
 decideMenuMonitor(2, _).
 
-decideMenuMonitor(3, _):- menuTrocarSenha().
+decideMenuMonitor(3, _).
 
 decideMenuMonitor(4, _) :- write('\nDeslogando...'), menuPrincipal().
 
@@ -159,7 +163,7 @@ decideMenuAluno(5, _).
 
 decideMenuAluno(6, _).
 
-decideMenuAluno(7, _) :- menuTrocarSenha().
+decideMenuAluno(7, Aluno):- menuTrocarSenhaAluno(Aluno.id).
 
 decideMenuAluno(8, _) :- write('\nDeslogando...'), menuPrincipal().
 
