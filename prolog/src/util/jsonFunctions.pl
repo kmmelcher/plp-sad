@@ -275,3 +275,16 @@ removeMensagem(Id) :-
     mensagensToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+getMensagens(ArrayMensagens):-
+    readJSON("mensagens", File),
+    getIDs(File, [], Ids),
+    max(Ids, X),
+    getMensagensAux(X, File, ArrayMensagens).
+
+getMensagensAux(-1, _, Array):- Array = [].
+getMensagensAux(Id, File, Array):-
+    getObjetoRecursivamente(File, Id, Mensagem),
+    IdAux is Id - 1,
+    getMensagensAux(IdAux, File, ArrayS),
+    append(ArrayS, Mensagem, Array).
