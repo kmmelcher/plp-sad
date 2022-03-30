@@ -1,4 +1,4 @@
-:- module('jsonFunctions', [getObjetoByID/3, addMonitor/3, atualizaAtributoAluno/3, checaExistencia/2, existeDisciplina/1]).
+:- module('jsonFunctions', [getObjetoByID/3, addMonitor/3, atualizaAtributoAluno/3, checaExistencia/2, existeDisciplina/1, readJSON/2]).
 
 :- use_module(library(http/json)).
 
@@ -279,7 +279,7 @@ removeMensagem(Id) :-
 
 getDisciplinaRecursivamente([], _, "").
 getDisciplinaRecursivamente([H|T], Sigla, Out):-
-     (H.sigla = Sigla -> Out = H);(getObjetoRecursivamente(T, Sigla, Out)).
+     (H.sigla = Sigla -> Out = H);(getDisciplinaRecursivamente(T, Sigla, Out)).
 
 getDisciplinaBySigla(Disciplina, Result):-
     readJSON("disciplinas", File),

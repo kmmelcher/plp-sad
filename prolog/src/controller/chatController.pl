@@ -1,4 +1,4 @@
-:- module('ChatController', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
+:- module('ChatController', [exibeTicketsDisciplina/1]).
 :- use_module('../util/jsonFunctions', [readJSON/2]).
 
 getTicketsAluno(Matricula, Saida):-
