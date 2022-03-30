@@ -1,6 +1,6 @@
 :- module('Menu', [menuPrincipal/0]).
 :- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2]).
-:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1]).
+:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2]).
 :- use_module('controller/AlunoController.pl', [getAluno/2]).
 :- use_module('util/jsonFunctions', [checaExistencia/2, getObjetoByID/3]).
@@ -149,7 +149,7 @@ exibeMenuAluno(Id):-
 
 decideMenuAluno(1, Aluno):- perguntaDisciplina(Aluno.disciplinas).
 
-decideMenuAluno(2, _).
+decideMenuAluno(2, Aluno):- exibeTicketsAluno(Aluno.id).
 
 decideMenuAluno(3, _).
 
