@@ -1,3 +1,4 @@
+:- module('Menu', [menuPrincipal/0]).
 :- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2]).
 :- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2]).
