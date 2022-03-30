@@ -1,10 +1,9 @@
 :- module('MonitorController', [getMonitor/2, vinculaMonitor/0]).
 
-:- include("../util/jsonFunctions.pl").
 :- use_module('AlunoController.pl', [getAluno/2]).
+:- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, addMonitor/3, checaExistencia/2, existeDisciplina/1]).
 
 getMonitor(Id, Monitor):-
-    checaExistencia("monitores", Id),
     getObjetoByID("monitores", Id, Monitor).
 
 adicionaMonitor(Matricula, Disciplina) :-

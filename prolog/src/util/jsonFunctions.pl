@@ -1,3 +1,5 @@
+:- module('jsonFunctions', [getObjetoByID/3, addMonitor/3, atualizaAtributoAluno/3, checaExistencia/2, existeDisciplina/1]).
+
 :- use_module(library(http/json)).
 
 getIDs([], ListaIDs, Result):- append([0], ListaIDs, Result).

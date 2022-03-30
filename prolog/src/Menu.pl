@@ -49,7 +49,8 @@ menuCadastro :- write('\nQuem você deseja vincular?'),
 decideMenuCadastro(1) :- exibeMenuProfessor, !.
 
 decideMenuCadastro(2) :-
-    vinculaMonitor().
+    vinculaMonitor(),
+    exibeMenuProfessor.
 
 decideMenuCadastro(3) :- exibeMenuProfessor, !.
 
