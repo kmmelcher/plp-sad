@@ -1,4 +1,4 @@
-:- module('jsonFunctions', [readJSON/2, checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3]).
+:- module('jsonFunctions', [readJSON/2, checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3, atualizaAtributoProfessor/3]).
 
 :- use_module(library(http/json)).
 
@@ -78,7 +78,7 @@ atualizaAtributoAluno(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     (Atributo = "nome" ->  removeAluno(Id), addAluno(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha); 
      Atributo = "disciplinas" -> removeAluno(Id), addAluno(Object.id, Object.nome, ConteudoAtualizado, Object.senha);
-     Atributo = "Senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
+     Atributo = "senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
 
 addAluno(Matricula, Nome, Disciplinas, Senha) :- 
     NomeArquivo = "alunos",
@@ -108,7 +108,7 @@ removeAluno(Id) :-
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 %-------------------------- Funções de Professores--------------------------%
- 
+
 showProfessoresAux([]):- halt.
 showProfessoresAux([H|T]) :- 
     write("Id: "), writeln(H.id),
@@ -127,6 +127,29 @@ professoresToJSON([], []).
 professoresToJSON([H|T], [X|Out]) :- 
     professorToJSON(H.id, H.nome, H.disciplinas, H.senha, X), 
     professoresToJSON(T, Out).
+
+atualizaAtributoProfessor(Id, Atributo, ConteudoAtualizado):-
+    getObjetoByID("professores", Id, Object),
+    (Atributo = "nome" ->  removeProfessor(Id), addProfessor(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha); 
+     Atributo = "disciplinas" -> removeProfessor(Id), addProfessor(Object.id, Object.nome, ConteudoAtualizado, Object.senha);
+     Atributo = "senha" -> removeProfessor(Id), addProfessor(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
+
+removeProfessor(Id) :-
+    NomeArquivo = "professores",
+    readJSON(NomeArquivo, File),
+    removeObjectJSON(File, Id, SaidaParcial),
+    professoresToJSON(SaidaParcial, Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+addProfessor(Matricula, Nome, Disciplinas, Senha) :- 
+    NomeArquivo = "professores",
+    readJSON(NomeArquivo, File),
+    professoresToJSON(File, ListaObjectsJSON),
+    professorToJSON(Matricula, Nome, Disciplinas, Senha, ObjectJSON),
+    append(ListaObjectsJSON, [ObjectJSON], Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 %-------------------------- Funções de Monitores--------------------------%
 
@@ -154,7 +177,7 @@ atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
     (Atributo = "nome" ->  removeMonitor(Id), addMonitor(Object.id, ConteudoAtualizado, Object.disciplinas, Object.horarios, Object.senha); 
      Atributo = "disciplinas" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, ConteudoAtualizado, Object.horarios, Object.senha);
      Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado, Object.senha);
-     Atributo = "Senha" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, Object.disciplinas, Object.horarios, ConteudoAtualizado)).
+     Atributo = "senha" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, Object.disciplinas, Object.horarios, ConteudoAtualizado)).
 
 monitorToJSON(Id, Nome, Disciplinas, Horarios, Senha, Out) :-
     swritef(Out, '{"id":"%w", "nome":"%w","disciplinas":"%w","horarios":"%w","senha":"%w"}', [Id, Nome, Disciplinas, Horarios, Senha]).

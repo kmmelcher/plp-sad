@@ -1,9 +1,9 @@
-%:- module('Menu', [menuPrincipal/0]).
+:- module('Menu', [menuPrincipal/0]).
 :- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2]).
 :- use_module('controller/chatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2]).
 :- use_module('controller/AlunoController.pl', [getAluno/2]).
-:- use_module('util/jsonFunctions.pl', [checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3]).
+:- use_module('util/jsonFunctions.pl', [checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3, atualizaAtributoProfessor/3]).
 :- use_module('util/EncriptFunctions.pl', [encripta/3]).
 
 menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):'),
@@ -20,15 +20,9 @@ decideMenu(Id) :-
       checaExistencia("professores", IdString) -> exibeMenuProfessor(IdString);
       checaExistencia("monitores", IdString) -> exibeMenuAlunoMonitor(IdString);
       checaExistencia("alunos", IdString) -> exibeMenuAluno(IdString);
-      write("Insira um valor válido!\n"),
+      write("Insira um valor valido!\n"),
       menuLogin()
     ).
-
-menuTrocarSenhaAluno(Matricula):-
-    writeln('Digite sua nova senha:'),
-    read(Senha),
-    encripta(Senha, "Aluno", SenhaEncriptada),
-    atualizaAtributoAluno(Matricula, "Senha", SenhaEncriptada).
 
 perguntaDisciplina(Disciplinas):-
     length(Disciplinas, Size), Size > 1,
@@ -66,7 +60,7 @@ decideMenuProfessor(3, Professor):- menuCadastroProfessor(Professor).
 
 decideMenuProfessor(4, Professor):- menuRemocaoProfessor(Professor).
 
-decideMenuProfessor(5, _).
+decideMenuProfessor(5, Professor):- menuTrocarSenhaProfessor(Professor).
 
 decideMenuProfessor(6, _) :- writeln('Deslogando...'), menuPrincipal().
 
@@ -101,6 +95,12 @@ decideMenuRemocao(2, _).
 decideMenuRemocao(3, Professor):- exibeMenuProfessor(Professor.id).
 
 decideMenuRemocao(_, Professor):- writeln('Entrada Invalida!'), menuRemocao(Professor).
+
+menuTrocarSenhaProfessor(Professor):-
+    writeln('Digite sua nova senha:'),
+    read(Senha),
+    encripta(Senha, Professor.nome, SenhaEncriptada),
+    atualizaAtributoProfessor(Professor.id, "senha", SenhaEncriptada).
 
 %----------------------------------------------------- MONITOR -----------------------------------------------------%
 
@@ -163,8 +163,14 @@ decideMenuAluno(5, _).
 
 decideMenuAluno(6, _).
 
-decideMenuAluno(7, Aluno):- menuTrocarSenhaAluno(Aluno.id).
+decideMenuAluno(7, Aluno):- menuTrocarSenhaAluno(Aluno).
 
 decideMenuAluno(8, _) :- write('\nDeslogando...'), menuPrincipal().
 
 decideMenuAluno(_, _) :- write('\nEntrada Invalida! ').
+
+menuTrocarSenhaAluno(Aluno):-
+    writeln('Digite sua nova senha:'),
+    read(Senha),
+    encripta(Senha, Aluno.nome, SenhaEncriptada),
+    atualizaAtributoAluno(Aluno.id, "senha", SenhaEncriptada).
