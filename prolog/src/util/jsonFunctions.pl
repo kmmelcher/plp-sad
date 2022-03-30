@@ -1,4 +1,4 @@
-:- module('jsonFunctions', [readJSON/2]).
+:- module('jsonFunctions', [readJSON/2, checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3]).
 
 :- use_module(library(http/json)).
 
@@ -52,7 +52,8 @@ getObjetoByID(NomeArquivo, Id, Result):-
 
 checaExistencia(NomeArquivo, Id):-
     readJSON(NomeArquivo, File),
-    getObjetoRecursivamente(File, Id, Result),
+    atom_string(Id, IdString),
+    getObjetoRecursivamente(File, IdString, Result),
     Result \= "".
 
 %-------------------------- Funções de Alunos--------------------------%

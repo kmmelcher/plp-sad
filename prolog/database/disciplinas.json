@@ -1,67 +1,67 @@
 [
   { "id": "1",
-    "nome": "Paradigmas de Linguagem de Programação",
-    "sigla": "PLP"
+    "nome": "Paradigmas de Linguagem de Programacao",
+    "sigla": "plp"
   },
   { "id": "2",
     "nome": "Projeto de Software",
-    "sigla": "PSoft"
+    "sigla": "psoft"
   },
   { "id": "3",
     "nome": "Banco de Dados",
-    "sigla": "BD"
+    "sigla": "bd"
   },
   { "id": "4",
     "nome": "Estrutura de Dados",
-    "sigla": "EDA"
+    "sigla": "eda"
   },
   { "id": "5",
-    "nome": "Laboratório de Estrutura de Dados",
-    "sigla": "LEDA"
+    "nome": "Laboratorio de Estrutura de Dados",
+    "sigla": "leda"
   },
   { "id": "6",
-    "nome": "Organização e Arquitetura de Computadores",
-    "sigla": "OAC"
+    "nome": "Organizacao e Arquitetura de Computadores",
+    "sigla": "oac"
   },
   { "id": "7",
-    "nome": "Laboratório de Organização e Arquitetura de Computadores",
-    "sigla": "LOAC"
+    "nome": "Laboratorio de Organizacao e Arquitetura de Computadores",
+    "sigla": "loac"
   },
   { "id": "8",
     "nome": "Engenharia de Software",
-    "sigla": "ES"
+    "sigla": "es"
   },
   { "id": "9",
     "nome": "Análise de Sistemas",
-    "sigla": "AS"
+    "sigla": "as"
   },
   { "id": "10",
     "nome": "Redes de Computadores",
-    "sigla": "Redes"
+    "sigla": "redes"
   },
   { "id": "11",
     "nome": "Sistemas Operacionais",
-    "sigla": "SO"
+    "sigla": "so"
   },
   { "id": "12",
-    "nome": "Introdução à Probabilidade",
-    "sigla": "IP"
+    "nome": "Introdução a Probabilidade",
+    "sigla": "ip"
   },
   { "id": "13",
     "nome": "Algoritmos Avançados",
-    "sigla": "AA"
+    "sigla": "aa"
   },
   { "id": "14",
-    "nome": "Programação II",
-    "sigla": "P2"
+    "nome": "Programacao II",
+    "sigla": "p2"
   },
   { "id": "15",
-    "nome": "Laboratório de Programação II",
-    "sigla": "LP2"
+    "nome": "Laboratorio de Programacao II",
+    "sigla": "lp2"
   },
   { "id": "16",
-    "nome": "Fundamentos de Matemática para Ciência da Computação II",
-    "sigla": "FMCC2"
+    "nome": "Fundamentos de Matematica para Ciencia da Computacao II",
+    "sigla": "fmcc2"
   }
 ]
 

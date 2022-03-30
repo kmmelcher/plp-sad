@@ -1,128 +1,128 @@
 [
   {
     "id": "120110001",
-    "nome": "Álef Ádonis",
-    "disciplinas": ["PLP","LEDA","IP","Psoft"],
+    "nome": "Alef Adonis",
+    "disciplinas": ["plp","leda","ip","psoft"],
     "senha": ""
   },
   {
     "id": "120110002",
-    "nome": "Vinícius da Silva",
-    "disciplinas": ["OAC","LOAC","BD","IP","Psoft","PLP"],
+    "nome": "Vinicius da Silva",
+    "disciplinas": ["oac","loac","bd","ip","psoft","plp"],
     "senha": ""
   },
   {
     "id": "120110003",
     "nome": "Pedro Adrian Pereira",
-    "disciplinas": ["Psoft","PLP","SO","Redes","BD"],
+    "disciplinas": ["psoft","plp","so","redes","bd"],
     "senha": ""
   },
   {
     "id": "120110004",
-    "nome": "Killian Macedo Melcher",
-    "disciplinas": ["Psoft","PLP","OAC","LOAC","BD"],
+    "nome": "Kilian Macedo Melcher",
+    "disciplinas": ["psoft","plp","oac","loac","bd"],
     "senha": ""
   },
   {
     "id": "120110005",
     "nome": "Filipe da Silva Ramalho",
-    "disciplinas": ["PLP","Redes","BD","AS"],
+    "disciplinas": ["plp","redes","bd","as"],
     "senha": ""
   },
   {
     "id": "119210006",
     "nome": "Luiggy Ferreira Dias",
-    "disciplinas": ["Redes","BD","AS","SO"],
+    "disciplinas": ["redes","bd","as","so"],
     "senha": ""
   },
   {
     "id": "118210007",
     "nome": "Tadeu Macedo Henrique",
-    "disciplinas": ["SO","AS","ES","AA"],
+    "disciplinas": ["so","as","es","aa"],
     "senha": ""
   },
   {
     "id": "119210008",
     "nome": "Caio Artur Luiz",
-    "disciplinas": ["OAC","LOAC","EDA","LEDA"],
+    "disciplinas": ["oac","loac","eda","leda"],
     "senha": ""
   },
   {
     "id": "120220009",
-    "nome": "Maria Luíza Dias",
-    "disciplinas": ["FMCC2","P2","LP2","AA"],
+    "nome": "Maria Luiza Dias",
+    "disciplinas": ["fmcc2","p2","lp2","aa"],
     "senha": ""
   },
   {
     "id": "119210010",
     "nome": "Juliana Almeida Alves",
-    "disciplinas": ["SO","ES","AS","Redes"],
+    "disciplinas": ["so","es","as","redes"],
     "senha": ""
   },
   {
     "id": "119210011",
     "nome": "Yuri Marques Neto",
-    "disciplinas": ["SO","Redes","ES","IP","BD"],
+    "disciplinas": ["so","redes","es","ip","bd"],
     "senha": ""
   },
   {
     "id": "120110012",
-    "nome": "Abraão César Lima",
-    "disciplinas": ["PLP","Psoft","BD","OAC","LOAC"],
+    "nome": "Abraao César Lima",
+    "disciplinas": ["plp","psoft","bd","oac","loac"],
     "senha": ""
   },
   {
     "id": "120220013",
     "nome": "Eduardo Caio Almeida",
-    "disciplinas": ["FMCC2","P2","LP2","AA"],
+    "disciplinas": ["fmcc2","p2","lp2","aa"],
     "senha": ""
   },
   {
     "id": "119210014",
     "nome": "Clara Duarte Batista",
-    "disciplinas": ["PLP","Redes","BD","AS"],
+    "disciplinas": ["plp","redes","bd","as"],
     "senha": ""
   },
   {
     "id": "119210015",
-    "nome": "Luíza Souza Martins",
-    "disciplinas": ["SO","ES","AS","Redes"],
+    "nome": "Luiza Souza Martins",
+    "disciplinas": ["so","es","as","redes"],
     "senha": ""
   },
   {
     "id": "120210016",
     "nome": "Aline Castro Garcia",
-    "disciplinas": ["Psoft","PLP","OAC","LOAC","BD"],
+    "disciplinas": ["psoft","plp","oac","loac","bd"],
     "senha": ""
   },
   {
     "id": "120210017",
     "nome": "Roberto Miranda",
-    "disciplinas": ["OAC","LOAC","PLP"],
+    "disciplinas": ["oac","loac","plp"],
     "senha": ""
   },
   {
     "id": "120210018",
     "nome": "Renata Glasc",
-    "disciplinas": ["ES","SO","Redes"],
+    "disciplinas": ["es","so","redes"],
     "senha": ""
   },
   {
     "id": "120210019",
     "nome": "Antonio Carlos",
-    "disciplinas": ["PLP","SO","AS","Redes","IP"],
+    "disciplinas": ["plp","so","as","redes","ip"],
     "senha": ""
   },
   {
     "id": "120210020",
     "nome": "Paulo Costa",
-    "disciplinas": ["LOAC","AS","Redes","IP"],
+    "disciplinas": ["loac","as","redes","ip"],
     "senha": ""
   },
   {
     "id": "120210021",
     "nome": "Henry Cavil",
-    "disciplinas": ["OAC","LOAC","PLP","Psoft","BD","ES"],
+    "disciplinas": ["oac","loac","plp","psoft","bd","es"],
     "senha": ""
   }
 ]
