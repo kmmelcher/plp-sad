@@ -1,5 +1,3 @@
-:- module('jsonFunctions', [readJSON/2, checaExistencia/2, getObjetoByID/3]).
-
 :- use_module(library(http/json)).
 
 getIDs([], ListaIDs, Result):- append([0], ListaIDs, Result).
