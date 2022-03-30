@@ -282,3 +282,9 @@ getDisciplinaRecursivamente([H|T], Sigla, Out):-
 getDisciplinaBySigla(Disciplina, Result):-
     readJSON("disciplinas", File),
     getDisciplinaRecursivamente(File, Disciplina, Result).
+
+existeDisciplina(Sigla):-
+    readJSON("disciplinas", File),
+    atom_string(Sigla, SiglaStr),
+    getDisciplinaRecursivamente(File, SiglaStr, Result),
+    Result \= "".

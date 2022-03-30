@@ -1,4 +1,4 @@
-:- use_module('controller/MonitorController.pl', [adiciona_monitor/0]).
+:- use_module('controller/MonitorController.pl', [vinculaMonitor/0]).
 
 :- use_module('model/aluno.pl', [cadastra_aluno/5] ). % Exemplo de importação
 

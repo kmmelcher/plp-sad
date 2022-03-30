@@ -11,16 +11,18 @@ adicionaMonitor(Matricula, Disciplina) :-
     writeln("Horarios:"),
     read(Horarios),
     addMonitor(Matricula, Disciplina, Horarios),
-    writeln("Monitor cadastrado com sucesso."),
-    halt.
+    writeln("Monitor cadastrado com sucesso.").
 
 vinculaMonitor() :-
     writeln("Disciplina:"),
     read(Disciplina),
-    writeln("Matrícula:"),
-    read(Matricula),
     (
-        checaExistencia("alunos", Matricula) -> adicionaMonitor(Matricula, Disciplina);
-        writeln('Aluno não cadastrado')
-    ),
-    halt.
+        existeDisciplina(Disciplina) ->
+            writeln("Matrícula:"),
+            read(Matricula),
+            (
+                checaExistencia("alunos", Matricula) -> adicionaMonitor(Matricula, Disciplina);
+                writeln('Aluno não cadastrado')
+            );
+        writeln('Disciplina não cadastrada')
+    ).
