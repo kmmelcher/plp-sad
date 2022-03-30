@@ -1,3 +1,5 @@
+:- module('jsonFunctions', [readJSON/2, checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3]).
+
 :- use_module(library(http/json)).
 
 getIDs([], ListaIDs, Result):- append([0], ListaIDs, Result).
@@ -50,7 +52,8 @@ getObjetoByID(NomeArquivo, Id, Result):-
 
 checaExistencia(NomeArquivo, Id):-
     readJSON(NomeArquivo, File),
-    getObjetoRecursivamente(File, Id, Result),
+    atom_string(Id, IdString),
+    getObjetoRecursivamente(File, IdString, Result),
     Result \= "".
 
 %-------------------------- Funções de Alunos--------------------------%
@@ -275,3 +278,13 @@ removeMensagem(Id) :-
     mensagensToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+%-------------------------- Funções de Disciplinas --------------------------%
+
+getDisciplinaRecursivamente([], _, "").
+getDisciplinaRecursivamente([H|T], Sigla, Out):-
+     (H.sigla = Sigla -> Out = H);(getObjetoRecursivamente(T, Sigla, Out)).
+
+getDisciplinaBySigla(Disciplina, Result):-
+    readJSON("disciplinas", File),
+    getDisciplinaRecursivamente(File, Disciplina, Result).
