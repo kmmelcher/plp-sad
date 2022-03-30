@@ -1,6 +1,6 @@
 [
   { "id": "1",
-    "nome": "Paradigmas de Linguagem de Programação",
+    "nome": "Paradigmas de Linguagem de Programacao",
     "sigla": "plp"
   },
   { "id": "2",
@@ -16,15 +16,15 @@
     "sigla": "eda"
   },
   { "id": "5",
-    "nome": "Laboratório de Estrutura de Dados",
+    "nome": "Laboratorio de Estrutura de Dados",
     "sigla": "leda"
   },
   { "id": "6",
-    "nome": "Organização e Arquitetura de Computadores",
+    "nome": "Organizacao e Arquitetura de Computadores",
     "sigla": "oac"
   },
   { "id": "7",
-    "nome": "Laboratório de Organização e Arquitetura de Computadores",
+    "nome": "Laboratorio de Organizacao e Arquitetura de Computadores",
     "sigla": "loac"
   },
   { "id": "8",
@@ -44,7 +44,7 @@
     "sigla": "so"
   },
   { "id": "12",
-    "nome": "Introdução à Probabilidade",
+    "nome": "Introdução a Probabilidade",
     "sigla": "ip"
   },
   { "id": "13",
@@ -52,15 +52,15 @@
     "sigla": "aa"
   },
   { "id": "14",
-    "nome": "Programação II",
+    "nome": "Programacao II",
     "sigla": "p2"
   },
   { "id": "15",
-    "nome": "Laboratório de Programação II",
+    "nome": "Laboratorio de Programacao II",
     "sigla": "lp2"
   },
   { "id": "16",
-    "nome": "Fundamentos de Matemática para Ciência da Computação II",
+    "nome": "Fundamentos de Matematica para Ciencia da Computacao II",
     "sigla": "fmcc2"
   }
 ]

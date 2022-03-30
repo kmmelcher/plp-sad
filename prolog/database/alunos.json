@@ -1,13 +1,13 @@
 [
   {
     "id": "120110001",
-    "nome": "Álef Ádonis",
+    "nome": "Alef Adonis",
     "disciplinas": ["plp","leda","ip","psoft"],
     "senha": ""
   },
   {
     "id": "120110002",
-    "nome": "Vinícius da Silva",
+    "nome": "Vinicius da Silva",
     "disciplinas": ["oac","loac","bd","ip","psoft","plp"],
     "senha": ""
   },
@@ -49,7 +49,7 @@
   },
   {
     "id": "120220009",
-    "nome": "Maria Luíza Dias",
+    "nome": "Maria Luiza Dias",
     "disciplinas": ["fmcc2","p2","lp2","aa"],
     "senha": ""
   },
@@ -67,7 +67,7 @@
   },
   {
     "id": "120110012",
-    "nome": "Abraão César Lima",
+    "nome": "Abraao César Lima",
     "disciplinas": ["plp","psoft","bd","oac","loac"],
     "senha": ""
   },
@@ -85,7 +85,7 @@
   },
   {
     "id": "119210015",
-    "nome": "Luíza Souza Martins",
+    "nome": "Luiza Souza Martins",
     "disciplinas": ["so","es","as","redes"],
     "senha": ""
   },

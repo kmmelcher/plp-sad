@@ -1,14 +1,14 @@
 [
   { "id": "1",
     "autor": "120110002",
-    "titulo": "Erro na sintetização do circuito na FPGA",
+    "titulo": "Erro na sintetizacao do circuito na FPGA",
     "mensagens": ["1","2","3","4","5","6"],
     "status": "Resolvido",
     "disciplina": "loac"
   },
   { "id": "2",
     "autor": "120110004",
-    "titulo": "Como faço para ler uma lista de inteiros da entrada?",
+    "titulo": "Como faco para ler uma lista de inteiros da entrada?",
     "mensagens": ["7","8","9"],
     "status": "Resolvido",
     "disciplina": "plp"
@@ -22,7 +22,7 @@
   },
   { "id": "4",
     "autor": "120110002",
-    "titulo": "Duvida Sobre o roteiro6",
+    "titulo": "Duvida Sobre o roteiro 6",
     "mensagens": ["13","14","15"],
     "status": "Resolvido",
     "disciplina": "bd"

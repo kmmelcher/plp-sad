@@ -1,16 +1,24 @@
 :- module('chatController', [exibeTicketsDisciplina/1]).
 :- use_module('../util/jsonFunctions.pl', [readJSON/2]).
 
-exibeTicketsDisciplina(SiglaDisciplina):-
+getTicketsDisciplina(SiglaDisciplina, TicketsDisciplina):-
     readJSON("tickets", Tickets),
-    exibeTicketsDisciplinaRecursivo(Tickets, SiglaDisciplina).
+    getTicketsDisciplinaRecursivo(Tickets, SiglaDisciplina, [], TicketsDisciplina).
+
+getTicketsDisciplinaRecursivo([], _, TicketsAux, TicketsDisciplina):- TicketsDisciplina = TicketsAux.
+getTicketsDisciplinaRecursivo([T|Ts], SiglaDisciplina, TicketsAux, TicketsDisciplina):-
+    T.disciplina = SiglaDisciplina,
+    append(TicketsAux, [T], NovosTicketsDisciplina),
+    getTicketsDisciplinaRecursivo(Ts, SiglaDisciplina, NovosTicketsDisciplina, TicketsDisciplina)
+    ;
+    getTicketsDisciplinaRecursivo(Ts, SiglaDisciplina, TicketsAux, TicketsDisciplina).
+
+exibeTicketsDisciplina(SiglaDisciplina):-
+    getTicketsDisciplina(SiglaDisciplina, Tickets),
+    (Tickets = [] -> writeln("Ainda nao ha tickets para esta disciplina."); exibeTicketsRecursivo(Tickets)).
     % TODO FALTA LER MENSAGENS DE UM TICKET
 
-exibeTicketsDisciplinaRecursivo([], _).
-
-exibeTicketsDisciplinaRecursivo([T|Ts], SiglaDisciplina):-
-    T.disciplina = SiglaDisciplina,
-    swritef(Out, "%w) %w (%w)", [T.id, T.titulo, T.status]), write(Out), nl,
-    exibeTicketsDisciplinaRecursivo(Ts, SiglaDisciplina)
-    ;
-    exibeTicketsDisciplinaRecursivo(Ts, SiglaDisciplina).
+exibeTicketsRecursivo([]).
+exibeTicketsRecursivo([T|Ts]):-
+    swritef(Out, "%w) %w (%w)", [T.id, T.titulo, T.status]), writeln(Out),
+    exibeTicketsRecursivo(Ts).
