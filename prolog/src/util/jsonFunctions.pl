@@ -1,4 +1,4 @@
-:- module('jsonFunctions', [readJSON/2, checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3]).
+:- module('jsonFunctions', [readJSON/2, checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3, buscaNovoID/2, incluiMensagemEmTicket/2, addMensagem/4]).
 
 :- use_module(library(http/json)).
 
@@ -229,6 +229,13 @@ removeTicket(Id) :-
     ticketToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+incluiMensagemEmTicket(IdTicket, IdMensagem):-
+    getObjetoByID("tickets", IdTicket, Ticket),
+    append(Ticket.mensagens, [IdMensagem], MensagensAtualizadas),
+    removeTicket(IdTicket),
+    addTicket(Ticket.titulo, Ticket.autor, MensagensAtualizadas, Ticket.status, Ticket.disciplina).
+
 
 %-------------------------- Funções de Mensagens --------------------------%
 

@@ -1,9 +1,11 @@
-:- module('AlunoController', [getAluno/2]).
+:- module('AlunoController', [getAluno/2, ehAluno/1]).
 
-:- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, atualizaAtributoAluno/3]).
+:- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, atualizaAtributoAluno/3, checaExistencia/2]).
 
 getAluno(Id, Aluno):-
     getObjetoByID("alunos", Id, Aluno).
+
+ehAluno(Id):- checaExistencia("alunos", Id).
 
 vinculaAlunoDisciplina(Id, Disciplina):-
     getAluno(Id, Aluno),

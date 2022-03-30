@@ -1,9 +1,9 @@
 :- module('Menu', [menuPrincipal/0]).
-:- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2]).
-:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
-:- use_module('controller/ProfessorController.pl', [getProfessor/2]).
-:- use_module('controller/AlunoController.pl', [getAluno/2]).
-:- use_module('util/jsonFunctions', [checaExistencia/2, getObjetoByID/3]).
+:- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1]).
+:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2]).
+:- use_module('controller/ProfessorController.pl', [getProfessor/2, ehProfessor/1]).
+:- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1]).
+:- use_module('util/jsonFunctions', [getObjetoByID/3]).
 
 menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):'),
                  menuLogin().
@@ -16,29 +16,28 @@ decideMenu(sair):- halt(0).
 decideMenu(Id) :- 
     atom_string(Id, IdString),
     (
-      jsonFunctions:checaExistencia("professores", IdString) -> exibeMenuProfessor(IdString);
-      jsonFunctions:checaExistencia("monitores", IdString) -> exibeMenuAlunoMonitor(IdString);
-      jsonFunctions:checaExistencia("alunos", IdString) -> exibeMenuAluno(IdString);
-      write("Insira um valor válido!\n"),
+      ehProfessor(IdString) -> exibeMenuProfessor(IdString);
+      ehMonitor(IdString) -> exibeMenuAlunoMonitor(IdString);
+      ehAluno(IdString) -> exibeMenuAluno(IdString);
+      write("Insira um valor valido!\n"),
       menuLogin()
     ).
 
 menuTrocarSenha():- 
     writeln('Digite sua nova senha:').
 
-perguntaDisciplina(Disciplinas):-
+perguntaDisciplina(Disciplinas, Disciplina):-
     length(Disciplinas, Size), Size > 1,
     writeln("Insira a disciplina:"),
     read(SiglaDisciplina), nl,
     atom_string(SiglaDisciplina, SiglaString),
     (
-        member(SiglaString, Disciplinas) -> exibeTicketsDisciplina(SiglaString)
-        ;
-        write("Insira um valor valido!\n")
+        member(SiglaString, Disciplinas) -> Disciplina = SiglaString;
+        Disciplina = "INVALIDA"
     )
     ;
     [H|_] = Disciplinas,
-    exibeTicketsDisciplina(H).
+    Disciplina = H.
 
 
 %----------------------------------------------------- PROFESSOR -----------------------------------------------------%
@@ -54,9 +53,14 @@ exibeMenuProfessor(Id) :-
     decideMenuProfessor(Opcao, Professor),
     exibeMenuProfessor(Id).
 
-decideMenuProfessor(1, Professor) :- perguntaDisciplina(Professor.disciplinas).
+decideMenuProfessor(1, Professor) :- 
+    perguntaDisciplina(Professor.disciplinas, Disciplina), 
+    (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor) ; exibeTicketsDisciplina(Disciplina)).
+    
 
-decideMenuProfessor(2, _).
+decideMenuProfessor(2, Professor):- 
+    perguntaDisciplina(Professor.disciplinas, Disciplina), 
+    (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor) ; responderTicket(Professor, Disciplina)).
 
 decideMenuProfessor(3, Professor):- menuCadastroProfessor(Professor).
 
@@ -66,7 +70,7 @@ decideMenuProfessor(5, _):- menuTrocarSenha().
 
 decideMenuProfessor(6, _) :- writeln('Deslogando...'), menuPrincipal().
 
-decideMenuProfessor(_, _) :- writeln('Entrada Inválida!').
+decideMenuProfessor(_, _) :- writeln('Entrada Invalida!').
 
 menuCadastroProfessor(Professor) :- 
     writeln('\nQuem voce deseja vincular?'),
@@ -126,7 +130,7 @@ exibeMenuMonitor(Id) :-
 
 decideMenuMonitor(1, Monitor) :- exibeTicketsDisciplina(Monitor.disciplina).
 
-decideMenuMonitor(2, _).
+decideMenuMonitor(2, Monitor):- responderTicket(Monitor, Monitor.disciplina).
 
 decideMenuMonitor(3, _):- menuTrocarSenha().
 
@@ -147,7 +151,9 @@ exibeMenuAluno(Id):-
     decideMenuAluno(Opcao, Aluno),
     exibeMenuAluno(Id).
 
-decideMenuAluno(1, Aluno):- perguntaDisciplina(Aluno.disciplinas).
+decideMenuAluno(1, Aluno):- 
+    perguntaDisciplina(Aluno.disciplinas, Disciplina), 
+    (Disciplina = "INVALIDA" -> decideMenuAluno(-1, Aluno) ; exibeTicketsDisciplina(Disciplina)).
 
 decideMenuAluno(2, Aluno):- exibeTicketsAluno(Aluno.id).
 
