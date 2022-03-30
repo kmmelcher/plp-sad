@@ -133,8 +133,7 @@ professoresToJSON([H|T], [X|Out]) :-
 showMonitoresAux([]):- halt.
 showMonitoresAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
-    write("Nome: "), writeln(H.nome), 
-    write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
+    write("Disciplina: "), showRecursevily(H.disciplinas), nl,
     write("Horários: "), showRecursevily(H.horarios),  nl, 
     showMonitoresAux(T).
 
@@ -145,30 +144,27 @@ showMonitores() :-
 showMonitor(Id) :-
     getObjetoByID("monitores", Id, H),
     write("Matricula: "), write(H.id),
-    write("Nome: "), writeln(H.nome), 
-    write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
+    write("Disciplina: "), showRecursevily(H.disciplinas), nl,
     write("Horários: "), showRecursevily(H.horarios),  nl.
 
 atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("monitores", Id, Object),
-    (Atributo = "nome" ->  removeMonitor(Id), addMonitor(Object.id, ConteudoAtualizado, Object.disciplinas, Object.horarios, Object.senha); 
-     Atributo = "disciplinas" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, ConteudoAtualizado, Object.horarios, Object.senha);
-     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado, Object.senha);
-     Atributo = "Senha" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, Object.disciplinas, Object.horarios, ConteudoAtualizado)).
+    (Atributo = "disciplinas" -> removeMonitor(Id), addMonitor(Object.id, ConteudoAtualizado, Object.horario);
+     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado)).
 
-monitorToJSON(Id, Nome, Disciplinas, Horarios, Senha, Out) :-
-    swritef(Out, '{"id":"%w", "nome":"%w","disciplinas":"%w","horarios":"%w","senha":"%w"}', [Id, Nome, Disciplinas, Horarios, Senha]).
+monitorToJSON(Id, Disciplina, Horarios, Out) :-
+    swritef(Out, '{"id":"%w","disciplina":"%w","horarios":"%w"}', [Id, Disciplina, Horarios]).
 
 monitoresToJSON([], []).
 monitoresToJSON([H|T], [X|Out]) :- 
-    monitorToJSON(H.id, H.nome, H.disciplinas, H.horarios, H.senha, X), 
+    monitorToJSON(H.id, H.disciplina, H.horarios, X), 
     monitoresToJSON(T, Out).
 
-addMonitor(Matricula, Nome, Disciplinas, Horarios, Senha) :- 
+addMonitor(Matricula, Disciplina, Horarios) :- 
     NomeArquivo = "monitores",
     readJSON(NomeArquivo, File),
     monitoresToJSON(File, ListaObjectsJSON),
-    monitorToJSON(Matricula, Nome, Disciplinas, Horarios, Senha, ObjectJSON),
+    monitorToJSON(Matricula, Disciplina, Horarios, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
