@@ -1,13 +1,10 @@
-:- module('chatController', []).
-
+:- module('chatController', [exibeTicketsDisciplina/1]).
 :- use_module('../util/jsonFunctions.pl', [readJSON/2]).
 
-exibeTicketsDisciplina():-
-    writeln("Insira a disciplina:"),
-    read(SiglaDisciplina),
-    atom_string(SiglaDisciplina, SiglaString),
+exibeTicketsDisciplina(SiglaDisciplina):-
     readJSON("tickets", Tickets),
-    exibeTicketsDisciplinaRecursivo(Tickets, SiglaString).
+    exibeTicketsDisciplinaRecursivo(Tickets, SiglaDisciplina).
+    % TODO FALTA LER MENSAGENS DE UM TICKET
 
 exibeTicketsDisciplinaRecursivo([], _).
 
