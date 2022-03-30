@@ -1,5 +1,5 @@
 :- module('Menu', [menuPrincipal/0]).
-:- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2]).
+:- use_module('controller/MonitorController.pl', [getMonitor/2, vinculaMonitor/0]).
 :- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2]).
 :- use_module('controller/AlunoController.pl', [getAluno/2]).
@@ -56,7 +56,9 @@ exibeMenuProfessor(Id) :-
 
 decideMenuProfessor(1, Professor) :- perguntaDisciplina(Professor.disciplinas).
 
-decideMenuProfessor(2, _).
+decideMenuProfessor(2, _) :-
+    vinculaMonitor(),
+    exibeMenuProfessor.
 
 decideMenuProfessor(3, Professor):- menuCadastroProfessor(Professor).
 
