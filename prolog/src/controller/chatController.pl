@@ -2,16 +2,15 @@
 
 getTicketsAluno(Matricula, Saida):-
     readJSON("tickets", TodosTickets),
-    ticketsDoAluno(TodosTickets, Matricula, Saida).
+    getTicketsDoAlunoRecursivo(TodosTickets, Matricula, Saida).
     
-ticketsDoAluno([],_, []).
-ticketsDoAluno([H|T],Matricula, Tickets):-
+getTicketsDoAlunoRecursivo([],_, []).
+getTicketsDoAlunoRecursivo([H|T],Matricula, Tickets):-
     H.autor = Matricula,
-    %write(H.autor),
-    ticketsDoAluno(T, Matricula, TicketsS),
+    getTicketsDoAlunoRecursivo(T, Matricula, TicketsS),
     append(TicketsS, [H], Tickets)
     ;
-    ticketsDoAluno(T, Matricula, Tickets).
+    getTicketsDoAlunoRecursivo(T, Matricula, Tickets).
 
 exibeTicketsAluno(Matricula):-
     getTicketsAluno(Matricula, Tickets),
