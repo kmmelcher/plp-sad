@@ -1,4 +1,4 @@
-:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1]).
+:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1]).
 :- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4]).
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
@@ -123,9 +123,27 @@ marcarTicketAlunoComoResolvido(Aluno) :-
     read(Opcao), atom_string(Opcao,OpcaoStr),
     (verificarIdTicketAoResolver(TicketsAluno,Aluno.id) -> atualizaAtributoTicket(OpcaoStr,"status","Resolvido") ; writeln('Id invalido !')).
 
-
 verificarIdTicketAoResolver([H|T],AutorId) :-
     (H.autor = AutorId ->
         ((H.status = "Em andamento") -> true ; false) ;
          verificarIdTicketAoResolver(T,AutorId)).
+
+verificarIdTicketAoMandarMsg(IdTicket,Aluno) :-
+    getTicket(IdTicket,Ticket),
+    writeln(Ticket.autor),
+    Ticket.autor = Aluno.id,
+    writeln(Ticket.status),
+    Ticket.status = "Em andamento",
+    writeln('passo').
+
+adicionarMensagemTicketAluno(Aluno) :-
+    exibeTicketsAluno(Aluno.id),
+    writeln('\nInsira o id do ticket no qual deseja enviar uma mensagem: '),
+    read(IdTicket), atom_string(IdTicket,IdTicketStr),
+    (verificarIdTicketAoMandarMsg(IdTicketStr,Aluno) -> 
+       getTicket(IdTicketStr,Ticket),
+       adicionaMensagem(Aluno,Ticket)
+       ;
+       writeln('\nId invalido !')).   
+    
 
