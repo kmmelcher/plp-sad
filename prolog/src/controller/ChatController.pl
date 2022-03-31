@@ -130,11 +130,8 @@ verificarIdTicketAoResolver([H|T],AutorId) :-
 
 verificarIdTicketAoMandarMsg(IdTicket,Aluno) :-
     getTicket(IdTicket,Ticket),
-    writeln(Ticket.autor),
     Ticket.autor = Aluno.id,
-    writeln(Ticket.status),
-    Ticket.status = "Em andamento",
-    writeln('passo').
+    Ticket.status = "Em andamento".
 
 adicionarMensagemTicketAluno(Aluno) :-
     exibeTicketsAluno(Aluno.id),
