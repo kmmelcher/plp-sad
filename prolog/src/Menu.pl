@@ -3,7 +3,7 @@
 :- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2]).
 :- use_module('controller/AlunoController.pl', [getAluno/2]).
-:- use_module('util/jsonFunctions.pl', [checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3, atualizaAtributoProfessor/3]).
+:- use_module('util/jsonFunctions.pl', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3]).
 :- use_module('util/EncriptFunctions.pl', [encripta/3]).
 
 menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):'),
@@ -71,7 +71,9 @@ decideMenuProfessor(3, Professor):- menuCadastroProfessor(Professor).
 
 decideMenuProfessor(4, Professor):- menuRemocaoProfessor(Professor).
 
-decideMenuProfessor(5, Professor):- menuTrocarSenhaProfessor(Professor).
+decideMenuProfessor(5, Professor):- 
+    menuTrocarSenhaProfessor(Professor),
+    exibeMenuProfessor(Professor.id).
 
 decideMenuProfessor(6, _) :- writeln('Deslogando...'), menuPrincipal().
 
@@ -179,7 +181,9 @@ decideMenuAluno(5, _).
 
 decideMenuAluno(6, _).
 
-decideMenuAluno(7, Aluno):- menuTrocarSenhaAluno(Aluno).
+decideMenuAluno(7, Aluno):- 
+    menuTrocarSenhaAluno(Aluno),
+    exibeMenuAluno(Aluno.id).
 
 decideMenuAluno(8, _) :- write('\nDeslogando...'), menuPrincipal().
 
