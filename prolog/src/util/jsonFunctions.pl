@@ -1,4 +1,13 @@
-:- module('jsonFunctions', [getObjetoByID/3, addMonitor/3, atualizaAtributoAluno/3, checaExistencia/2, existeDisciplina/1, readJSON/2]).
+:- module('jsonFunctions',
+    [
+        getObjetoByID/3,
+        addMonitor/3,
+        atualizaAtributoAluno/3,
+        checaExistencia/2,
+        existeDisciplina/1,
+        readJSON/2,
+        removeMonitor/1
+    ]).
 
 :- use_module(library(http/json)).
 
