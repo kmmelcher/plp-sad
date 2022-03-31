@@ -3,7 +3,7 @@
         "id": "1",
         "titulo": "Erro na sintetizacao do circuito na FPGA",
         "autor": "120110002",
-        "mensagens": "[1,2,3,4,5,6]",
+        "mensagens": ["1","2","3","4","5","6"],
         "status": "Resolvido",
         "disciplina": "loac",
         "senha": ""
@@ -12,7 +12,7 @@
         "id": "2",
         "titulo": "Como faco para ler uma lista de inteiros da entrada?",
         "autor": "120110004",
-        "mensagens": "[7,8,9]",
+        "mensagens": ["7","8","9"],
         "status": "Resolvido",
         "disciplina": "plp",
         "senha": ""
@@ -21,7 +21,7 @@
         "id": "3",
         "titulo": "Algoritmos de escalonamento em discos rigidos",
         "autor": "119210010",
-        "mensagens": "[10,11,12]",
+        "mensagens": ["10","11","12"],
         "status": "Resolvido",
         "disciplina": "so",
         "senha": ""
@@ -30,7 +30,7 @@
         "id": "4",
         "titulo": "Duvida Sobre o roteiro 6",
         "autor": "120110002",
-        "mensagens": "[13,14,15]",
+        "mensagens": ["13","14","15"],
         "status": "Resolvido",
         "disciplina": "bd",
         "senha": ""
@@ -39,7 +39,7 @@
         "id": "5",
         "titulo": "Duvida sobre UML",
         "autor": "120110003",
-        "mensagens": "[16,17,18,19]",
+        "mensagens": ["16","17","18","19"],
         "status": "Resolvido",
         "disciplina": "psoft",
         "senha": ""
@@ -48,7 +48,7 @@
         "id": "6",
         "titulo": "Duvida sobre normalizacao",
         "autor": "119210016",
-        "mensagens": "[20,21,22]",
+        "mensagens": ["20","21","22"],
         "status": "Em andamento",
         "disciplina": "bd",
         "senha": ""
@@ -57,7 +57,16 @@
         "id": "7",
         "titulo": "Erro ao retornar Json no swagger",
         "autor": "120110005",
-        "mensagens": "[23]",
+        "mensagens": ["23"],
+        "status": "Em andamento",
+        "disciplina": "psoft",
+        "senha": ""
+    },
+    {
+        "id": "8",
+        "titulo": "TICKET",
+        "autor": "120110005",
+        "mensagens": ["23"],
         "status": "Em andamento",
         "disciplina": "psoft",
         "senha": ""

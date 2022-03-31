@@ -65,7 +65,6 @@ exibeTicketsDisciplina(SiglaDisciplina):-
         writeln("\n Qual o numero do ticket que deseja visualizar mensagens? "), 
         read(Opcao),
         atom_string(Opcao, OpcaoStr),
-        
         (
             checaIdValidoEmTickets(OpcaoStr, Tickets) -> getTicket(OpcaoStr, Ticket), exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina); 
             writeln("Insira um valor valido!")
@@ -86,7 +85,7 @@ exibeMensagensTicket([Im|Ims], Disciplina):-
 responderTicket(Entidade, Disciplina):-
     getTicketsEmAndamento(Disciplina, Tickets),
     (
-      Tickets == [] -> writeln("Ainda nao ha tickets em andamento para serem respondidos nesta disciplina.\n") ;
+      Tickets = [] -> writeln("Ainda nao ha tickets em andamento para serem respondidos nesta disciplina.\n") ;
       swritef(Out, "Estes sao os tickets em andamento da disciplina: %w\n\n", [Disciplina]), write(Out),
         exibirTickets(Tickets),
         writeln("Qual ticket voce deseja responder? "), read(Opcao), atom_string(Opcao, OpcaoStr),
@@ -102,7 +101,6 @@ adicionaMensagem(Entidade, Ticket, TicketId):-
     exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina),
     writeln("Insira a mensagem entre aspas simples: "), read(Conteudo),
     get_time(T), format_time(string(Horario), "%c", T),
-    
     buscaNovoID("mensagens", IdMensagem),
     incluiMensagemEmTicket(TicketId, IdMensagem),
     addMensagem(Autor, Conteudo, Horario, Entidade.id).
