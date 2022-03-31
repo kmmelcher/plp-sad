@@ -71,7 +71,7 @@ exibeTicketsDisciplina(SiglaDisciplina):-
         atom_string(Opcao, OpcaoStr),
         (
             checaIdValidoEmTickets(OpcaoStr, Tickets) -> getTicket(OpcaoStr, Ticket), exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina); 
-            writeln("Insira um valor valido!")
+            msgInputInvalido()
         )
     ).
 
@@ -95,7 +95,7 @@ responderTicket(Entidade, Disciplina):-
         writeln("Qual ticket voce deseja responder? "), read(Opcao), atom_string(Opcao, OpcaoStr),
         (
             checaIdValidoEmTickets(OpcaoStr, Tickets) -> getTicket(OpcaoStr, Ticket), adicionaMensagem(Entidade, Ticket, OpcaoStr);
-            writeln("Insira um valor valido!")
+            msgInputInvalido()
         )
     ).
 
@@ -107,9 +107,12 @@ adicionaMensagem(Entidade, Ticket, TicketId):-
     get_time(T), format_time(string(Horario), "%c", T),
     buscaNovoID("mensagens", IdMensagem),
     incluiMensagemEmTicket(TicketId, IdMensagem),
-    addMensagem(Autor, Conteudo, Horario, Entidade.id).
+    addMensagem(Autor, Conteudo, Horario, Entidade.id),
+    writeln("Mensagem adicionada com sucesso.\n").
 
 checaEntidadeParaMensagem(Id, Disciplina, Autor, Entidade):-
     ehMonitor(Id), getMonitor(Id, Monitor), Monitor.disciplina = Disciplina -> Autor = "MONITOR", getAluno(Id, Entidade);
     ehProfessor(Id) -> Autor = "PROFESSOR", getProfessor(Id, Entidade);
     Autor = "ALUNO", getAluno(Id, Entidade).
+
+msgInputInvalido():- writeln("Insira um valor valido\n").

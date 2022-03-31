@@ -58,6 +58,7 @@ perguntaDisciplina(Disciplinas, Disciplina):-
     [H|_] = Disciplinas,
     Disciplina = H.
 
+msgInputInvalido():- writeln("Insira um valor valido\n").
 
 %----------------------------------------------------- PROFESSOR -----------------------------------------------------%
 
@@ -90,7 +91,7 @@ decideMenuProfessor(5, Professor):-
 
 decideMenuProfessor(6, _) :- writeln('Deslogando...'), menuPrincipal().
 
-decideMenuProfessor(_, _) :- writeln('Entrada Invalida!').
+decideMenuProfessor(_, _) :- msgInputInvalido().
 
 menuCadastroProfessor(Professor) :- 
     writeln('\nQuem voce deseja vincular?'),
@@ -107,7 +108,7 @@ decideMenuCadastro(2, Professor):-
 
 decideMenuCadastro(3, _).
 
-decideMenuCadastro(_, Professor):- writeln('Entrada Invalida!'), menuCadastroProfessor(Professor).
+decideMenuCadastro(_, Professor):- msgInputInvalido(), menuCadastroProfessor(Professor).
 
 menuRemocaoProfessor(Professor) :- 
     writeln('\nQuem voce deseja desvincular?'),
@@ -124,7 +125,7 @@ decideMenuRemocao(2, Professor) :-
 
 decideMenuRemocao(3, Professor):- exibeMenuProfessor(Professor.id).
 
-decideMenuRemocao(_, Professor):- writeln('Entrada Invalida!'), menuRemocao(Professor).
+decideMenuRemocao(_, Professor):- msgInputInvalido(), menuRemocao(Professor).
 
 %----------------------------------------------------- MONITOR -----------------------------------------------------%
 
@@ -137,7 +138,7 @@ exibeMenuAlunoMonitor(Id) :-
   
 decideMenuAlunoMonitor(1, Id) :- exibeMenuAluno(Id).
 decideMenuAlunoMonitor(2, Id) :- exibeMenuMonitor(Id).
-decideMenuAlunoMonitor(_, _) :- write('\nEntrada Invalida! '), exibeMenuAlunoMonitor().
+decideMenuAlunoMonitor(_, _) :- msgInputInvalido(), exibeMenuAlunoMonitor().
 
 exibeMenuMonitor(Id) :- 
     getMonitor(Id, Monitor),
@@ -156,7 +157,7 @@ decideMenuMonitor(2, Monitor):- responderTicket(Monitor, Monitor.disciplina).
 
 decideMenuMonitor(3, _) :- write('\nDeslogando...'), menuPrincipal().
 
-decideMenuMonitor(_) :- write('\nEntrada Invalida! ').
+decideMenuMonitor(_) :- msgInputInvalido().
 
 %----------------------------------------------------- ALUNO -----------------------------------------------------%
 
@@ -190,4 +191,4 @@ decideMenuAluno(7, Aluno):-
 
 decideMenuAluno(8, _) :- write('\nDeslogando...'), menuPrincipal().
 
-decideMenuAluno(_, _) :- write('\nEntrada Invalida! ').
+decideMenuAluno(_, _) :- msgInputInvalido().
