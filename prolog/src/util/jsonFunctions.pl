@@ -8,8 +8,10 @@
         existeDisciplina/1,
         readJSON/2,
         removeMonitor/1,
-        atualizaAtributoProfessor/3,
-        showMonitoresAux/1
+        showMonitoresAux/1,
+        buscaNovoID/2,
+        addMensagem/4,
+        atualizaAtributoTicket/3
     ]).
 
 :- use_module(library(http/json)).
@@ -285,8 +287,8 @@ removeTicket(Id) :-
 atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("tickets", Id, Object),
     split_string(Object.mensagens, ",", "", ConteudoAux),
-    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, NovoConteudo, Object.status, Object.disciplina); 
-    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
+    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, NovoConteudo, Object.status, Object.disciplina); 
+    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
 
 %-------------------------- Funções de Mensagens --------------------------%
 
@@ -312,7 +314,7 @@ showMensagens(Id) :-
     write("Disciplina: "), writeln(H.disciplina).
 
 mensagemToJSON(ID, Autor, Conteudo, Horario, Out) :-
-    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w","senha":""}', [ID, Autor, Conteudo, Horario]).
+    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w"}', [ID, Autor, Conteudo, Horario]).
 
 mensagensToJSON([], []).
 mensagensToJSON([H|T], [X|Out]) :- 

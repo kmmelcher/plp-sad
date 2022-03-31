@@ -1,4 +1,4 @@
-:- module(monitorController, [getMonitor/2, vinculaMonitor/0, desvinculaMonitor/0]).
+:- module(monitorController, [getMonitor/2, vinculaMonitor/0,  ehMonitor/1, desvinculaMonitor/0]).
 
 :- use_module('../util/jsonFunctions', 
     [
@@ -11,8 +11,9 @@
         showMonitoresAux/1
     ]).
 
-getMonitor(Id, Monitor):-
-    getObjetoByID("monitores", Id, Monitor).
+getMonitor(Id, Monitor):- getObjetoByID("monitores", Id, Monitor).
+
+ehMonitor(Id):- checaExistencia("monitores", Id).
 
 adicionaMonitor(Matricula, Disciplina) :-
     writeln("Horarios:"),
