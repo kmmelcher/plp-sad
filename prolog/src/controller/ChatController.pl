@@ -1,16 +1,45 @@
-:- module('chatController', []).
+:- module('ChatController', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
+:- use_module('../util/jsonFunctions', [readJSON/2]).
 
-:- use_module('../util/jsonFunctions.pl', [readJSON/2]).
+getTicket(Id, Ticket):-
+    getObjetoByID("tickets", Id, TicketJson),
+    split_string(TicketJson.mensagens, ",", "", MensagensFormated),
+    put_dict([mensagens=MensagensFormated], TicketJson, Ticket).
+
+getTicketsAluno(Matricula, Saida):-
+    readJSON("tickets", TodosTickets),
+    getTicketsDoAlunoRecursivo(TodosTickets, Matricula, Saida).
+    
+getTicketsDoAlunoRecursivo([],_, []).
+getTicketsDoAlunoRecursivo([H|T],Matricula, Tickets):-
+    H.autor = Matricula,
+    getTicketsDoAlunoRecursivo(T, Matricula, TicketsS),
+    append(TicketsS, [H], Tickets)
+    ;
+    getTicketsDoAlunoRecursivo(T, Matricula, Tickets).
+
+getTicketsDisciplina(SiglaDisciplina, TicketsDisciplina):-
+    readJSON("tickets", Tickets),
+    getTicketsDisciplinaRecursivo(Tickets, SiglaDisciplina, [], TicketsDisciplina).
+
+getTicketsDisciplinaRecursivo([], _, TicketsAux, TicketsDisciplina):- TicketsDisciplina = TicketsAux.
+getTicketsDisciplinaRecursivo([T|Ts], SiglaDisciplina, TicketsAux, TicketsDisciplina):-
+    T.disciplina = SiglaDisciplina,
+    append(TicketsAux, [T], NovosTicketsDisciplina),
+    getTicketsDisciplinaRecursivo(Ts, SiglaDisciplina, NovosTicketsDisciplina, TicketsDisciplina)
+    ;
+    getTicketsDisciplinaRecursivo(Ts, SiglaDisciplina, TicketsAux, TicketsDisciplina).
+
+exibirTickets([]).
+exibirTickets([H|T]):-
+    swritef(Out, "%w) %w (%w)", [H.id, H.titulo, H.status]), write(Out), nl,
+    exibirTickets(T).
+
+exibeTicketsAluno(Matricula):-
+    getTicketsAluno(Matricula, Tickets),
+    (Tickets = [] -> writeln("Voce ainda nao criou nenhum ticket."); exibirTickets(Tickets)).
 
 exibeTicketsDisciplina(SiglaDisciplina):-
-    readJSON("tickets", Tickets),
-    exibeTicketsDisciplinaRecursivo(Tickets, SiglaDisciplina).
-
-exibeTicketsDisciplinaRecursivo([], _).
-
-exibeTicketsDisciplinaRecursivo([T|Ts], SiglaDisciplina):-
-    T.disciplina = SiglaDisciplina,
-    swritef(Out, "%w) %w (%w)", [T.id, T.titulo, T.status]), write(Out), nl,
-    exibeTicketsDisciplinaRecursivo(Ts, SiglaDisciplina)    
-    ;
-    exibeTicketsDisciplinaRecursivo(Ts, SiglaDisciplina).
+    getTicketsDisciplina(SiglaDisciplina, Tickets),
+    (Tickets = [] -> writeln("Ainda nao ha tickets para esta disciplina."); exibirTickets(Tickets)).
+    % TODO FALTA LER MENSAGENS DE UM TICKET

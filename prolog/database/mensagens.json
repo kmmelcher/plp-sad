@@ -1,7 +1,7 @@
 [
   { "id": "1",
     "autor": "120110002",
-    "conteudo": "Boa tarde Pedro , estou em dúvida sobre um erro que estou tendo na sintetização do circuito na Fpga.",
+    "conteudo": "Boa tarde Pedro , estou em duvida sobre um erro que estou tendo na sintetizacao do circuito na Fpga.",
     "horario": "19-11-2021 16:12:22"
   },
   { "id": "2",
@@ -11,12 +11,12 @@
   },
   { "id": "3",
     "autor": "120110003",
-    "conteudo": "Boa tarde Vinicius, o que provavelmente está acontecendo é que alguma das saídas está indefinida para um conjunto de entradas.Me manda um email com o seu código para eu analisar.",
+    "conteudo": "Boa tarde Vinicius, o que provavelmente esta acontecendo eh que alguma das saidas está indefinida para um conjunto de entradas. Me manda um email com o seu codigo para eu analisar.",
     "horario": "19-11-2021 16:15:03"
   },
   { "id": "4",
     "autor": "120110003",
-    "conteudo": "Analisando aqui, vi que vc esqueceu de definir o valor da variável LED no else do ultimo if. Como é um bloco combinacional, vc tem q explicitar os valores para cada saída",
+    "conteudo": "Analisando aqui, vi que vc esqueceu de definir o valor da variavel LED no else do ultimo if. Como e um bloco combinacional, vc tem q explicitar os valores para cada saida",
     "horario": "19-11-2021 16:19:33"
   },
   { "id": "5",
@@ -31,7 +31,7 @@
   },
   { "id": "7",
     "autor": "120110004",
-    "conteudo": "Oi, alguém está disponível ? Eu estou em dúvida em como ler uma lista de inteiros da entrada em haskell",
+    "conteudo": "Oi, alguem está disponivel ? Eu estou em duvida em como ler uma lista de inteiros da entrada em haskell",
     "horario": "19-11-2021 16:22:22"
   },
   { "id": "8",
@@ -46,12 +46,12 @@
   },
   { "id": "10",
     "autor": "119210010",
-    "conteudo": "Alguém pode me explicar melhor sobre os algoritmos de escalonamento em discos rígidos? No caso qual é o melhor? ",
+    "conteudo": "Alguém pode me explicar melhor sobre os algoritmos de escalonamento em discos rigidos? No caso qual eh o melhor? ",
     "horario": "19-11-2021 18:06:11"
   },
   { "id": "11",
     "autor": "119210014",
-    "conteudo": "Oi, considerando os algoritmos que foram apresentados pelo Prof, o melhor é o C-SCAN , já que ele garante que não vai ter inanição de processos, e ele não prioriza os setores intermediários como o SCAN faz. O algoritmo SSTF apesar de ser eficiente, ele pode causar a inanição de algum processo, já que ele sempre procura por requisições que requerem menor movimentação do braço do leitor do disco rigido",
+    "conteudo": "Oi, considerando os algoritmos que foram apresentados pelo Prof, o melhor eh o C-SCAN , ja que ele garante que nao vai ter inanicao de processos, e ele não prioriza os setores intermediarios como o SCAN faz. O algoritmo SSTF apesar de ser eficiente, ele pode causar a inanição de algum processo, ja que ele sempre procura por requisicoes que requerem menor movimentacao do braco do leitor do disco rigido",
     "horario": "19-11-2021 18:15:11"
   },
   { "id": "12",
@@ -101,17 +101,17 @@
   },
   { "id": "21",
     "autor": "119210015",
-    "conteudo": "Oi , boa noite , Pode falar a sua dúvida",
+    "conteudo": "Oi , boa noite , Pode falar a sua duvida",
     "horario": "19-11-2021 19:10:04"
   },
   { "id": "22",
     "autor": "119210016",
-    "conteudo": "Então, eu não estou conseguindo entender essa forma normal de Boyce Codd, tem como Vc me explicar melhor?",
+    "conteudo": "Entao, eu não estou conseguindo entender essa forma normal de Boyce Codd, tem como Vc me explicar melhor?",
     "horario": "19-11-2021 19:11:15"
   },
   { "id": "23",
     "autor": "120110005",
-    "conteudo": "Boa noite, estou tendo um erro na minha aplicação, onde é retornado um erro de código 0 na criação do Json de um objeto, que eu não estou entendendo o motivo. Alguém pode me ajudar?",
+    "conteudo": "Boa noite, estou tendo um erro na minha aplicação, onde eh retornado um erro de codigo 0 na criação do Json de um objeto, que eu não estou entendendo o motivo. Alguem pode me ajudar?",
     "horario": "19-11-2021 19:12:07"
   }
 ]

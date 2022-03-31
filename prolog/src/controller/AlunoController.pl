@@ -1,8 +1,12 @@
-:- include("../util/jsonFunctions.pl").
+:- module('AlunoController', [getAluno/2]).
+
+:- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, atualizaAtributoAluno/3]).
 
 getAluno(Id, Aluno):-
-    (checaExistencia("alunos", Id) -> getObjetoByID("alunos", Id, Aluno); 
-    Aluno = "Inexistente").
+    getObjetoByID("alunos", Id, AlunoJson),
+    split_string(AlunoJson.disciplinas, ",", "", DisciplinasFormated),
+    put_dict([disciplinas=DisciplinasFormated], AlunoJson, Aluno).
+
 
 vinculaAlunoDisciplina(Id, Disciplina):-
     getAluno(Id, Aluno),
