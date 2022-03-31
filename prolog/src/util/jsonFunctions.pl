@@ -9,7 +9,8 @@
     buscaNovoID/2, 
     addMensagem/4, 
     atualizaAtributoProfessor/3,
-    atualizaAtributoTicket/3
+    atualizaAtributoTicket/3,
+    removeTicket/1
     ]).
 
 :- use_module(library(http/json)).
