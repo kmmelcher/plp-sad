@@ -1,5 +1,5 @@
 :- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1]).
-:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, buscaNovoID/2, incluiMensagemEmTicket/2, addMensagem/4]).
+:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4]).
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
 :- use_module('ProfessorController.pl', [ehProfessor/1, getProfessor/2]).
@@ -94,20 +94,19 @@ responderTicket(Entidade, Disciplina):-
         exibirTickets(Tickets),
         writeln("Qual ticket voce deseja responder? "), read(Opcao), atom_string(Opcao, OpcaoStr),
         (
-            checaIdValidoEmTickets(OpcaoStr, Tickets) -> getTicket(OpcaoStr, Ticket), adicionaMensagem(Entidade, Ticket, OpcaoStr);
+            checaIdValidoEmTickets(OpcaoStr, Tickets) -> getTicket(OpcaoStr, Ticket), adicionaMensagem(Entidade, Ticket);
             msgInputInvalido()
         )
     ).
 
 
-adicionaMensagem(Entidade, Ticket, TicketId):-
+adicionaMensagem(Entidade, Ticket):-
     checaEntidadeParaMensagem(Entidade.id, Ticket.disciplina, Autor, _),
     exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina),
     writeln("Insira a mensagem entre aspas simples: "), read(Conteudo),
     get_time(T), format_time(string(Horario), "%c", T),
-    buscaNovoID("mensagens", IdMensagem),
-    incluiMensagemEmTicket(TicketId, IdMensagem),
-    addMensagem(Autor, Conteudo, Horario, Entidade.id),
+    addMensagem(Autor, Conteudo, Horario, IdMensagem),
+    atualizaAtributoTicket(Ticket.id, "mensagens", IdMensagem),   
     writeln("Mensagem adicionada com sucesso.\n").
 
 checaEntidadeParaMensagem(Id, Disciplina, Autor, Entidade):-

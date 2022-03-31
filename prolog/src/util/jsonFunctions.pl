@@ -7,9 +7,9 @@
     getObjetoByID/3, 
     atualizaAtributoAluno/3, 
     buscaNovoID/2, 
-    incluiMensagemEmTicket/2, 
     addMensagem/4, 
-    atualizaAtributoProfessor/3
+    atualizaAtributoProfessor/3,
+    atualizaAtributoTicket/3
     ]).
 
 :- use_module(library(http/json)).
@@ -282,18 +282,11 @@ removeTicket(Id) :-
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-incluiMensagemEmTicket(IdTicket, IdMensagem):-
-    getObjetoByID("tickets", IdTicket, Ticket),
-    split_string(Ticket.mensagens, ",", "", MensagensFormated),
-    append(MensagensFormated, [IdMensagem], MensagensAtualizadas),
-    removeTicket(IdTicket),
-    addTicket(Ticket.id, Ticket.titulo, Ticket.autor, MensagensAtualizadas, Ticket.status, Ticket.disciplina).
-
 atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("tickets", Id, Object),
     split_string(Object.mensagens, ",", "", ConteudoAux),
-    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, NovoConteudo, Object.status, Object.disciplina); 
-    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
+    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, NovoConteudo, Object.status, Object.disciplina); 
+    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
 
 %-------------------------- Funções de Mensagens --------------------------%
 
