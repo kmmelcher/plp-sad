@@ -61,7 +61,7 @@ checaExistencia(NomeArquivo, Id):-
     Result \= "".
 
 %-------------------------- Funções de Alunos--------------------------%
-showAlunosAux([]):- halt.
+showAlunosAux([]):- !.
 showAlunosAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome),
@@ -117,7 +117,7 @@ removeAluno(Id) :-
 
 %-------------------------- Funções de Professores--------------------------%
  
-showProfessoresAux([]):- halt.
+showProfessoresAux([]):- !.
 showProfessoresAux([H|T]) :- 
     write("Id: "), writeln(H.id),
     write("Nome: "), writeln(H.nome),
@@ -139,7 +139,7 @@ professoresToJSON([H|T], [X|Out]) :-
 
 %-------------------------- Funções de Monitores--------------------------%
 
-showMonitoresAux([]):- halt.
+showMonitoresAux([]):- !.
 showMonitoresAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome), 
@@ -195,7 +195,7 @@ removeMonitor(Id) :-
 
 %-------------------------- Funções de Ticket--------------------------%
 
-showTicketAux([]):- halt.
+showTicketAux([]):- !.
 showTicketAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome),
@@ -224,13 +224,14 @@ ticketToJSON([H|T], [X|Out]) :-
     ticketToJSON(H.id, H.titulo,H.autor,H.mensagens, H.status,H.disciplina, X), 
     ticketToJSON(T, Out).
 
-addTicket(Titulo, Autor, Mensagens, Status, Disciplina) :- 
+%Quando criar um novo ticket passar como -1
+addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina) :- 
     NomeArquivo = "tickets",
-    buscaNovoID(NomeArquivo, ID),
+    (ID =:= -1 -> buscaNovoID(NomeArquivo, IDAux); IDAux = ID),
     readJSON(NomeArquivo, File),
     ticketToJSON(File, ListaObjectsJSON),
     stringlist_concat(Mensagens, ",", "", MensagensFormated),
-    ticketToJSON(ID, Titulo, Autor, MensagensFormated, Status, Disciplina, ObjectJSON),
+    ticketToJSON(IDAux, Titulo, Autor, MensagensFormated, Status, Disciplina, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
@@ -246,12 +247,12 @@ removeTicket(Id) :-
 atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("tickets", Id, Object),
     split_string(Object.mensagens, ",", "", ConteudoAux),
-    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.titulo, NovoConteudo, Object.status, Object.disciplina); 
-    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.titulo, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
+    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, NovoConteudo, Object.status, Object.disciplina); 
+    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
 
 %-------------------------- Funções de Mensagens --------------------------%
 
-showMensagensAux([]):- halt.
+showMensagensAux([]):- !.
 showMensagensAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome), 
