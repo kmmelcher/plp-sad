@@ -1,6 +1,25 @@
-:- module('jsonFunctions', [readJSON/2, checaExistencia/2, getObjetoByID/3, atualizaAtributoAluno/3, buscaNovoID/2, incluiMensagemEmTicket/2, addMensagem/4]).
+:- module('jsonFunctions', [
+    addMonitor/4, 
+    removeMonitor/1, 
+    existeDisciplina/1, 
+    readJSON/2, 
+    checaExistencia/2, 
+    getObjetoByID/3, 
+    atualizaAtributoAluno/3, 
+    buscaNovoID/2, 
+    incluiMensagemEmTicket/2, 
+    addMensagem/4, 
+    atualizaAtributoProfessor/3
+    ]).
 
 :- use_module(library(http/json)).
+
+stringlist_concat([H|[]], _, ResultAux, ResultReal):- string_concat(ResultAux, H, ResultReal).
+stringlist_concat([H|T], Sep, ResultAux, ResultReal):-
+    string_concat(H, Sep, NovoResultAux),
+    string_concat(ResultAux,NovoResultAux, Result),
+    stringlist_concat(T, Sep, Result, ResultReal).
+
 
 getIDs([], ListaIDs, Result):- append([0], ListaIDs, Result).
 getIDs([H|T], ListaIDs, Result):-
@@ -31,11 +50,11 @@ getFilePath(NomeArquivo, FilePath) :-
     atom_concat(S, ".json", FilePath).
 
 % Usado para mostrar conteúdo de listas
-showRecursevily([]).
-showRecursevily([Row|[]]):-
+showRecursively([]).
+showRecursively([Row|[]]):-
     write(Row).
-showRecursevily([Row|Rows]) :-
-    write(Row), write(", "), showRecursevily(Rows).
+showRecursively([Row|Rows]) :-
+    write(Row), write(", "), showRecursively(Rows).
 
 % Removendo 
 removeObjectJSON([], _, []).
@@ -57,11 +76,12 @@ checaExistencia(NomeArquivo, Id):-
     Result \= "".
 
 %-------------------------- Funções de Alunos--------------------------%
-showAlunosAux([]):- halt.
+showAlunosAux([]):- !.
 showAlunosAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
-    write("Nome: "), writeln(H.nome), 
-    write("Disciplinas: "), showRecursevily(H.disciplinas), nl, nl, 
+    write("Nome: "), writeln(H.nome),
+    split_string(H.disciplinas, ",", "", Disciplinas), 
+    write("Disciplinas: "), showRecursively(Disciplinas), nl, nl, 
     showAlunosAux(T).
 
 showAlunos() :-
@@ -71,20 +91,23 @@ showAlunos() :-
 showAluno(Id) :-
     getObjetoByID("alunos", Id, H),
     write("Matricula: "), write(H.id),
-    write(" | Nome: "), write(H.nome), 
-    write(" | Disciplinas: "), showRecursevily(H.disciplinas), nl, nl.
+    write(" | Nome: "), write(H.nome),
+    split_string(H.disciplinas, ",", "", Disciplinas),
+    write(" | Disciplinas: "), showRecursively(Disciplinas), nl, nl.
 
 atualizaAtributoAluno(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
+    split_string(Object.disciplinas, ",", "", ConteudoAux),
     (Atributo = "nome" ->  removeAluno(Id), addAluno(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha); 
-     Atributo = "disciplinas" -> removeAluno(Id), addAluno(Object.id, Object.nome, ConteudoAtualizado, Object.senha);
-     Atributo = "Senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
+     Atributo = "disciplinas" -> append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeAluno(Id), addAluno(Object.id, Object.nome, NovoConteudo, Object.senha);
+     Atributo = "senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
 
 addAluno(Matricula, Nome, Disciplinas, Senha) :- 
     NomeArquivo = "alunos",
     readJSON(NomeArquivo, File),
     alunosToJSON(File, ListaObjectsJSON),
-    alunoToJSON(Matricula, Nome, Disciplinas, Senha, ObjectJSON),
+    stringlist_concat(Disciplinas, ",", "", DisciplinasFormated),
+    alunoToJSON(Matricula, Nome, DisciplinasFormated, Senha, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
@@ -109,11 +132,13 @@ removeAluno(Id) :-
 
 %-------------------------- Funções de Professores--------------------------%
  
-showProfessoresAux([]):- halt.
+showProfessoresAux([]):- !.
+
 showProfessoresAux([H|T]) :- 
     write("Id: "), writeln(H.id),
-    write("Nome: "), writeln(H.nome), 
-    write("Disciplinas: "), showRecursevily(H.disciplinas), nl, nl, 
+    write("Nome: "), writeln(H.nome),
+    split_string(H.disciplinas, ",", "", Disciplinas), 
+    write("Disciplinas: "), showRecursively(Disciplinas), nl, nl, 
     showProfessoresAux(T).
 
 showProfessores() :-
@@ -128,14 +153,38 @@ professoresToJSON([H|T], [X|Out]) :-
     professorToJSON(H.id, H.nome, H.disciplinas, H.senha, X), 
     professoresToJSON(T, Out).
 
+atualizaAtributoProfessor(Id, Atributo, ConteudoAtualizado):-
+    getObjetoByID("professores", Id, Object),
+    (Atributo = "nome" ->  removeProfessor(Id), addProfessor(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha); 
+     Atributo = "disciplinas" -> removeProfessor(Id), addProfessor(Object.id, Object.nome, ConteudoAtualizado, Object.senha);
+     Atributo = "senha" -> removeProfessor(Id), addProfessor(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
+
+removeProfessor(Id) :-
+    NomeArquivo = "professores",
+    readJSON(NomeArquivo, File),
+    removeObjectJSON(File, Id, SaidaParcial),
+    professoresToJSON(SaidaParcial, Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+addProfessor(Matricula, Nome, Disciplinas, Senha) :- 
+    NomeArquivo = "professores",
+    readJSON(NomeArquivo, File),
+    professoresToJSON(File, ListaObjectsJSON),
+    professorToJSON(Matricula, Nome, Disciplinas, Senha, ObjectJSON),
+    append(ListaObjectsJSON, [ObjectJSON], Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
 %-------------------------- Funções de Monitores--------------------------%
 
-showMonitoresAux([]):- halt.
+showMonitoresAux([]):- !.
 showMonitoresAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome), 
-    write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
-    write("Horários: "), showRecursevily(H.horarios),  nl, 
+    split_string(H.disciplinas, ",", "", Disciplinas),
+    write("Disciplinas: "), showRecursively(Disciplinas), nl,
+    write("Horários: "), showRecursively(H.horarios),  nl, 
     showMonitoresAux(T).
 
 showMonitores() :-
@@ -146,29 +195,31 @@ showMonitor(Id) :-
     getObjetoByID("monitores", Id, H),
     write("Matricula: "), write(H.id),
     write("Nome: "), writeln(H.nome), 
-    write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
-    write("Horários: "), showRecursevily(H.horarios),  nl.
+    split_string(H.disciplinas, ",", "", Disciplinas),
+    write("Disciplinas: "), showRecursively(Disciplinas), nl,
+    write("Horários: "), showRecursively(H.horarios),  nl.
 
 atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("monitores", Id, Object),
-    (Atributo = "nome" ->  removeMonitor(Id), addMonitor(Object.id, ConteudoAtualizado, Object.disciplinas, Object.horarios, Object.senha); 
-     Atributo = "disciplinas" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, ConteudoAtualizado, Object.horarios, Object.senha);
-     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado, Object.senha);
-     Atributo = "Senha" -> removeMonitor(Id), addMonitor(Object.id, Object.nome, Object.disciplinas, Object.horarios, ConteudoAtualizado)).
+    split_string(Object.disciplinas, ",", "", ConteudoAux),
+    (Atributo = "disciplina" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeMonitor(Id), addMonitor(Object.id, NovoConteudo, Object.horarios, Object.senha);
+     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado, Object.senha);
+     Atributo = "Senha" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, Object.horarios, ConteudoAtualizado)).
 
-monitorToJSON(Id, Nome, Disciplinas, Horarios, Senha, Out) :-
-    swritef(Out, '{"id":"%w", "nome":"%w","disciplinas":"%w","horarios":"%w","senha":"%w"}', [Id, Nome, Disciplinas, Horarios, Senha]).
+monitorToJSON(Id, Disciplina, Horarios, Senha, Out) :-
+    swritef(Out, '{"id":"%w","disciplina":"%w","horarios":"%w","senha":"%w"}', [Id, Disciplina, Horarios, Senha]).
 
 monitoresToJSON([], []).
 monitoresToJSON([H|T], [X|Out]) :- 
-    monitorToJSON(H.id, H.nome, H.disciplinas, H.horarios, H.senha, X), 
+    monitorToJSON(H.id, H.disciplinas, H.horarios, H.senha, X), 
     monitoresToJSON(T, Out).
 
-addMonitor(Matricula, Nome, Disciplinas, Horarios, Senha) :- 
+addMonitor(Matricula, Disciplinas, Horarios, Senha) :- 
     NomeArquivo = "monitores",
     readJSON(NomeArquivo, File),
     monitoresToJSON(File, ListaObjectsJSON),
-    monitorToJSON(Matricula, Nome, Disciplinas, Horarios, Senha, ObjectJSON),
+    stringlist_concat(Disciplinas, ",", "", DisciplinasFormated),
+    monitorToJSON(Matricula, DisciplinasFormated, Horarios, Senha, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
@@ -183,12 +234,12 @@ removeMonitor(Id) :-
 
 %-------------------------- Funções de Ticket--------------------------%
 
-showTicketAux([]):- halt.
+showTicketAux([]):- !.
 showTicketAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
-    write("Nome: "), writeln(H.nome), 
-    write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
-    write("Horários: "), showRecursevily(H.horarios),  nl, 
+    write("Nome: "), writeln(H.nome),
+    write("Disciplinas: "), showRecursively(H.disciplinas), nl,
+    write("Horários: "), showRecursively(H.horarios),  nl, 
     showTicketAux(T).
 
 showTicket() :-
@@ -200,24 +251,26 @@ showTicket(Id) :-
     write("Id: "), writeln(H.id),
     write("Titulo: "), writeln(H.titulo), 
     write("Autor: "), writeln(H.autor), 
-    write("Mensagens: "), showRecursevily(H.mensagens), nl,
+    write("Mensagens: "), showRecursively(H.mensagens), nl,
     write("Status: "), writeln(H.status),
     write("Disciplina: "), writeln(H.disciplina).
 
 ticketToJSON(ID, Titulo, Autor, Mensagens, Status, Disciplina, Out) :-
-    swritef(Out, '{"id":"%w", "titulo":"%w","autor":"%w","mensagens":"%w","status":"%w","disciplina":"%w","senha":""}', [ID, Titulo, Autor, Mensagens, Status, Disciplina]).
+    swritef(Out, '{"id":"%w", "titulo":"%w","autor":"%w","mensagens":"%w","status":"%w","disciplina":"%w"}', [ID, Titulo, Autor, Mensagens, Status, Disciplina]).
 
 ticketToJSON([], []).
 ticketToJSON([H|T], [X|Out]) :- 
     ticketToJSON(H.id, H.titulo,H.autor,H.mensagens, H.status,H.disciplina, X), 
     ticketToJSON(T, Out).
 
-addTicket(Titulo, Autor, Mensagens, Status, Disciplina) :- 
+%Quando criar um novo ticket passar como -1
+addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina) :- 
     NomeArquivo = "tickets",
-    buscaNovoID(NomeArquivo, ID),
+    (ID =:= -1 -> buscaNovoID(NomeArquivo, IDAux); IDAux = ID),
     readJSON(NomeArquivo, File),
     ticketToJSON(File, ListaObjectsJSON),
-    ticketToJSON(ID, Titulo, Autor, Mensagens, Status, Disciplina, ObjectJSON),
+    stringlist_concat(Mensagens, ",", "", MensagensFormated),
+    ticketToJSON(IDAux, Titulo, Autor, MensagensFormated, Status, Disciplina, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
@@ -232,19 +285,25 @@ removeTicket(Id) :-
 
 incluiMensagemEmTicket(IdTicket, IdMensagem):-
     getObjetoByID("tickets", IdTicket, Ticket),
-    append(Ticket.mensagens, [IdMensagem], MensagensAtualizadas),
+    split_string(Ticket.mensagens, ",", "", MensagensFormated),
+    append(MensagensFormated, [IdMensagem], MensagensAtualizadas),
     removeTicket(IdTicket),
-    addTicket(Ticket.titulo, Ticket.autor, MensagensAtualizadas, Ticket.status, Ticket.disciplina).
+    addTicket(Ticket.id, Ticket.titulo, Ticket.autor, MensagensAtualizadas, Ticket.status, Ticket.disciplina).
 
+atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
+    getObjetoByID("tickets", Id, Object),
+    split_string(Object.mensagens, ",", "", ConteudoAux),
+    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, NovoConteudo, Object.status, Object.disciplina); 
+    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
 
 %-------------------------- Funções de Mensagens --------------------------%
 
-showMensagensAux([]):- halt.
+showMensagensAux([]):- !.
 showMensagensAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome), 
-    write("Disciplinas: "), showRecursevily(H.disciplinas), nl,
-    write("Horários: "), showRecursevily(H.horarios),  nl, 
+    write("Disciplinas: "), showRecursively(H.disciplinas), nl,
+    write("Horários: "), showRecursively(H.horarios),  nl, 
     showMensagensAux(T).
 
 showMensagens() :-
@@ -256,7 +315,7 @@ showMensagens(Id) :-
     write("Id: "), writeln(H.id),
     write("Titulo: "), writeln(H.titulo), 
     write("Autor: "), writeln(H.autor), 
-    write("Mensagens: "), showRecursevily(H.mensagens), nl,
+    write("Mensagens: "), showRecursively(H.mensagens), nl,
     write("Status: "), writeln(H.status),
     write("Disciplina: "), writeln(H.disciplina).
 
@@ -290,8 +349,14 @@ removeMensagem(Id) :-
 
 getDisciplinaRecursivamente([], _, "").
 getDisciplinaRecursivamente([H|T], Sigla, Out):-
-     (H.sigla = Sigla -> Out = H);(getObjetoRecursivamente(T, Sigla, Out)).
+     (H.sigla = Sigla -> Out = H);(getDisciplinaRecursivamente(T, Sigla, Out)).
 
 getDisciplinaBySigla(Disciplina, Result):-
     readJSON("disciplinas", File),
     getDisciplinaRecursivamente(File, Disciplina, Result).
+
+existeDisciplina(Sigla):-
+    readJSON("disciplinas", File),
+    atom_string(Sigla, SiglaStr),
+    getDisciplinaRecursivamente(File, SiglaStr, Result),
+    Result \= "".

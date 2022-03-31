@@ -1,3 +1,3 @@
-:- use_module('src/Menu.pl', [menuPrincipal/0]).
+:- use_module('Menu.pl', [menuPrincipal/0]).
 
 main():- menuPrincipal().

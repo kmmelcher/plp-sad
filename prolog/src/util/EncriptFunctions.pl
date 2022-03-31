@@ -1,3 +1,5 @@
+:- module('EncriptFunctions', [encripta/3]).
+
 %Encripta uma mensagem(string já no formato de lista)
 encriptaMensagem([],_,'').
 encriptaMensagem([Mensagem|TailMensagem], [Chave|TailChave], Saida):-
