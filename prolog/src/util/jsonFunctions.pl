@@ -1,3 +1,14 @@
+:- module('jsonFunctions',
+    [
+        getObjetoByID/3,
+        addMonitor/3,
+        atualizaAtributoAluno/3,
+        checaExistencia/2,
+        existeDisciplina/1,
+        readJSON/2,
+        removeMonitor/1
+    ]).
+
 :- use_module(library(http/json)).
 
 stringlist_concat([H|[]], _, ResultAux, ResultReal):- string_concat(ResultAux, H, ResultReal).
@@ -57,7 +68,8 @@ getObjetoByID(NomeArquivo, Id, Result):-
 
 checaExistencia(NomeArquivo, Id):-
     readJSON(NomeArquivo, File),
-    getObjetoRecursivamente(File, Id, Result),
+    atom_string(Id, IdString),
+    getObjetoRecursivamente(File, IdString, Result),
     Result \= "".
 
 %-------------------------- Funções de Alunos--------------------------%
@@ -85,7 +97,7 @@ atualizaAtributoAluno(Id, Atributo, ConteudoAtualizado):-
     split_string(Object.disciplinas, ",", "", ConteudoAux),
     (Atributo = "nome" ->  removeAluno(Id), addAluno(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha); 
      Atributo = "disciplinas" -> append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeAluno(Id), addAluno(Object.id, Object.nome, NovoConteudo, Object.senha);
-     Atributo = "Senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
+     Atributo = "senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
 
 addAluno(Matricula, Nome, Disciplinas, Senha) :- 
     NomeArquivo = "alunos",
@@ -118,6 +130,7 @@ removeAluno(Id) :-
 %-------------------------- Funções de Professores--------------------------%
  
 showProfessoresAux([]):- !.
+
 showProfessoresAux([H|T]) :- 
     write("Id: "), writeln(H.id),
     write("Nome: "), writeln(H.nome),
@@ -136,6 +149,29 @@ professoresToJSON([], []).
 professoresToJSON([H|T], [X|Out]) :- 
     professorToJSON(H.id, H.nome, H.disciplinas, H.senha, X), 
     professoresToJSON(T, Out).
+
+atualizaAtributoProfessor(Id, Atributo, ConteudoAtualizado):-
+    getObjetoByID("professores", Id, Object),
+    (Atributo = "nome" ->  removeProfessor(Id), addProfessor(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha); 
+     Atributo = "disciplinas" -> removeProfessor(Id), addProfessor(Object.id, Object.nome, ConteudoAtualizado, Object.senha);
+     Atributo = "senha" -> removeProfessor(Id), addProfessor(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
+
+removeProfessor(Id) :-
+    NomeArquivo = "professores",
+    readJSON(NomeArquivo, File),
+    removeObjectJSON(File, Id, SaidaParcial),
+    professoresToJSON(SaidaParcial, Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+addProfessor(Matricula, Nome, Disciplinas, Senha) :- 
+    NomeArquivo = "professores",
+    readJSON(NomeArquivo, File),
+    professoresToJSON(File, ListaObjectsJSON),
+    professorToJSON(Matricula, Nome, Disciplinas, Senha, ObjectJSON),
+    append(ListaObjectsJSON, [ObjectJSON], Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 %-------------------------- Funções de Monitores--------------------------%
 
@@ -311,3 +347,19 @@ getMensagensAux(Id, File, Array):-
     IdAux is Id - 1,
     getMensagensAux(IdAux, File, ArrayS),
     append(ArrayS, Mensagem, Array).
+
+%-------------------------- Funções de Disciplinas --------------------------%
+
+getDisciplinaRecursivamente([], _, "").
+getDisciplinaRecursivamente([H|T], Sigla, Out):-
+     (H.sigla = Sigla -> Out = H);(getDisciplinaRecursivamente(T, Sigla, Out)).
+
+getDisciplinaBySigla(Disciplina, Result):-
+    readJSON("disciplinas", File),
+    getDisciplinaRecursivamente(File, Disciplina, Result).
+
+existeDisciplina(Sigla):-
+    readJSON("disciplinas", File),
+    atom_string(Sigla, SiglaStr),
+    getDisciplinaRecursivamente(File, SiglaStr, Result),
+    Result \= "".

@@ -1,30 +1,30 @@
 [
   { "id": "120110003",
-    "disciplina": "LOAC",
+    "disciplina": "loac",
     "horarios": "QUA 14-16 SEX 14-16"
   },
   { "id": "120110006",
-    "disciplina": "PLP",
+    "disciplina": "plp",
     "horarios": "SEG 14-16 QUA 16-18"
   },
   { "id": "119210014",
-    "disciplina": "SO",
+    "disciplina": "so",
     "horarios": "SEG 10-12 QUI 14-16"
   },
   { "id": "119210015",
-    "disciplina": "BD",
+    "disciplina": "bd",
     "horarios": "QUA 10-12 SEX 14-16"
   },
   { "id": "118210007",
-    "disciplina": "Psoft",
+    "disciplina": "psoft",
     "horarios": "TER 10-12 SEX 16-18"
   },
   { "id": "120110002",
-    "disciplina": "LP2",
+    "disciplina": "lp2",
     "horarios": "SEG 08-10 QUA 14-16"
   },
   { "id": "120110004",
-    "disciplina": "P2",
+    "disciplina": "p2",
     "horarios": "TER 08-10 SEX 14-16"
   }
 ]
