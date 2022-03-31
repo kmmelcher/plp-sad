@@ -1,4 +1,11 @@
-:- module(monitorController, [getMonitor/2, vinculaMonitor/0,  ehMonitor/1, desvinculaMonitor/0]).
+:- module(monitorController, 
+    [
+        getMonitor/2,
+        vinculaMonitor/0,
+        ehMonitor/1,
+        desvinculaMonitor/0,
+        listarMonitoresByDisciplina/1
+    ]).
 
 :- use_module('../util/jsonFunctions', 
     [
@@ -58,16 +65,11 @@ getMonitoresByDisciplinaRecursivo([H|T], Sigla, Monitores) :-
 
 getMonitoresByDisciplina(Sigla, Monitores):-
     readJSON("monitores", File),
-    atom_string(Sigla, SiglaStr),
-    getMonitoresByDisciplinaRecursivo(File, SiglaStr, Monitores).
+    getMonitoresByDisciplinaRecursivo(File, Sigla, Monitores).
 
-listarMonitoresByDisciplina() :-
-    writeln("Disciplina:"),
-    read(Disciplina),
+listarMonitoresByDisciplina(Disciplina) :-
+    getMonitoresByDisciplina(Disciplina, Monitores),
     (
-        existeDisciplina(Disciplina) ->
-            getMonitoresByDisciplina(Disciplina, Monitores),
-            nl, showMonitoresAux(Monitores)
-        ;
-        writeln('Disciplina não cadastrada')
+        Monitores = [] -> writeln("Não há monitores nessa disciplina"); 
+        nl, showMonitoresAux(Monitores)
     ).

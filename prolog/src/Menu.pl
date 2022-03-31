@@ -1,5 +1,5 @@
 :- module('Menu', [menuPrincipal/0]).
-:- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1, desvinculaMonitor/0]).
+:- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1, desvinculaMonitor/0, listarMonitoresByDisciplina/1]).
 :- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2, ehProfessor/1]).
 :- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1]).
@@ -67,7 +67,7 @@ exibeMenuProfessor(Id):-
     writeln('\n== SAD: MENU PROFESSOR =='),
     swritef(Out, "\nID: %w | Nome: %w | Disciplinas: %w\n", [Professor.id, Professor.nome, Professor.disciplinas]), write(Out),
     writeln('Digite o numero da acao que deseja executar!\n'),
-    writeln('1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Alterar senha de acesso\n6) Deslogar\n'),
+    writeln('1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Alterar senha de acesso\n6) Listar monitores por disciplina\n7) Deslogar\n'),
     read(Opcao),
     decideMenuProfessor(Opcao, Professor),
     exibeMenuProfessor(Id).
@@ -75,7 +75,6 @@ exibeMenuProfessor(Id):-
 decideMenuProfessor(1, Professor) :- 
     perguntaDisciplina(Professor.disciplinas, Disciplina), 
     (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor) ; exibeTicketsDisciplina(Disciplina)).
-    
 
 decideMenuProfessor(2, Professor):- 
     perguntaDisciplina(Professor.disciplinas, Disciplina), 
@@ -85,13 +84,24 @@ decideMenuProfessor(3, Professor):- menuCadastroProfessor(Professor).
 
 decideMenuProfessor(4, Professor):- menuRemocaoProfessor(Professor).
 
-decideMenuProfessor(5, Professor):- 
+decideMenuProfessor(5, Professor):-
     trocarSenhaProfessor(Professor),
     exibeMenuProfessor(Professor.id).
 
-decideMenuProfessor(6, _) :- writeln('Deslogando...'), menuPrincipal().
+decideMenuProfessor(6, Professor) :-
+    perguntaDisciplina(Professor.disciplinas, Disciplina),
+    (
+        Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor)
+    ;
+        listarMonitoresByDisciplina(Disciplina),
+        exibeMenuProfessor(Professor.id)
+    ).
 
-decideMenuProfessor(_, _) :- msgInputInvalido().
+decideMenuProfessor(7, _) :- writeln('Deslogando...'), menuPrincipal().
+
+decideMenuProfessor(_, Professor) :- 
+    msgInputInvalido(),
+    exibeMenuProfessor(Professor.id).
 
 menuCadastroProfessor(Professor) :- 
     writeln('\nQuem voce deseja vincular?'),

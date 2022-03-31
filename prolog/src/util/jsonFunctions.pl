@@ -180,7 +180,7 @@ addProfessor(Matricula, Nome, Disciplinas, Senha) :-
 
 %-------------------------- Funções de Monitores--------------------------%
 
-showMonitoresAux([]):- halt.
+showMonitoresAux([]).
 showMonitoresAux([H|T]) :-
     getAluno(H.id, Aluno),
     write("Matrícula: "), writeln(H.id),
