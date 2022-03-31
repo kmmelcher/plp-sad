@@ -1,14 +1,15 @@
-:- module('jsonFunctions',
-    [
-        getObjetoByID/3,
-        addMonitor/4,
-        atualizaAtributoAluno/3,
-        checaExistencia/2,
-        existeDisciplina/1,
-        readJSON/2,
-        removeMonitor/1,
-        atualizaAtributoProfessor/3,
-        atualizaAtributoTicket/3
+:- module('jsonFunctions', [
+    addMonitor/3, 
+    removeMonitor/1, 
+    existeDisciplina/1, 
+    readJSON/2, 
+    checaExistencia/2, 
+    getObjetoByID/3, 
+    atualizaAtributoAluno/3, 
+    buscaNovoID/2, 
+    addMensagem/4, 
+    atualizaAtributoProfessor/3,
+    atualizaAtributoTicket/3
     ]).
 
 :- use_module(library(http/json)).
@@ -201,24 +202,23 @@ showMonitor(Id) :-
 atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("monitores", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
-    (Atributo = "disciplina" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeMonitor(Id), addMonitor(Object.id, NovoConteudo, Object.horarios, Object.senha);
-     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado, Object.senha);
-     Atributo = "Senha" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, Object.horarios, ConteudoAtualizado)).
+    (Atributo = "disciplina" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeMonitor(Id), addMonitor(Object.id, NovoConteudo, Object.horarios);
+     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado)).
 
-monitorToJSON(Id, Disciplina, Horarios, Senha, Out) :-
-    swritef(Out, '{"id":"%w","disciplina":"%w","horarios":"%w","senha":"%w"}', [Id, Disciplina, Horarios, Senha]).
+monitorToJSON(Id, Disciplina, Horarios, Out) :-
+    swritef(Out, '{"id":"%w","disciplina":"%w","horarios":"%w"}', [Id, Disciplina, Horarios]).
 
 monitoresToJSON([], []).
 monitoresToJSON([H|T], [X|Out]) :- 
-    monitorToJSON(H.id, H.disciplinas, H.horarios, H.senha, X), 
+    monitorToJSON(H.id, H.disciplinas, H.horarios, X), 
     monitoresToJSON(T, Out).
 
-addMonitor(Matricula, Disciplinas, Horarios, Senha) :- 
+addMonitor(Matricula, Disciplinas, Horarios) :- 
     NomeArquivo = "monitores",
     readJSON(NomeArquivo, File),
     monitoresToJSON(File, ListaObjectsJSON),
     stringlist_concat(Disciplinas, ",", "", DisciplinasFormated),
-    monitorToJSON(Matricula, DisciplinasFormated, Horarios, Senha, ObjectJSON),
+    monitorToJSON(Matricula, DisciplinasFormated, Horarios, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
@@ -294,8 +294,8 @@ removeTicket(Id) :-
 atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("tickets", Id, Object),
     split_string(Object.mensagens, ",", "", ConteudoAux),
-    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, NovoConteudo, Object.status, Object.disciplina); 
-    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.autor, Object.titulo, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
+    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, NovoConteudo, Object.status, Object.disciplina); 
+    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
 
 %-------------------------- Funções de Mensagens --------------------------%
 
@@ -321,7 +321,7 @@ showMensagens(Id) :-
     write("Disciplina: "), writeln(H.disciplina).
 
 mensagemToJSON(ID, Autor, Conteudo, Horario, Out) :-
-    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w","senha":""}', [ID, Autor, Conteudo, Horario]).
+    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w"}', [ID, Autor, Conteudo, Horario]).
 
 mensagensToJSON([], []).
 mensagensToJSON([H|T], [X|Out]) :- 
