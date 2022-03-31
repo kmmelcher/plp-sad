@@ -1,16 +1,19 @@
 :- module('jsonFunctions',
     [
         getObjetoByID/3,
-        addMonitor/4,
+        addMonitor/3,
         atualizaAtributoAluno/3,
+        atualizaAtributoProfessor/3,
         checaExistencia/2,
         existeDisciplina/1,
         readJSON/2,
         removeMonitor/1,
-        atualizaAtributoProfessor/3
+        atualizaAtributoProfessor/3,
+        showMonitoresAux/1
     ]).
 
 :- use_module(library(http/json)).
+:- use_module('../controller/AlunoController.pl', [getAluno/2]).
 
 stringlist_concat([H|[]], _, ResultAux, ResultReal):- string_concat(ResultAux, H, ResultReal).
 stringlist_concat([H|T], Sep, ResultAux, ResultReal):-
@@ -24,7 +27,6 @@ getIDs([H|T], ListaIDs, Result):-
     atom_number(H.id, X),
     getIDs(T,ListaIDs, ResultAux),
     append([X], ResultAux, Result).
-    
 
 max([Max], Max).
 max([Head | List], Max) :-
@@ -176,13 +178,13 @@ addProfessor(Matricula, Nome, Disciplinas, Senha) :-
 
 %-------------------------- Funções de Monitores--------------------------%
 
-showMonitoresAux([]):- !.
-showMonitoresAux([H|T]) :- 
-    write("Matricula: "), writeln(H.id),
-    write("Nome: "), writeln(H.nome), 
-    split_string(H.disciplinas, ",", "", Disciplinas),
-    write("Disciplinas: "), showRecursively(Disciplinas), nl,
-    write("Horários: "), showRecursively(H.horarios),  nl, 
+showMonitoresAux([]):- halt.
+showMonitoresAux([H|T]) :-
+    getAluno(H.id, Aluno),
+    write("Matrícula: "), writeln(H.id),
+    write("Nome: "), writeln(Aluno.nome),
+    write("Horários: "), writeln(H.horarios),
+    nl,
     showMonitoresAux(T).
 
 showMonitores() :-
@@ -200,24 +202,23 @@ showMonitor(Id) :-
 atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("monitores", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
-    (Atributo = "disciplina" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeMonitor(Id), addMonitor(Object.id, NovoConteudo, Object.horarios, Object.senha);
-     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado, Object.senha);
-     Atributo = "Senha" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, Object.horarios, ConteudoAtualizado)).
+    (Atributo = "disciplina" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeMonitor(Id), addMonitor(Object.id, NovoConteudo, Object.horarios);
+     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado)).
 
-monitorToJSON(Id, Disciplina, Horarios, Senha, Out) :-
-    swritef(Out, '{"id":"%w","disciplina":"%w","horarios":"%w","senha":"%w"}', [Id, Disciplina, Horarios, Senha]).
+monitorToJSON(Id, Disciplina, Horarios, Out) :-
+    swritef(Out, '{"id":"%w","disciplina":"%w","horarios":"%w"}', [Id, Disciplina, Horarios]).
 
 monitoresToJSON([], []).
 monitoresToJSON([H|T], [X|Out]) :- 
-    monitorToJSON(H.id, H.disciplinas, H.horarios, H.senha, X), 
+    monitorToJSON(H.id, H.disciplinas, H.horarios, X), 
     monitoresToJSON(T, Out).
 
-addMonitor(Matricula, Disciplinas, Horarios, Senha) :- 
+addMonitor(Matricula, Disciplinas, Horarios) :- 
     NomeArquivo = "monitores",
     readJSON(NomeArquivo, File),
     monitoresToJSON(File, ListaObjectsJSON),
     stringlist_concat(Disciplinas, ",", "", DisciplinasFormated),
-    monitorToJSON(Matricula, DisciplinasFormated, Horarios, Senha, ObjectJSON),
+    monitorToJSON(Matricula, DisciplinasFormated, Horarios, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
