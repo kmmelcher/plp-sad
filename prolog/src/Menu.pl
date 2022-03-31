@@ -183,6 +183,7 @@ decideMenuAluno(4, _).
 
 decideMenuAluno(5, Aluno) :-
     getTicketsAluno(Aluno.id,TicketsAluno),
+    write(TicketsAluno),
     exibeTicketsAluno(Aluno.id),
     writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
     read(Opcao),
