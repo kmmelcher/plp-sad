@@ -240,7 +240,7 @@ removeTicket(Id) :-
 
 atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("tickets", Id, Object),
-    (Atributo = "mensagens" ->  removeTicket(Id), addTicketComId(Id,Object.titulo, Object.autor, append(Object.mensagens,ConteudoAtualizado), Object.status, Object.disciplina); 
+    (Atributo = "mensagens" ->  removeTicket(Id),append(Object.mensagens,[ConteudoAtualizado],NovasMensagens) ,addTicketComId(Id,Object.titulo, Object.autor, NovasMensagens, Object.status, Object.disciplina); 
      Atributo = "status" -> removeTicket(Id), addTicketComId(Id,Object.titulo, Object.autor, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
 
 
