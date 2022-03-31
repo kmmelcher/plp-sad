@@ -2,127 +2,133 @@
   {
     "id": "120110002",
     "nome": "Vinícius da Silva",
-    "disciplinas": "[OAC,LOAC,BD,IP,Psoft,PLP]",
+    "disciplinas": "OAC,LOAC,BD,IP,Psoft,PLP",
     "senha": ""
   },
   {
     "id": "120110003",
     "nome": "Pedro Adrian Pereira",
-    "disciplinas": "[Psoft,PLP,SO,Redes,BD]",
+    "disciplinas": "Psoft,PLP,SO,Redes,BD",
     "senha": ""
   },
   {
     "id": "120110004",
     "nome": "Killian Macedo Melcher",
-    "disciplinas": "[Psoft,PLP,OAC,LOAC,BD]",
+    "disciplinas": "Psoft,PLP,OAC,LOAC,BD",
     "senha": ""
   },
   {
     "id": "120110005",
     "nome": "Filipe da Silva Ramalho",
-    "disciplinas": "[PLP,Redes,BD,AS]",
+    "disciplinas": "PLP,Redes,BD,AS",
     "senha": ""
   },
   {
     "id": "119210006",
     "nome": "Luiggy Ferreira Dias",
-    "disciplinas": "[Redes,BD,AS,SO]",
+    "disciplinas": "Redes,BD,AS,SO",
     "senha": ""
   },
   {
     "id": "118210007",
     "nome": "Tadeu Macedo Henrique",
-    "disciplinas": "[SO,AS,ES,AA]",
+    "disciplinas": "SO,AS,ES,AA",
     "senha": ""
   },
   {
     "id": "119210008",
     "nome": "Caio Artur Luiz",
-    "disciplinas": "[OAC,LOAC,EDA,LEDA]",
+    "disciplinas": "OAC,LOAC,EDA,LEDA",
     "senha": ""
   },
   {
     "id": "120220009",
     "nome": "Maria Luíza Dias",
-    "disciplinas": "[FMCC2,P2,LP2,AA]",
+    "disciplinas": "FMCC2,P2,LP2,AA",
     "senha": ""
   },
   {
     "id": "119210010",
     "nome": "Juliana Almeida Alves",
-    "disciplinas": "[SO,ES,AS,Redes]",
+    "disciplinas": "SO,ES,AS,Redes",
     "senha": ""
   },
   {
     "id": "119210011",
     "nome": "Yuri Marques Neto",
-    "disciplinas": "[SO,Redes,ES,IP,BD]",
+    "disciplinas": "SO,Redes,ES,IP,BD",
     "senha": ""
   },
   {
     "id": "120110012",
     "nome": "Abraão César Lima",
-    "disciplinas": "[PLP,Psoft,BD,OAC,LOAC]",
+    "disciplinas": "PLP,Psoft,BD,OAC,LOAC",
     "senha": ""
   },
   {
     "id": "120220013",
     "nome": "Eduardo Caio Almeida",
-    "disciplinas": "[FMCC2,P2,LP2,AA]",
+    "disciplinas": "FMCC2,P2,LP2,AA",
     "senha": ""
   },
   {
     "id": "119210014",
     "nome": "Clara Duarte Batista",
-    "disciplinas": "[PLP,Redes,BD,AS]",
+    "disciplinas": "PLP,Redes,BD,AS",
     "senha": ""
   },
   {
     "id": "119210015",
     "nome": "Luíza Souza Martins",
-    "disciplinas": "[SO,ES,AS,Redes]",
+    "disciplinas": "SO,ES,AS,Redes",
     "senha": ""
   },
   {
     "id": "120210016",
     "nome": "Aline Castro Garcia",
-    "disciplinas": "[Psoft,PLP,OAC,LOAC,BD]",
+    "disciplinas": "Psoft,PLP,OAC,LOAC,BD",
     "senha": ""
   },
   {
     "id": "120210017",
     "nome": "Roberto Miranda",
-    "disciplinas": "[OAC,LOAC,PLP]",
+    "disciplinas": "OAC,LOAC,PLP",
     "senha": ""
   },
   {
     "id": "120210018",
     "nome": "Renata Glasc",
-    "disciplinas": "[ES,SO,Redes]",
+    "disciplinas": "ES,SO,Redes",
     "senha": ""
   },
   {
     "id": "120210019",
     "nome": "Antonio Carlos",
-    "disciplinas": "[PLP,SO,AS,Redes,IP]",
+    "disciplinas": "PLP,SO,AS,Redes,IP",
     "senha": ""
   },
   {
     "id": "120210020",
     "nome": "Paulo Costa",
-    "disciplinas": "[LOAC,AS,Redes,IP]",
+    "disciplinas": "LOAC,AS,Redes,IP",
     "senha": ""
   },
   {
     "id": "120210021",
     "nome": "Henry Cavil",
-    "disciplinas": "[OAC,LOAC,PLP,Psoft,BD,ES]",
+    "disciplinas": "OAC,LOAC,PLP,Psoft,BD,ES",
     "senha": ""
   },
   {
     "id": "120110001",
     "nome": "Álef Ádonis",
-    "disciplinas": "[PLP,LEDA,IP,Psoft,ADM & EMP]",
+    "disciplinas": "PLP,LEDA,IP,Psoft,ADM & EMP",
+    "senha": ""
+  },
+  {
+    "id": "1201010101",
+    "nome": "Pericles Sampaio Arruda",
+    "disciplinas": "PJ & CLT,Mobile,I.A,CINEMA",
     "senha": ""
   }
 ]

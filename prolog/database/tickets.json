@@ -3,7 +3,7 @@
     "id": "1",
     "titulo": "Erro na sintetização do circuito na FPGA",
     "autor": "120110002",
-    "mensagens": [1, 2, 3, 4, 5, 6],
+    "mensagens": ["1", "2", "3", "4", "5", "6"],
     "status": "Resolvido",
     "disciplina": "LOAC"
   },
@@ -11,7 +11,7 @@
     "id": "3",
     "titulo": "Algoritmos de escalonamento em discos rigidos",
     "autor": "119210010",
-    "mensagens": [10, 11, 12],
+    "mensagens": ["10", "11", "12"],
     "status": "Resolvido",
     "disciplina": "SO"
   },
@@ -19,7 +19,7 @@
     "id": "4",
     "titulo": "Duvida Sobre o roteiro6",
     "autor": "120110002",
-    "mensagens": [13, 14, 15],
+    "mensagens": ["13", "14", "15"],
     "status": "Resolvido",
     "disciplina": "BD"
   },
@@ -27,7 +27,7 @@
     "id": "5",
     "titulo": "Duvida sobre UML",
     "autor": "120110003",
-    "mensagens": [16, 17, 18, 19],
+    "mensagens": ["16", "17", "18", "19"],
     "status": "Resolvido",
     "disciplina": "Psoft"
   },
@@ -35,7 +35,7 @@
     "id": "6",
     "titulo": "Duvida sobre normalizacao",
     "autor": "119210016",
-    "mensagens": [20, 21, 22],
+    "mensagens": ["20", "21", "22"],
     "status": "Em andamento",
     "disciplina": "BD"
   },
@@ -43,7 +43,7 @@
     "id": "7",
     "titulo": "Erro ao retornar Json no swagger",
     "autor": "120110005",
-    "mensagens": [23],
+    "mensagens": ["23"],
     "status": "Em andamento",
     "disciplina": "Psoft"
   },
@@ -51,7 +51,7 @@
     "id": "8",
     "titulo": "2",
     "autor": "Como faço para ler uma lista de inteiros da entrada?",
-    "mensagens": [7, 8, 9, 10],
+    "mensagens": ["7", "8", "9", "10"],
     "status": "Resolvido",
     "disciplina": "PLP"
   }
