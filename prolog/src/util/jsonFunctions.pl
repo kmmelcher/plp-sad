@@ -7,7 +7,8 @@
         existeDisciplina/1,
         readJSON/2,
         removeMonitor/1,
-        atualizaAtributoProfessor/3
+        atualizaAtributoProfessor/3,
+        atualizaAtributoTicket/3
     ]).
 
 :- use_module(library(http/json)).

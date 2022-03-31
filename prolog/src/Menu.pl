@@ -1,9 +1,9 @@
 :- module('Menu', [menuPrincipal/0]).
 :- use_module('controller/MonitorController.pl', [getMonitor/2, vinculaMonitor/0, desvinculaMonitor/0]).
-:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
+:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1,getTicketsAluno/2]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2]).
 :- use_module('controller/AlunoController.pl', [getAluno/2]).
-:- use_module('util/jsonFunctions.pl', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3]).
+:- use_module('util/jsonFunctions.pl', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3,atualizaAtributoTicket/3]).
 :- use_module('util/EncriptFunctions.pl', [encripta/3]).
 
 menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):'),
@@ -181,7 +181,12 @@ decideMenuAluno(3, _).
 
 decideMenuAluno(4, _).
 
-decideMenuAluno(5, _).
+decideMenuAluno(5, Aluno) :-
+    getTicketsAluno(Aluno.id,TicketsAluno),
+    exibeTicketsAluno(Aluno.id),
+    writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
+    read(Opcao),
+    atualizaAtributoTicket(Opcao,"status","Resolvido").
 
 decideMenuAluno(6, _).
 

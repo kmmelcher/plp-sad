@@ -1,4 +1,4 @@
-:- module('ChatController', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
+:- module('ChatController', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, getTicketsAluno/2]).
 :- use_module('../util/jsonFunctions', [readJSON/2]).
 
 getTicket(Id, Ticket):-
@@ -9,7 +9,7 @@ getTicket(Id, Ticket):-
 getTicketsAluno(Matricula, Saida):-
     readJSON("tickets", TodosTickets),
     getTicketsDoAlunoRecursivo(TodosTickets, Matricula, Saida).
-    
+
 getTicketsDoAlunoRecursivo([],_, []).
 getTicketsDoAlunoRecursivo([H|T],Matricula, Tickets):-
     H.autor = Matricula,
