@@ -85,16 +85,14 @@ decideMenuProfessor(3, Professor):- menuCadastroProfessor(Professor).
 decideMenuProfessor(4, Professor):- menuRemocaoProfessor(Professor).
 
 decideMenuProfessor(5, Professor):-
-    trocarSenhaProfessor(Professor),
-    exibeMenuProfessor(Professor.id).
+    trocarSenhaProfessor(Professor).
 
 decideMenuProfessor(6, Professor) :-
     perguntaDisciplina(Professor.disciplinas, Disciplina),
     (
         Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor)
     ;
-        listarMonitoresByDisciplina(Disciplina),
-        exibeMenuProfessor(Professor.id)
+        listarMonitoresByDisciplina(Disciplina)
     ).
 
 decideMenuProfessor(7, _) :- writeln('Deslogando...'), menuPrincipal().
@@ -145,7 +143,7 @@ exibeMenuAlunoMonitor(Id) :-
     write('\nComo deseja entrar no sistema?\n\n1) Entrar como Aluno\n2) Entrar como Monitor de '), write(Monitor.disciplina), nl,
     read(Opcao),
     decideMenuAlunoMonitor(Opcao, Id).
-  
+
 decideMenuAlunoMonitor(1, Id) :- exibeMenuAluno(Id).
 decideMenuAlunoMonitor(2, Id) :- exibeMenuMonitor(Id).
 decideMenuAlunoMonitor(_, _) :- msgInputInvalido(), exibeMenuAlunoMonitor().
