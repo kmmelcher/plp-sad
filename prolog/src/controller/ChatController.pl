@@ -1,6 +1,11 @@
 :- module('ChatController', [exibeTicketsDisciplina/1, exibeTicketsAluno/1]).
 :- use_module('../util/jsonFunctions', [readJSON/2]).
 
+getTicket(Id, Ticket):-
+    getObjetoByID("tickets", Id, TicketJson),
+    split_string(TicketJson.mensagens, ",", "", MensagensFormated),
+    put_dict([mensagens=MensagensFormated], TicketJson, Ticket).
+
 getTicketsAluno(Matricula, Saida):-
     readJSON("tickets", TodosTickets),
     getTicketsDoAlunoRecursivo(TodosTickets, Matricula, Saida).

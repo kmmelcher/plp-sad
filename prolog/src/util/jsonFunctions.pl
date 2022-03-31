@@ -1,12 +1,13 @@
 :- module('jsonFunctions',
     [
         getObjetoByID/3,
-        addMonitor/3,
+        addMonitor/4,
         atualizaAtributoAluno/3,
         checaExistencia/2,
         existeDisciplina/1,
         readJSON/2,
-        removeMonitor/1
+        removeMonitor/1,
+        atualizaAtributoProfessor/3
     ]).
 
 :- use_module(library(http/json)).
@@ -77,7 +78,7 @@ showAlunosAux([]):- !.
 showAlunosAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome),
-    split_string(Object.disciplinas, ",", "", Disciplinas), 
+    split_string(H.disciplinas, ",", "", Disciplinas), 
     write("Disciplinas: "), showRecursively(Disciplinas), nl, nl, 
     showAlunosAux(T).
 
@@ -89,7 +90,7 @@ showAluno(Id) :-
     getObjetoByID("alunos", Id, H),
     write("Matricula: "), write(H.id),
     write(" | Nome: "), write(H.nome),
-    split_string(Object.disciplinas, ",", "", Disciplinas),
+    split_string(H.disciplinas, ",", "", Disciplinas),
     write(" | Disciplinas: "), showRecursively(Disciplinas), nl, nl.
 
 atualizaAtributoAluno(Id, Atributo, ConteudoAtualizado):-
@@ -134,7 +135,7 @@ showProfessoresAux([]):- !.
 showProfessoresAux([H|T]) :- 
     write("Id: "), writeln(H.id),
     write("Nome: "), writeln(H.nome),
-    split_string(Object.disciplinas, ",", "", Disciplinas), 
+    split_string(H.disciplinas, ",", "", Disciplinas), 
     write("Disciplinas: "), showRecursively(Disciplinas), nl, nl, 
     showProfessoresAux(T).
 
@@ -179,7 +180,7 @@ showMonitoresAux([]):- !.
 showMonitoresAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome), 
-    split_string(Object.disciplinas, ",", "", Disciplinas),
+    split_string(H.disciplinas, ",", "", Disciplinas),
     write("Disciplinas: "), showRecursively(Disciplinas), nl,
     write("Horários: "), showRecursively(H.horarios),  nl, 
     showMonitoresAux(T).
@@ -192,7 +193,7 @@ showMonitor(Id) :-
     getObjetoByID("monitores", Id, H),
     write("Matricula: "), write(H.id),
     write("Nome: "), writeln(H.nome), 
-    split_string(Object.disciplinas, ",", "", Disciplinas),
+    split_string(H.disciplinas, ",", "", Disciplinas),
     write("Disciplinas: "), showRecursively(Disciplinas), nl,
     write("Horários: "), showRecursively(H.horarios),  nl.
 
@@ -334,19 +335,6 @@ removeMensagem(Id) :-
     mensagensToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
-
-getMensagens(ArrayMensagens):-
-    readJSON("mensagens", File),
-    getIDs(File, [], Ids),
-    max(Ids, X),
-    getMensagensAux(X, File, ArrayMensagens).
-
-getMensagensAux(-1, _, Array):- Array = [].
-getMensagensAux(Id, File, Array):-
-    getObjetoRecursivamente(File, Id, Mensagem),
-    IdAux is Id - 1,
-    getMensagensAux(IdAux, File, ArrayS),
-    append(ArrayS, Mensagem, Array).
 
 %-------------------------- Funções de Disciplinas --------------------------%
 
