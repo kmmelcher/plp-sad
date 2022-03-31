@@ -1,5 +1,5 @@
 :- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, excluirTicket/1]).
-:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4, removeTicket/1]).
+:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4, removeTicket/1, removeMensagem/1]).
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
 :- use_module('ProfessorController.pl', [ehProfessor/1, getProfessor/2]).
@@ -120,7 +120,7 @@ removeMensagens(IdTicket):-
     removeMensagensRecursivo(Ticket.mensagens).
 
 removeMensagensRecursivo([]).
-removeMensagensRecursivo([H|T]):- removeMensagem(H.id), removeMensagensRecursivo(T).
+removeMensagensRecursivo([H|T]):- removeMensagem(H), removeMensagensRecursivo(T).
 
 excluirTicket(IdAluno):-
     writeln("\nEstes sao os tickets criados por voce:"),
@@ -130,6 +130,8 @@ excluirTicket(IdAluno):-
     read(Opcao), atom_string(Opcao, OpcaoStr),
     (checaIdValidoEmTickets(OpcaoStr, Tickets) -> 
         removeMensagens(OpcaoStr),
-        removeTicket(OpcaoStr); msgInputInvalido()
-    ),
-    writeln("Ticket deletado com sucesso\n").
+        removeTicket(OpcaoStr), 
+        msgInputInvalido(),
+        writeln("Ticket deletado com sucesso\n");
+        msgInputInvalido()
+    ).
