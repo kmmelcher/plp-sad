@@ -105,7 +105,7 @@ adicionaMensagem(Entidade, Ticket):-
     exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina),
     writeln("Insira a mensagem entre aspas simples: "), read(Conteudo),
     get_time(T), format_time(string(Horario), "%c", T),
-    addMensagem(Autor, Conteudo, Horario, IdMensagem),
+    addMensagem(Entidade.id, Conteudo, Horario, IdMensagem),
     atualizaAtributoTicket(Ticket.id, "mensagens", IdMensagem),   
     writeln("Mensagem adicionada com sucesso.\n").
 
