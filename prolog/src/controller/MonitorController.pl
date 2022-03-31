@@ -71,5 +71,5 @@ listarMonitoresByDisciplina(Disciplina) :-
     getMonitoresByDisciplina(Disciplina, Monitores),
     (
         Monitores = [] -> writeln("Não há monitores nessa disciplina"); 
-        nl, showMonitoresAux(Monitores)
+        showMonitoresAux(Monitores)
     ).
