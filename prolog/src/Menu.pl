@@ -1,6 +1,6 @@
 :- module('Menu', [menuPrincipal/0]).
 :- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1, desvinculaMonitor/0]).
-:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2]).
+:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2, adicionaTicket/2]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2, ehProfessor/1]).
 :- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('util/jsonFunctions', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3, getObjetoByID/3]).
@@ -177,7 +177,11 @@ decideMenuAluno(1, Aluno):-
 
 decideMenuAluno(2, Aluno):- exibeTicketsAluno(Aluno.id).
 
-decideMenuAluno(3, _).
+decideMenuAluno(3, Aluno):-
+    perguntaDisciplina(Aluno.disciplinas, Disciplina),
+    (Disciplina = "INVALIDA" -> writeln("Disciplina inválida"), decideMenuAluno(-1, Aluno);
+    adicionaTicket(Aluno, Disciplina)
+    ).
 
 decideMenuAluno(4, _).
 

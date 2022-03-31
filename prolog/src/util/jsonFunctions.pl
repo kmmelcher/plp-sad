@@ -9,7 +9,8 @@
     buscaNovoID/2, 
     addMensagem/4, 
     atualizaAtributoProfessor/3,
-    atualizaAtributoTicket/3
+    atualizaAtributoTicket/3,
+    addTicket/6
     ]).
 
 :- use_module(library(http/json)).
@@ -263,9 +264,9 @@ ticketToJSON([H|T], [X|Out]) :-
     ticketToJSON(T, Out).
 
 %Quando criar um novo ticket passar como -1
-addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina) :- 
+addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina):- 
     NomeArquivo = "tickets",
-    (ID =:= -1 -> buscaNovoID(NomeArquivo, IDAux); IDAux = ID),
+    (ID = "" -> buscaNovoID(NomeArquivo, IDAux); IDAux = ID),
     readJSON(NomeArquivo, File),
     ticketToJSON(File, ListaObjectsJSON),
     stringlist_concat(Mensagens, ",", "", MensagensFormated),

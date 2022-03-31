@@ -1,5 +1,5 @@
-:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1]).
-:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4]).
+:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, adicionaTicket/2]).
+:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4,  addTicket/6]).
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
 :- use_module('ProfessorController.pl', [ehProfessor/1, getProfessor/2]).
@@ -99,7 +99,6 @@ responderTicket(Entidade, Disciplina):-
         )
     ).
 
-
 adicionaMensagem(Entidade, Ticket):-
     checaEntidadeParaMensagem(Entidade.id, Ticket.disciplina, Autor, _),
     exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina),
@@ -115,3 +114,8 @@ checaEntidadeParaMensagem(Id, Disciplina, Autor, Entidade):-
     Autor = "ALUNO", getAluno(Id, Entidade).
 
 msgInputInvalido():- writeln("Insira um valor valido\n").
+
+adicionaTicket(Aluno, Disciplina):-
+    writeln("Insira o titulo do seu ticket: "),
+    read(Titulo),
+    addTicket("", Titulo, Aluno.id, [""], "Em andamento", Disciplina).
