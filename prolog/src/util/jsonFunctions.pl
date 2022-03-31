@@ -221,6 +221,15 @@ addTicket(Titulo, Autor, Mensagens, Status, Disciplina) :-
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
+addTicketComId(Id,Titulo, Autor, Mensagens, Status, Disciplina) :- 
+    NomeArquivo = "tickets",
+    readJSON(NomeArquivo, File),
+    ticketToJSON(File, ListaObjectsJSON),
+    ticketToJSON(Id, Titulo, Autor, Mensagens, Status, Disciplina, ObjectJSON),
+    append(ListaObjectsJSON, [ObjectJSON], Saida),
+    getFilePath(NomeArquivo, FilePath),
+    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
 removeTicket(Id) :-
     NomeArquivo = "tickets",
     readJSON(NomeArquivo, File),
@@ -228,6 +237,12 @@ removeTicket(Id) :-
     ticketToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
+
+atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
+    getObjetoByID("tickets", Id, Object),
+    (Atributo = "mensagens" ->  removeTicket(Id), addTicketComId(Id,Object.titulo, Object.autor, append(Object.mensagens,ConteudoAtualizado), Object.status, Object.disciplina); 
+     Atributo = "status" -> removeTicket(Id), addTicketComId(Id,Object.titulo, Object.autor, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
+
 
 %-------------------------- Funções de Mensagens --------------------------%
 
