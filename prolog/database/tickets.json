@@ -1,50 +1,54 @@
 [
-  { "id": "1",
+  {
+    "id": "1",
     "autor": "120110002",
     "titulo": "Erro na sintetizacao do circuito na FPGA",
-    "mensagens": ["1","2","3","4","5","6"],
+    "mensagens": "1,2,3,4,5,6",
     "status": "Resolvido",
     "disciplina": "loac"
   },
   { "id": "2",
     "autor": "120110004",
     "titulo": "Como faco para ler uma lista de inteiros da entrada?",
-    "mensagens": ["7","8","9"],
+    "mensagens": "7,8,9",
     "status": "Resolvido",
     "disciplina": "plp"
   },
   { "id": "3",
     "autor": "119210010",
     "titulo": "Algoritmos de escalonamento em discos rigidos",
-    "mensagens": ["10","11","12"],
+    "mensagens": "10,11,12",
     "status": "Resolvido",
     "disciplina": "so"
   },
   { "id": "4",
     "autor": "120110002",
     "titulo": "Duvida Sobre o roteiro 6",
-    "mensagens": ["13","14","15"],
+    "mensagens": "13,14,15",
     "status": "Resolvido",
     "disciplina": "bd"
   },
-  { "id": "5",
+  {
+    "id": "5",
     "autor": "120110003",
     "titulo": "Duvida sobre UML",
-    "mensagens": ["16","17","18","19"],
+    "mensagens": "16,17,18,19",
     "status": "Resolvido",
     "disciplina": "psoft"
   },
-  { "id": "6",
+  {
+    "id": "6",
     "autor": "119210016",
     "titulo": "Duvida sobre normalizacao",
-    "mensagens": ["20","21","22"],
+    "mensagens": "20,21,22",
     "status": "Em andamento",
     "disciplina": "bd"
   },
-  { "id": "7",
+  {
+    "id": "7",
     "autor": "120110005",
     "titulo": "Erro ao retornar Json no swagger",
-    "mensagens": ["23"],
+    "mensagens": "23",
     "status": "Em andamento",
     "disciplina": "psoft"
   }
