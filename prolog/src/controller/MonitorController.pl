@@ -1,14 +1,15 @@
-:- module('MonitorController', [getMonitor/2, vinculaMonitor/0, desvinculaMonitor/0]).
+:- module('MonitorController', [getMonitor/2, vinculaMonitor/0, ehMonitor/1, desvinculaMonitor/0]).
 
-:- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, addMonitor/4, checaExistencia/2, existeDisciplina/1, removeMonitor/1]).
+:- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, addMonitor/3, checaExistencia/2, existeDisciplina/1, removeMonitor/1]).
 
-getMonitor(Id, Monitor):-
-    getObjetoByID("monitores", Id, Monitor).
+getMonitor(Id, Monitor):- getObjetoByID("monitores", Id, Monitor).
+
+ehMonitor(Id):- checaExistencia("monitores", Id).
 
 adicionaMonitor(Matricula, Disciplina) :-
     writeln("Horarios:"),
     read(Horarios),
-    addMonitor(Matricula, Disciplina, Horarios, ""),
+    addMonitor(Matricula, Disciplina, Horarios),
     writeln("Monitor cadastrado com sucesso.").
 
 vinculaMonitor() :-
