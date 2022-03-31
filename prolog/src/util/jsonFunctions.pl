@@ -10,7 +10,9 @@
     addMensagem/4, 
     atualizaAtributoProfessor/3,
     atualizaAtributoTicket/3,
-    addTicket/6
+    addTicket/6,
+    removeTicket/1,
+    removeMensagem/1
     ]).
 
 :- use_module(library(http/json)).
