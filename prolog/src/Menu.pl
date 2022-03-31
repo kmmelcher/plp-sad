@@ -115,16 +115,11 @@ menuTrocarSenhaProfessor(Professor):-
 
 exibeMenuAlunoMonitor(Id) :- 
     getMonitor(Id, Monitor),
-    getAluno(Id, Aluno),
-    menuAutenticacao(Aluno),
     write('\nFoi identificado que voce eh monitor da disciplina: '), write(Monitor.disciplina),
     write('\nComo deseja entrar no sistema?\n\n1) Entrar como Aluno\n2) Entrar como Monitor de '), write(Monitor.disciplina), nl,
     read(Opcao),
-    decideMenuAlunoMonitor(Opcao, Id)
-    ;
-    writeln("Senha incorreta"),
-    menuLogin().
-
+    decideMenuAlunoMonitor(Opcao, Id).
+  
 decideMenuAlunoMonitor(1, Id) :- exibeMenuAluno(Id).
 decideMenuAlunoMonitor(2, Id) :- exibeMenuMonitor(Id).
 decideMenuAlunoMonitor(_, _) :- write('\nEntrada Invalida! '), exibeMenuAlunoMonitor().
@@ -132,14 +127,17 @@ decideMenuAlunoMonitor(_, _) :- write('\nEntrada Invalida! '), exibeMenuAlunoMon
 exibeMenuMonitor(Id) :- 
     getMonitor(Id, Monitor),
     getAluno(Id, Aluno),
-
+    menuAutenticacao(Aluno),
     writeln('\n== SAD: MENU MONITOR =='),
     swritef(Out, '\nID: %w | Nome: %w | Disciplina: %w\n', [Monitor.id, Aluno.nome, Monitor.disciplina]), write(Out),
     writeln('Digite o numero da ação que deseja executar!\n'),
     writeln('1) Exibir todos os tickets\n2) Responder tickets em andamento\n3) Alterar senha de acesso\n4) Deslogar\n'),
     read(Opcao),
     decideMenuMonitor(Opcao, Monitor),
-    exibeMenuMonitor(Id).
+    exibeMenuMonitor(Id)
+    ;
+    writeln("Senha incorreta"),
+    menuLogin().
 
 decideMenuMonitor(1, Monitor) :- exibeTicketsDisciplina(Monitor.disciplina).
 
