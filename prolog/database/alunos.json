@@ -124,5 +124,11 @@
         "nome": "Alef Adonis",
         "disciplinas": "plp,leda,ip,psoft",
         "senha": "457621624220182332810530"
+    },
+    {
+        "id": "120110006",
+        "nome": "Homem de Ferro",
+        "disciplinas": "leda,ip,psoft",
+        "senha": "457621624220182332810530"
     }
 ]

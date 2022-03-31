@@ -1,5 +1,5 @@
 :- module('jsonFunctions', [
-    addMonitor/4, 
+    addMonitor/3, 
     removeMonitor/1, 
     existeDisciplina/1, 
     readJSON/2, 
@@ -202,24 +202,23 @@ showMonitor(Id) :-
 atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("monitores", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
-    (Atributo = "disciplina" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeMonitor(Id), addMonitor(Object.id, NovoConteudo, Object.horarios, Object.senha);
-     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado, Object.senha);
-     Atributo = "Senha" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, Object.horarios, ConteudoAtualizado)).
+    (Atributo = "disciplina" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeMonitor(Id), addMonitor(Object.id, NovoConteudo, Object.horarios);
+     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado)).
 
-monitorToJSON(Id, Disciplina, Horarios, Senha, Out) :-
-    swritef(Out, '{"id":"%w","disciplina":"%w","horarios":"%w","senha":"%w"}', [Id, Disciplina, Horarios, Senha]).
+monitorToJSON(Id, Disciplina, Horarios, Out) :-
+    swritef(Out, '{"id":"%w","disciplina":"%w","horarios":"%w"}', [Id, Disciplina, Horarios]).
 
 monitoresToJSON([], []).
 monitoresToJSON([H|T], [X|Out]) :- 
-    monitorToJSON(H.id, H.disciplinas, H.horarios, H.senha, X), 
+    monitorToJSON(H.id, H.disciplinas, H.horarios, X), 
     monitoresToJSON(T, Out).
 
-addMonitor(Matricula, Disciplinas, Horarios, Senha) :- 
+addMonitor(Matricula, Disciplinas, Horarios) :- 
     NomeArquivo = "monitores",
     readJSON(NomeArquivo, File),
     monitoresToJSON(File, ListaObjectsJSON),
     stringlist_concat(Disciplinas, ",", "", DisciplinasFormated),
-    monitorToJSON(Matricula, DisciplinasFormated, Horarios, Senha, ObjectJSON),
+    monitorToJSON(Matricula, DisciplinasFormated, Horarios, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
