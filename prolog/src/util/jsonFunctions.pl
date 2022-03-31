@@ -1,20 +1,23 @@
-:- module('jsonFunctions', [
-    addMonitor/3, 
-    removeMonitor/1, 
-    existeDisciplina/1, 
-    readJSON/2, 
-    checaExistencia/2, 
-    getObjetoByID/3, 
-    atualizaAtributoAluno/3, 
-    buscaNovoID/2, 
-    addMensagem/4, 
-    atualizaAtributoProfessor/3,
-    atualizaAtributoTicket/3,
-    removeTicket/1,
-    removeMensagem/1
+:- module('jsonFunctions',
+    [
+        addMonitor/3,
+        removeMonitor/1,
+        existeDisciplina/1,
+        readJSON/2,
+        checaExistencia/2,
+        getObjetoByID/3,
+        atualizaAtributoAluno/3,
+        buscaNovoID/2,
+        addMensagem/4,
+        atualizaAtributoProfessor/3,
+        atualizaAtributoTicket/3,
+        showMonitoresAux/1,
+        removeTicket/1,
+        removeMensagem/1
     ]).
 
 :- use_module(library(http/json)).
+:- use_module('../controller/AlunoController.pl', [getAluno/2]).
 
 stringlist_concat([H|[]], _, ResultAux, ResultReal):- string_concat(ResultAux, H, ResultReal).
 stringlist_concat([H|T], Sep, ResultAux, ResultReal):-
@@ -28,7 +31,6 @@ getIDs([H|T], ListaIDs, Result):-
     atom_number(H.id, X),
     getIDs(T,ListaIDs, ResultAux),
     append([X], ResultAux, Result).
-    
 
 max([Max], Max).
 max([Head | List], Max) :-
@@ -180,13 +182,13 @@ addProfessor(Matricula, Nome, Disciplinas, Senha) :-
 
 %-------------------------- Funções de Monitores--------------------------%
 
-showMonitoresAux([]):- !.
-showMonitoresAux([H|T]) :- 
-    write("Matricula: "), writeln(H.id),
-    write("Nome: "), writeln(H.nome), 
-    split_string(H.disciplinas, ",", "", Disciplinas),
-    write("Disciplinas: "), showRecursively(Disciplinas), nl,
-    write("Horários: "), showRecursively(H.horarios),  nl, 
+showMonitoresAux([]).
+showMonitoresAux([H|T]) :-
+    getAluno(H.id, Aluno),
+    write("Matrícula: "), writeln(H.id),
+    write("Nome: "), writeln(Aluno.nome),
+    write("Horários: "), writeln(H.horarios),
+    nl,
     showMonitoresAux(T).
 
 showMonitores() :-
