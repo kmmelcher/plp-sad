@@ -1,17 +1,19 @@
 :- module('jsonFunctions',
     [
-        getObjetoByID/3,
         addMonitor/3,
-        atualizaAtributoAluno/3,
-        atualizaAtributoProfessor/3,
-        checaExistencia/2,
+        removeMonitor/1,
         existeDisciplina/1,
         readJSON/2,
-        removeMonitor/1,
-        showMonitoresAux/1,
+        checaExistencia/2,
+        getObjetoByID/3,
+        atualizaAtributoAluno/3,
         buscaNovoID/2,
         addMensagem/4,
-        atualizaAtributoTicket/3
+        atualizaAtributoProfessor/3,
+        atualizaAtributoTicket/3,
+        showMonitoresAux/1,
+        removeTicket/1,
+        removeMensagem/1
     ]).
 
 :- use_module(library(http/json)).
