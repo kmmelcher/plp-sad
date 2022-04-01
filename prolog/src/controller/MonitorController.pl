@@ -25,13 +25,13 @@ ehMonitor(Id):- checaExistencia("monitores", Id).
 
 adicionaMonitor(Matricula, Disciplina) :-
     writeln("Horarios de atendimento do monitor:"),
-    read(Horarios),
+    input(HorariosAtom),atom_string(HorariosAtom,Horarios),
     addMonitor(Matricula, Disciplina, Horarios),
     writeln("Monitor cadastrado com sucesso.").
 
 vinculaMonitor(Disciplina) :-
     writeln("Matricula:"),
-    read(MatriculaAtom), atom_string(MatriculaAtom, Matricula),
+    input(MatriculaAtom), atom_string(MatriculaAtom, Matricula),
     (
         ehAluno(Matricula) ->
             getAluno(Matricula, Aluno),
@@ -50,7 +50,7 @@ excluiMonitor(Matricula) :-
 
 desvinculaMonitor(Disciplina) :-
     writeln("Matricula:"),
-    read(MatriculaAtom), atom_string(MatriculaAtom, Matricula),
+    input(MatriculaAtom), atom_string(MatriculaAtom, Matricula),
     (
         ehAluno(Matricula) -> 
             (

@@ -59,7 +59,7 @@ exibeTicketsAluno(Matricula, Ticket):-
         writeln("Estes sao os tickets criados por voce\n"),
         exibirTickets(Tickets), 
         writeln("\nInsira o id do ticket que deseja visualizar mensagens:\n"),
-        read(OpcaoAtom), atom_string(OpcaoAtom, Opcao),
+        input(OpcaoAtom), atom_string(OpcaoAtom, Opcao),
         (
             checaIdValidoEmTickets(Opcao, Tickets) -> 
                 getTicket(Opcao, Ticket), 
@@ -77,7 +77,7 @@ exibeTicketsDisciplina(SiglaDisciplina):-
         swritef(Out, "Estes sao os tickets da disciplina: %w\n", [SiglaDisciplina]), write(Out),
         exibirTickets(Tickets),
         writeln("\n Qual o numero do ticket que deseja visualizar mensagens?"), 
-        read(Opcao),
+        input(Opcao),
         atom_string(Opcao, OpcaoStr),
         (
             checaIdValidoEmTickets(OpcaoStr, Tickets) -> 
@@ -107,7 +107,7 @@ responderTicket(Entidade, Disciplina):-
       Tickets = [] -> writeln("Ainda nao ha tickets em andamento para serem respondidos nesta disciplina.\n") ;
       swritef(Out, "Estes sao os tickets em andamento da disciplina: %w\n\n", [Disciplina]), write(Out),
         exibirTickets(Tickets),
-        writeln("Qual ticket voce deseja responder? "), read(Opcao), atom_string(Opcao, OpcaoStr),
+        writeln("Qual ticket voce deseja responder? "), input(Opcao), atom_string(Opcao, OpcaoStr),
         (
             checaIdValidoEmTickets(OpcaoStr, Tickets) -> getTicket(OpcaoStr, Ticket), adicionaMensagem(Entidade, Ticket);
             msgInputInvalido()
@@ -116,7 +116,7 @@ responderTicket(Entidade, Disciplina):-
 
 adicionaMensagem(Entidade, Ticket):-
     checaEntidadeParaMensagem(Entidade.id, Ticket.disciplina, _, _),
-    writeln("Insira a mensagem entre aspas simples: "), read(Conteudo),
+    writeln("Insira a mensagem: "), input(Conteudo),
     get_time(T), format_time(string(Horario), "%c", T),
     addMensagem(Entidade.id, Conteudo, Horario, IdMensagem),
     atualizaAtributoTicket(Ticket.id, "mensagens", IdMensagem),   
@@ -133,7 +133,7 @@ marcarTicketAlunoComoResolvido(Aluno) :-
     getTicketsAluno(Aluno.id,TicketsAluno),
     exibeTicketsAluno(Aluno.id, _),
     writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
-    read(Opcao), atom_string(Opcao,OpcaoStr),
+    input(Opcao), atom_string(Opcao,OpcaoStr),
     (verificarIdTicketAoResolver(TicketsAluno,Aluno.id) -> atualizaAtributoTicket(OpcaoStr,"status","Resolvido"), writeln("Status de ticket atualizado com sucesso") ; writeln('Id invalido !')).
 
 verificarIdTicketAoResolver([H|T],AutorId) :-
@@ -151,8 +151,8 @@ adicionarMensagemTicketAluno(Aluno) :-
     adicionaMensagem(Aluno, Ticket).
     
 adicionaTicket(Aluno, Disciplina):-
-    writeln("Insira o titulo do seu ticket (entre aspas simples): "),
-    read(Titulo),
+    writeln("Insira o titulo do seu ticket: "),
+    input(Titulo),
     addTicket("", Titulo, Aluno.id, [""], "Em andamento", Disciplina),
     writeln("Ticket adicionado com sucesso.").
 
@@ -170,7 +170,7 @@ excluirTicket(IdAluno):-
         writeln("\nEstes sao os tickets criados por voce:"),
         exibirTickets(Tickets),
         writeln("\nQual ticket voce deseja exlcuir?\n"),
-        read(Opcao), atom_string(Opcao, OpcaoStr),
+        input(Opcao), atom_string(Opcao, OpcaoStr),
         (checaIdValidoEmTickets(OpcaoStr, Tickets) -> 
             removeMensagens(OpcaoStr),
             removeTicket(OpcaoStr), 

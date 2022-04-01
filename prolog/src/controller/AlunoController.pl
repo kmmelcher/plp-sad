@@ -11,7 +11,7 @@ ehAluno(Id):- checaExistencia("alunos", Id).
 
 vinculaAlunoDisciplina(Disciplina):-
     writeln("Digite a matricula do Aluno:"),
-    read(IdAtom), atom_string(IdAtom, Id),
+    input(IdAtom), atom_string(IdAtom, Id),
     (
         ehAluno(Id) -> 
             getAluno(Id, Aluno),
@@ -33,17 +33,17 @@ vinculaAlunoDisciplina(Disciplina):-
     
 cadastraAluno(Nome, Disciplina):-
     (Nome = "" -> 
-        writeln("Digite o nome do ingressante (entre aspas duplas): "),
-        read(NomeAluno);
+        writeln("Digite o nome do ingressante: "),
+        input(NomeAtom), atom_string(NomeAtom,NomeAluno);
             NomeAluno = Nome),
     
     (Disciplina = "" ->
             writeln("Digite a disciplina do ingressante: "),
-            read(DisciplinaAluno);
+            input(DisciplinaAtom), atom_string(DisciplinaAtom,DisciplinaAluno);
             DisciplinaAluno = Disciplina
     ),
     writeln("Digite a matrícula do ingressante: "),
-    read(Matricula),
+    input(MatriculaAtom),atom_string(MatriculaAtom,Matricula),
     addAluno(Matricula, NomeAluno, DisciplinaAluno, ""), !. 
 
 removerAluno(Id):-
@@ -52,7 +52,7 @@ removerAluno(Id):-
 
 desvinculaAlunoDisciplina(Disciplina) :-
     writeln("Matricula:"),
-    read(AtomMatricula),
+    input(AtomMatricula),
     (
         ehAluno(AtomMatricula)-> 
             atom_string(AtomMatricula, Matricula),
