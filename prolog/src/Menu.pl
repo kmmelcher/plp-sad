@@ -2,7 +2,7 @@
 :- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1, desvinculaMonitor/0, listarMonitoresByDisciplina/1]).
 :- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2, adicionaTicket/2, excluirTicket/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2, ehProfessor/1]).
-:- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/0]).
+:- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1]).
 :- use_module('util/jsonFunctions', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3, getObjetoByID/3]).
 :- use_module('util/EncriptFunctions.pl', [encripta/3]).
 
