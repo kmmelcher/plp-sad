@@ -77,7 +77,7 @@ exibeTicketsDisciplina(SiglaDisciplina):-
         ;
         swritef(Out, "Estes sao os tickets da disciplina: %w\n", [SiglaDisciplina]), write(Out),
         exibirTickets(Tickets),
-        writeln("\n Qual o numero do ticket que deseja visualizar mensagens?"), 
+        writeln("\nQual o numero do ticket que deseja visualizar mensagens?"), 
         input(Opcao),
         atom_string(Opcao, OpcaoStr),
         (
