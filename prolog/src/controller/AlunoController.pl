@@ -11,7 +11,7 @@ getAluno(Id, Aluno):-
 ehAluno(Id):- checaExistencia("alunos", Id).
 
 vinculaAlunoDisciplina(Disciplina):-
-    writeln("Digite a matricula do Aluno:"),
+    writeln("Digite a matricula do Aluno :"),
     input(IdAtom), atom_string(IdAtom, Id),
     (
         ehAluno(Id) -> 
@@ -28,11 +28,11 @@ vinculaAlunoDisciplina(Disciplina):-
                 )
                 
             );
-        writeln("Este aluno nao esta cadastrado no SAD."),
-        cadastraAluno("", [Disciplina])   
+        writeln("\nEste aluno nao esta cadastrado no SAD.\n"),
+        cadastraAluno("", Id, Disciplina)   
     ).
-    
-cadastraAluno(Nome, Disciplina):-
+
+cadastraAluno(Nome, Matricula, Disciplina):-
     (Nome = "" -> 
         writeln("Digite o nome do ingressante: "),
         input(NomeAtom), atom_string(NomeAtom,NomeAluno);
@@ -43,9 +43,15 @@ cadastraAluno(Nome, Disciplina):-
             input(DisciplinaAtom), atom_string(DisciplinaAtom,DisciplinaAluno);
             DisciplinaAluno = Disciplina
     ),
-    writeln("Digite a matrícula do ingressante: "),
-    input(MatriculaAtom),atom_string(MatriculaAtom,Matricula),
-    addAluno(Matricula, NomeAluno, DisciplinaAluno, ""), !. 
+    (Matricula = "" ->
+        writeln("Digite a nova matricula do ingressante: "),
+        input(MatriculaAtom),atom_string(MatriculaAtom,MatriculaAluno);
+            MatriculaAluno = Matricula
+        ),
+    addAluno(MatriculaAluno, NomeAluno, [DisciplinaAluno], "aluno"), 
+    swritef(Out, "\nAluno %w criado com matricula:%w e senha padrão:aluno", [Nome, Matricula]),
+    writeln(Out). 
+
 
 removerAluno(Id):-
     removeAluno(Id),
