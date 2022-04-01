@@ -1,5 +1,5 @@
-:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1]).
-:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4]).
+:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, excluirTicket/1]).
+:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4, removeTicket/1, removeMensagem/1]).
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
 :- use_module('ProfessorController.pl', [ehProfessor/1, getProfessor/2]).
@@ -99,13 +99,12 @@ responderTicket(Entidade, Disciplina):-
         )
     ).
 
-
 adicionaMensagem(Entidade, Ticket):-
-    checaEntidadeParaMensagem(Entidade.id, Ticket.disciplina, Autor, _),
+    checaEntidadeParaMensagem(Entidade.id, Ticket.disciplina, _, _),
     exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina),
     writeln("Insira a mensagem entre aspas simples: "), read(Conteudo),
     get_time(T), format_time(string(Horario), "%c", T),
-    addMensagem(Autor, Conteudo, Horario, IdMensagem),
+    addMensagem(Entidade.id, Conteudo, Horario, IdMensagem),
     atualizaAtributoTicket(Ticket.id, "mensagens", IdMensagem),   
     writeln("Mensagem adicionada com sucesso.\n").
 
@@ -115,3 +114,24 @@ checaEntidadeParaMensagem(Id, Disciplina, Autor, Entidade):-
     Autor = "ALUNO", getAluno(Id, Entidade).
 
 msgInputInvalido():- writeln("Insira um valor valido\n").
+
+removeMensagens(IdTicket):-
+    getTicket(IdTicket, Ticket),
+    removeMensagensRecursivo(Ticket.mensagens).
+
+removeMensagensRecursivo([]).
+removeMensagensRecursivo([H|T]):- removeMensagem(H), removeMensagensRecursivo(T).
+
+excluirTicket(IdAluno):-
+    writeln("\nEstes sao os tickets criados por voce:"),
+    getTicketsAluno(IdAluno, Tickets), 
+    exibirTickets(Tickets),
+    writeln("\nQual ticket voce deseja exlcuir?\n"),
+    read(Opcao), atom_string(Opcao, OpcaoStr),
+    (checaIdValidoEmTickets(OpcaoStr, Tickets) -> 
+        removeMensagens(OpcaoStr),
+        removeTicket(OpcaoStr), 
+        msgInputInvalido(),
+        writeln("Ticket deletado com sucesso\n");
+        msgInputInvalido()
+    ).

@@ -14,6 +14,7 @@
     ]).
 
 :- use_module(library(http/json)).
+:- use_module('../controller/AlunoController.pl', [getAluno/2]).
 
 stringlist_concat([H|[]], _, ResultAux, ResultReal):- string_concat(ResultAux, H, ResultReal).
 stringlist_concat([H|T], Sep, ResultAux, ResultReal):-
@@ -27,7 +28,6 @@ getIDs([H|T], ListaIDs, Result):-
     atom_number(H.id, X),
     getIDs(T,ListaIDs, ResultAux),
     append([X], ResultAux, Result).
-    
 
 max([Max], Max).
 max([Head | List], Max) :-
@@ -179,13 +179,13 @@ addProfessor(Matricula, Nome, Disciplinas, Senha) :-
 
 %-------------------------- Funções de Monitores--------------------------%
 
-showMonitoresAux([]):- !.
-showMonitoresAux([H|T]) :- 
-    write("Matricula: "), writeln(H.id),
-    write("Nome: "), writeln(H.nome), 
-    split_string(H.disciplinas, ",", "", Disciplinas),
-    write("Disciplinas: "), showRecursively(Disciplinas), nl,
-    write("Horários: "), showRecursively(H.horarios),  nl, 
+showMonitoresAux([]).
+showMonitoresAux([H|T]) :-
+    getAluno(H.id, Aluno),
+    write("Matrícula: "), writeln(H.id),
+    write("Nome: "), writeln(Aluno.nome),
+    write("Horários: "), writeln(H.horarios),
+    nl,
     showMonitoresAux(T).
 
 showMonitores() :-
@@ -313,7 +313,7 @@ showMensagens(Id) :-
     write("Disciplina: "), writeln(H.disciplina).
 
 mensagemToJSON(ID, Autor, Conteudo, Horario, Out) :-
-    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w""}', [ID, Autor, Conteudo, Horario]).
+    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w"}', [ID, Autor, Conteudo, Horario]).
 
 mensagensToJSON([], []).
 mensagensToJSON([H|T], [X|Out]) :- 
