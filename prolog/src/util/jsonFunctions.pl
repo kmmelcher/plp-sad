@@ -14,7 +14,8 @@
     addTicket/6,
     removeTicket/1,
     removeMensagem/1,
-    showMonitoresAux/1
+    showMonitoresAux/1,
+    removeObjectJSON/3
     ]).
 
 :- use_module(library(http/json)).
@@ -100,6 +101,10 @@ showAluno(Id) :-
     split_string(H.disciplinas, ",", "", Disciplinas),
     write(" | Disciplinas: "), showRecursively(Disciplinas), nl, nl.
 
+atualizaAtributoAluno(Id, "removerDisciplina", DisciplinasAtualizadas):-
+    getObjetoByID("alunos", Id, Object),
+     removeAluno(Id), 
+     addAluno(Object.id, Object.nome, DisciplinasAtualizadas, Object.senha).
 atualizaAtributoAluno(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
