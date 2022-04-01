@@ -1,4 +1,5 @@
 :- module('jsonFunctions', [
+    addAluno/4,
     addMonitor/3, 
     removeMonitor/1, 
     existeDisciplina/1, 
@@ -14,7 +15,6 @@
     removeTicket/1,
     removeMensagem/1,
     showMonitoresAux/1
-
     ]).
 
 :- use_module(library(http/json)).
