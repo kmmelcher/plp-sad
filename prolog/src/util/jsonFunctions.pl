@@ -1,19 +1,20 @@
-:- module('jsonFunctions',
-    [
-        addMonitor/3,
-        removeMonitor/1,
-        existeDisciplina/1,
-        readJSON/2,
-        checaExistencia/2,
-        getObjetoByID/3,
-        atualizaAtributoAluno/3,
-        buscaNovoID/2,
-        addMensagem/4,
-        atualizaAtributoProfessor/3,
-        atualizaAtributoTicket/3,
-        showMonitoresAux/1,
-        removeTicket/1,
-        removeMensagem/1
+:- module('jsonFunctions', [
+    addMonitor/3, 
+    removeMonitor/1, 
+    existeDisciplina/1, 
+    readJSON/2, 
+    checaExistencia/2, 
+    getObjetoByID/3, 
+    atualizaAtributoAluno/3, 
+    buscaNovoID/2, 
+    addMensagem/4, 
+    atualizaAtributoProfessor/3,
+    atualizaAtributoTicket/3,
+    addTicket/6,
+    removeTicket/1,
+    removeMensagem/1,
+    showMonitoresAux/1
+
     ]).
 
 :- use_module(library(http/json)).
@@ -102,9 +103,9 @@ showAluno(Id) :-
 atualizaAtributoAluno(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
-    (Atributo = "nome" ->  removeAluno(Id), addAluno(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha); 
+    (Atributo = "nome" ->  removeAluno(Id), addAluno(Object.id, ConteudoAtualizado, ConteudoAux, Object.senha); 
      Atributo = "disciplinas" -> append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeAluno(Id), addAluno(Object.id, Object.nome, NovoConteudo, Object.senha);
-     Atributo = "senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
+     Atributo = "senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, ConteudoAux, ConteudoAtualizado)).
 
 addAluno(Matricula, Nome, Disciplinas, Senha) :- 
     NomeArquivo = "alunos",
@@ -266,10 +267,10 @@ ticketToJSON([H|T], [X|Out]) :-
     ticketToJSON(H.id, H.titulo,H.autor,H.mensagens, H.status,H.disciplina, X), 
     ticketToJSON(T, Out).
 
-%Quando criar um novo ticket passar como -1
-addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina) :- 
+%Quando criar um novo ticket passar como ""
+addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina):- 
     NomeArquivo = "tickets",
-    (ID =:= -1 -> buscaNovoID(NomeArquivo, IDAux); IDAux = ID),
+    (ID = "" -> buscaNovoID(NomeArquivo, IDAux); IDAux = ID),
     readJSON(NomeArquivo, File),
     ticketToJSON(File, ListaObjectsJSON),
     stringlist_concat(Mensagens, ",", "", MensagensFormated),

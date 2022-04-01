@@ -43,7 +43,7 @@
     },
     {
         "id": "8",
-        "autor": "120110006",
+        "autor": "120210017",
         "conteudo": "Opa, boa tarde. Para fazer isso , vc pode fazer por exemplo inputStr <- getLine , e depois fazendo input = read inputStr :: [Int]",
         "horario": "19-11-2021 16:24:51"
     },
@@ -154,11 +154,5 @@
         "autor": "2",
         "conteudo": "filipe meu tempo acabou",
         "horario": "31/03/2022 18:42:36"
-    },
-    {
-        "id": "27",
-        "autor": "5",
-        "conteudo": "assista a aula",
-        "horario": "31/03/2022 18:43:37"
     }
 ]
