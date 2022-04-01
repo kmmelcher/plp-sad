@@ -9,18 +9,25 @@ getAluno(Id, Aluno):-
 
 ehAluno(Id):- checaExistencia("alunos", Id).
 
-vinculaAlunoDisciplina(Disciplina) :-
-    writeln("Digite a matrícula do Aluno (caso o aluno ainda não exista, digite 0"),
+vinculaAlunoDisciplina(Disciplina):-
+    writeln("Digite a matrícula do Aluno:"),
     read(Id),
-    atom_string(Disciplina, DisciplinaStr),
-    (ehAluno(Id) -> getAluno(Id, Aluno),
-        (ehMonitor(Id), member(DisciplinaStr, Aluno.disciplinas) -> 
-            writeln("Este aluno é monitor de sua disciplina!");
-                append(Aluno.disciplinas, [DisciplinaStr], NovasDisciplinas),
-                atualizaAtributoAluno(Aluno.id, "disciplinas", NovasDisciplinas)
-        );
+    (
+        ehAluno(Id) -> 
+            getAluno(Id, Aluno),
+            (
+                ehMonitor(Id), getMonitor(Id, Monitor), Disciplina = Monitor.disciplina -> 
+                    writeln("Este aluno é monitor de sua disciplina!")
+                ;
+                (
+                    member(Disciplina, Aluno.disciplinas) -> 
+                        writeln("Este aluno ja esta nesta disciplina");
+                        atualizaAtributoAluno(Aluno.id, "disciplinas", Disciplina)
+                )
+                
+            );
         writeln("Este aluno não está cadastrado no SAD."),
-        cadastraAluno("", [Disciplina])
+        cadastraAluno("", [Disciplina])   
     ).
     
 cadastraAluno(Nome, Disciplina):-
@@ -42,7 +49,7 @@ removerAluno(Id):-
     removeAluno(Id),
     writeln("Aluno removido com sucesso!").
 
-desvinculaAlunoDisciplina(Disciplina) :-
+    desvinculaAlunoDisciplina(Disciplina) :-
     writeln("Matrícula:"),
     read(AtomMatricula),
     (
@@ -56,3 +63,4 @@ desvinculaAlunoDisciplina(Disciplina) :-
             writeln(Out);
         writeln("Aluno não existe no sistema.")
     ).
+    
