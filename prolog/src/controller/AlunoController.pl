@@ -1,6 +1,7 @@
 :- module('AlunoController', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1, desvinculaAlunoDisciplina/1]).
 :- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, atualizaAtributoAluno/3, checaExistencia/2, addAluno/4, removeAluno/1]).
 :- use_module('../controller/MonitorController.pl', [ehMonitor/1, getMonitor/2]).
+:- use_module('util/input.pl',[input/1]).
 
 getAluno(Id, Aluno):-
     getObjetoByID("alunos", Id, AlunoJson),

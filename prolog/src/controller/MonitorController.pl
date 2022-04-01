@@ -18,6 +18,7 @@
         showMonitoresAux/1
     ]).
 :- use_module('../controller/AlunoController.pl', [ehAluno/1, getAluno/2]).
+:- use_module('util/input.pl',[input/1]).
 
 getMonitor(Id, Monitor):- getObjetoByID("monitores", Id, Monitor).
 

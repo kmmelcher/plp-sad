@@ -3,6 +3,7 @@
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
 :- use_module('ProfessorController.pl', [ehProfessor/1, getProfessor/2]).
+:- use_module('util/input.pl',[input/1]).
 %----------------------------------------------------- FUNÇÕES DE GET -----------------------------------------------------%
 
 getTicket(Id, Ticket):-
