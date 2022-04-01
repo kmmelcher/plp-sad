@@ -1,6 +1,6 @@
 :- module('Menu', [menuPrincipal/0]).
 :- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1, desvinculaMonitor/0, listarMonitoresByDisciplina/1]).
-:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2, excluirTicket/1]).
+:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2, adicionaTicket/2, excluirTicket/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2, ehProfessor/1]).
 :- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/0]).
 :- use_module('util/jsonFunctions', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3, getObjetoByID/3]).
@@ -40,10 +40,10 @@ trocarSenha(Entidade):-
     writeln('Digite sua nova senha:'),
     read(Senha),
     encripta(Senha, Entidade.nome, SenhaEncriptada),
-    (
-       ehAluno(Entidade.id) -> atualizaAtributoAluno(Entidade.id, "senha", SenhaEncriptada);
-       atualizaAtributoProfessor(Entidade.id, "senha", SenhaEncriptada)
-    ).
+    (   
+        ehAluno(Entidade.id) ->atualizaAtributoAluno(Entidade.id, "senha", SenhaEncriptada);
+        atualizaAtributoProfessor(Entidade.id, "senha", SenhaEncriptada)
+    ), writeln("Senha alterada com sucesso").
 
 perguntaDisciplina(Disciplinas, Disciplina):-
     length(Disciplinas, Size), Size > 1,
@@ -188,7 +188,11 @@ decideMenuAluno(1, Aluno):-
 
 decideMenuAluno(2, Aluno):- exibeTicketsAluno(Aluno.id).
 
-decideMenuAluno(3, _).
+decideMenuAluno(3, Aluno):-
+    perguntaDisciplina(Aluno.disciplinas, Disciplina),
+    (Disciplina = "INVALIDA" -> writeln("Disciplina inválida"), decideMenuAluno(-1, Aluno);
+    adicionaTicket(Aluno, Disciplina)
+    ).
 
 decideMenuAluno(4, _).
 
@@ -196,9 +200,7 @@ decideMenuAluno(5, _).
 
 decideMenuAluno(6, Aluno):- excluirTicket(Aluno.id).
 
-decideMenuAluno(7, Aluno):- 
-    trocarSenha(Aluno),
-    exibeMenuAluno(Aluno.id).
+decideMenuAluno(7, Aluno):- trocarSenha(Aluno).
 
 decideMenuAluno(8, _) :- write('\nDeslogando...'), menuPrincipal().
 
