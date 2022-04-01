@@ -100,12 +100,26 @@ showAluno(Id) :-
     split_string(H.disciplinas, ",", "", Disciplinas),
     write(" | Disciplinas: "), showRecursively(Disciplinas), nl, nl.
 
-atualizaAtributoAluno(Id, Atributo, ConteudoAtualizado):-
+atualizaAtributoAluno(Id, "removerDisciplina", DisciplinasAtualizadas):-
+    getObjetoByID("alunos", Id, Object),
+    removeAluno(Id), 
+    addAluno(Object.id, Object.nome, DisciplinasAtualizadas, Object.senha).
+atualizaAtributoAluno(Id, "disciplinas", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
-    (Atributo = "nome" ->  removeAluno(Id), addAluno(Object.id, ConteudoAtualizado, ConteudoAux, Object.senha); 
-     Atributo = "disciplinas" -> append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeAluno(Id), addAluno(Object.id, Object.nome, NovoConteudo, Object.senha);
-     Atributo = "senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, ConteudoAux, ConteudoAtualizado)).
+    append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), 
+    removeAluno(Id), 
+    addAluno(Object.id, Object.nome, NovoConteudo, Object.senha).
+atualizaAtributoAluno(Id, "nome", ConteudoAtualizado):-
+    getObjetoByID("alunos", Id, Object),
+    split_string(Object.disciplinas, ",", "", ConteudoAux),
+    removeAluno(Id), 
+    addAluno(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha).
+atualizaAtributoAluno(Id, "senha", ConteudoAtualizado):-
+    getObjetoByID("alunos", Id, Object),
+    split_string(Object.disciplinas, ",", "", ConteudoAux),
+    removeAluno(Id), 
+    addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado).
 
 addAluno(Matricula, Nome, Disciplinas, Senha) :- 
     NomeArquivo = "alunos",
@@ -157,11 +171,20 @@ professoresToJSON([H|T], [X|Out]) :-
     professorToJSON(H.id, H.nome, H.disciplinas, H.senha, X), 
     professoresToJSON(T, Out).
 
-atualizaAtributoProfessor(Id, Atributo, ConteudoAtualizado):-
+atualizaAtributoProfessor(Id, "disciplinas", ConteudoAtualizado):-
     getObjetoByID("professores", Id, Object),
-    (Atributo = "nome" ->  removeProfessor(Id), addProfessor(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha); 
-     Atributo = "disciplinas" -> removeProfessor(Id), addProfessor(Object.id, Object.nome, ConteudoAtualizado, Object.senha);
-     Atributo = "senha" -> removeProfessor(Id), addProfessor(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
+    split_string(Object.disciplinas, ",", "", ConteudoAux),
+    append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), 
+    removeProfessor(Id),
+    addProfessor(Object.id, Object.nome, NovoConteudo, Object.senha).
+atualizaAtributoProfessor(Id, "nome", ConteudoAtualizado):-
+    getObjetoByID("professores", Id, Object),
+    removeProfessor(Id), 
+    addProfessor(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha).
+atualizaAtributoProfessor(Id, "senha", ConteudoAtualizado):-
+    getObjetoByID("professores", Id, Object),
+    removeProfessor(Id), 
+    addProfessor(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado).
 
 removeProfessor(Id) :-
     NomeArquivo = "professores",
@@ -203,10 +226,14 @@ showMonitor(Id) :-
     write("Disciplinas: "), showRecursively(Disciplinas), nl,
     write("Horários: "), showRecursively(H.horarios),  nl.
 
-atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
+atualizaAtributoMonitor(Id, "horarios", ConteudoAtualizado):-
     getObjetoByID("monitores", Id, Object),
-    (Atributo = "disciplina" -> removeMonitor(Id), addMonitor(Object.id, ConteudoAtualizado, Object.horarios);
-     Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado)).
+    removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado).
+atualizaAtributoMonitor(Id, "disciplina", ConteudoAtualizado):-
+    getObjetoByID("monitores", Id, Object),
+    removeMonitor(Id), 
+    addMonitor(Object.id, ConteudoAtualizado, Object.horarios).
+
 
 monitorToJSON(Id, Disciplina, Horarios, Out) :-
     swritef(Out, '{"id":"%w","disciplina":"%w","horarios":"%w"}', [Id, Disciplina, Horarios]).
@@ -285,11 +312,17 @@ removeTicket(Id) :-
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
+atualizaAtributoTicket(Id, "mensagens", ConteudoAtualizado):-
     getObjetoByID("tickets", Id, Object),
     split_string(Object.mensagens, ",", "", ConteudoAux),
-    (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, NovoConteudo, Object.status, Object.disciplina); 
-    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, ConteudoAux, ConteudoAtualizado, Object.disciplina)).
+    append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), 
+    removeTicket(Id), 
+    addTicket(Object.id, Object.titulo, Object.autor, NovoConteudo, Object.status, Object.disciplina).
+atualizaAtributoTicket(Id, "status", ConteudoAtualizado):-
+    getObjetoByID("tickets", Id, Object),
+    split_string(Object.mensagens, ",", "", ConteudoAux),
+    removeTicket(Id), 
+    addTicket(Object.id, Object.titulo, Object.autor, Object.mensagens, ConteudoAtualizado, Object.disciplina).
 
 %-------------------------- Funções de Mensagens --------------------------%
 
