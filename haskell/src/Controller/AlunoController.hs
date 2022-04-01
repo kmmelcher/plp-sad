@@ -52,7 +52,6 @@ module Controller.AlunoController where
     -- informações de entrada. 
     --  > Parametros:
     --    disciplina = disciplina na qual o aluno será vinculado
-
     desvinculaAluno :: String -> IO()
     desvinculaAluno disciplina = do
         putStrLn "Informe a matrícula do aluno a ser desvinculado de sua disciplina (digite 0 para voltar ao seu menu):"
