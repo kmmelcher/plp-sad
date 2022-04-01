@@ -277,15 +277,6 @@ addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina):-
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-addTicketComId(Id,Titulo, Autor, Mensagens, Status, Disciplina) :- 
-    NomeArquivo = "tickets",
-    readJSON(NomeArquivo, File),
-    ticketToJSON(File, ListaObjectsJSON),
-    ticketToJSON(Id, Titulo, Autor, Mensagens, Status, Disciplina, ObjectJSON),
-    append(ListaObjectsJSON, [ObjectJSON], Saida),
-    getFilePath(NomeArquivo, FilePath),
-    open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
-
 removeTicket(Id) :-
     NomeArquivo = "tickets",
     readJSON(NomeArquivo, File),
