@@ -1,10 +1,8 @@
-:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1]).
-:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4]).
+:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1, adicionaTicket/2, excluirTicket/1]).
+:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4, addTicket/6, removeMensagem/1, removeTicket/1]).
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
 :- use_module('ProfessorController.pl', [ehProfessor/1, getProfessor/2]).
-
-
 %----------------------------------------------------- FUNÇÕES DE GET -----------------------------------------------------%
 
 getTicket(Id, Ticket):-
@@ -60,11 +58,11 @@ exibeTicketsAluno(Matricula):-
     (Tickets = [] -> writeln("Voce ainda nao criou nenhum ticket."); exibirTickets(Tickets)).
 
 exibeTicketsDisciplina(SiglaDisciplina):-
-    swritef(Out, "Estes sao os tickets da disciplina: %w\n", [SiglaDisciplina]), write(Out),
     getTicketsDisciplina(SiglaDisciplina, Tickets),
     (
         Tickets = [] -> writeln("Ainda nao ha tickets para esta disciplina.")
-        ; 
+        ;
+        swritef(Out, "Estes sao os tickets da disciplina: %w\n", [SiglaDisciplina]), write(Out),
         exibirTickets(Tickets),
         writeln("\n Qual o numero do ticket que deseja visualizar mensagens? "), 
         read(Opcao),
@@ -98,7 +96,6 @@ responderTicket(Entidade, Disciplina):-
             msgInputInvalido()
         )
     ).
-
 
 adicionaMensagem(Entidade, Ticket):-
     checaEntidadeParaMensagem(Entidade.id, Ticket.disciplina, _, _),
@@ -143,4 +140,31 @@ adicionarMensagemTicketAluno(Aluno) :-
        ;
        writeln('\nId invalido !')).   
     
+adicionaTicket(Aluno, Disciplina):-
+    writeln("Insira o titulo do seu ticket: "),
+    read(Titulo),
+    addTicket("", Titulo, Aluno.id, [""], "Em andamento", Disciplina).
 
+removeMensagens(IdTicket):-
+    getTicket(IdTicket, Ticket),
+    removeMensagensRecursivo(Ticket.mensagens).
+
+removeMensagensRecursivo([]).
+removeMensagensRecursivo([H|T]):- removeMensagem(H), removeMensagensRecursivo(T).
+
+excluirTicket(IdAluno):-
+    getTicketsAluno(IdAluno, Tickets),
+    (
+        Tickets = [] -> writeln("Nao existe nenhum ticket cadastrado por voce");
+        writeln("\nEstes sao os tickets criados por voce:"),
+        exibirTickets(Tickets),
+        writeln("\nQual ticket voce deseja exlcuir?\n"),
+        read(Opcao), atom_string(Opcao, OpcaoStr),
+        (checaIdValidoEmTickets(OpcaoStr, Tickets) -> 
+            removeMensagens(OpcaoStr),
+            removeTicket(OpcaoStr), 
+            msgInputInvalido(),
+            writeln("Ticket deletado com sucesso\n");
+            msgInputInvalido()
+        )
+    ).

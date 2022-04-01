@@ -1,6 +1,22 @@
-:- module('MonitorController', [getMonitor/2, vinculaMonitor/0, ehMonitor/1, desvinculaMonitor/0]).
+:- module(monitorController, 
+    [
+        getMonitor/2,
+        vinculaMonitor/0,
+        ehMonitor/1,
+        desvinculaMonitor/0,
+        listarMonitoresByDisciplina/1
+    ]).
 
-:- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, addMonitor/3, checaExistencia/2, existeDisciplina/1, removeMonitor/1]).
+:- use_module('../util/jsonFunctions', 
+    [
+        getObjetoByID/3,
+        addMonitor/3,
+        checaExistencia/2,
+        existeDisciplina/1,
+        removeMonitor/1,
+        readJSON/2,
+        showMonitoresAux/1
+    ]).
 
 getMonitor(Id, Monitor):- getObjetoByID("monitores", Id, Monitor).
 
@@ -37,4 +53,23 @@ desvinculaMonitor() :-
     (
         checaExistencia("monitores", Matricula) -> excluiMonitor(Matricula);
         writeln('Monitor não cadastrado')
+    ).
+
+getMonitoresByDisciplinaRecursivo([], _, []).
+getMonitoresByDisciplinaRecursivo([H|T], Sigla, Monitores) :-
+    H.disciplina = Sigla,
+    getMonitoresByDisciplinaRecursivo(T, Sigla, MonitoresAux),
+    append(MonitoresAux, [H], Monitores)
+    ;
+    getMonitoresByDisciplinaRecursivo(T, Sigla, Monitores).
+
+getMonitoresByDisciplina(Sigla, Monitores):-
+    readJSON("monitores", File),
+    getMonitoresByDisciplinaRecursivo(File, Sigla, Monitores).
+
+listarMonitoresByDisciplina(Disciplina) :-
+    getMonitoresByDisciplina(Disciplina, Monitores),
+    (
+        Monitores = [] -> writeln("Não há monitores nessa disciplina"); 
+        showMonitoresAux(Monitores)
     ).
