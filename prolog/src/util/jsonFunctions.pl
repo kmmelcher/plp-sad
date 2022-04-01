@@ -103,9 +103,9 @@ showAluno(Id) :-
 atualizaAtributoAluno(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
-    (Atributo = "nome" ->  removeAluno(Id), addAluno(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha); 
+    (Atributo = "nome" ->  removeAluno(Id), addAluno(Object.id, ConteudoAtualizado, ConteudoAux, Object.senha); 
      Atributo = "disciplinas" -> append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeAluno(Id), addAluno(Object.id, Object.nome, NovoConteudo, Object.senha);
-     Atributo = "senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado)).
+     Atributo = "senha" -> removeAluno(Id), addAluno(Object.id, Object.nome, ConteudoAux, ConteudoAtualizado)).
 
 addAluno(Matricula, Nome, Disciplinas, Senha) :- 
     NomeArquivo = "alunos",

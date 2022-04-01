@@ -41,8 +41,8 @@ trocarSenha(Entidade):-
     read(Senha),
     encripta(Senha, Entidade.nome, SenhaEncriptada),
     (   
-        ehAluno(Entidade.id) -> atualizaAtributoAluno(Entidade.id, "senha", SenhaEncriptada);
-        atualizaAtributoProfessor(Entidade.id, "senha", SenhaEncriptada),
+        ehAluno(Entidade.id) ->atualizaAtributoAluno(Entidade.id, "senha", SenhaEncriptada);
+        atualizaAtributoProfessor(Entidade.id, "senha", SenhaEncriptada)
     ), writeln("Senha alterada com sucesso").
 
 perguntaDisciplina(Disciplinas, Disciplina):-
