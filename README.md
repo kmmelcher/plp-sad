@@ -26,7 +26,7 @@ $ cd plp-sad
 
 2. Seguir as instruções para rodar o projeto em [haskell](haskell/README.md) ou em [prolog](prolog/README.md).
 
-# Usando o SAD
+# Exemplos de uso
 
 
 ### Cadastro

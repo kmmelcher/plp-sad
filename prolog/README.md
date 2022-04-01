@@ -18,7 +18,7 @@ $ ./sad
 
 ![Windows](https://img.shields.io/badge/Windows-017AD7?style=for-the-badge&logo=windows&logoColor=white)
 
-```bash
-$ cd prolog
-$ .\sad.exe
+```
+> cd prolog
+> .\sad.exe
 ```
