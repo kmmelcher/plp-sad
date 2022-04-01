@@ -6,7 +6,7 @@
 :- use_module('util/jsonFunctions', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3, getObjetoByID/3, atualizaAtributoTicket/3]).
 :- use_module('util/EncriptFunctions.pl', [encripta/3]).
 
-menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):'), menuLogin().
+menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):\nVoce esta na versao Beta do Sistema, por favor utilizar . no final de suas entradas\n'), menuLogin().
 
 menuLogin() :- 
     writeln("Insira seu ID para entrar. Para sair do sistema, digite 'sair': "), 
