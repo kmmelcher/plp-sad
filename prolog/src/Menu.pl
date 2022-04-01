@@ -7,7 +7,7 @@
 :- use_module('util/EncriptFunctions.pl', [encripta/3]).
 :- use_module('util/input.pl',[input/1]).
 
-menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):\nVoce esta na versao Beta do Sistema, por favor utilizar . no final de suas entradas\n'), menuLogin().
+menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):\n'), menuLogin().
 
 menuLogin() :- 
     writeln("Insira seu ID para entrar. Para sair do sistema, digite 'sair': "), 
