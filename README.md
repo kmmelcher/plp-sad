@@ -6,6 +6,7 @@
 # Serviço de atendimento ao discente (SAD)
 
 ![Haskell](https://img.shields.io/badge/Haskell-5e5086?style=for-the-badge&logo=haskell&logoColor=white)
+<img src="https://custom-icon-badges.herokuapp.com/badge/prolog-blue.svg?logo=prolog&logoColor=white" style="margin-left: 10px;" width="90px">
 
 ## Instalação
 
@@ -13,7 +14,6 @@
 
 Para usar o SAD é preciso ter as seguintes ferramentas instaladas:
  - [GIT](https://git-scm.com/)
- - [Cabal](https://www.haskell.org/cabal/)
 
 ### Executando
 
@@ -24,18 +24,7 @@ $ git clone https://github.com/kmmelcher/plp-sad.git
 $ cd plp-sad
 ```
 
-2. Configurar o Cabal e instalar as dependências
-
-```bash
-$ cabal update
-$ cabal install cabal-install
-$ cabal build
-```
-
-3. Executar o projeto
-```bash
-$ cabal run
-```
+2. Seguir as instruções para rodar o projeto em [haskell](haskell/README.md) ou em [prolog](prolog/README.md).
 
 # Usando o SAD
 
