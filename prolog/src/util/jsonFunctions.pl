@@ -121,7 +121,7 @@ addAluno(Matricula, Nome, Disciplinas, Senha) :-
 alunoToJSON(Id, Nome, Disciplinas, Senha, Out) :-
     swritef(Out, '{"id":"%w", "nome":"%w","disciplinas":"%w", "senha":"%w"}', [Id, Nome, Disciplinas,Senha]).
 
-% Convertendo uma lista de objetos em JSON para 
+% Convertendo uma lista de objetos em JSON para NovoConteudo
 alunosToJSON([], []).
 alunosToJSON([H|T], [X|Out]) :- 
     alunoToJSON(H.id, H.nome, H.disciplinas, H.senha, X), 
@@ -136,7 +136,6 @@ removeAluno(Id) :-
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 %-------------------------- Funções de Professores--------------------------%
- 
 showProfessoresAux([]):- !.
 
 showProfessoresAux([H|T]) :- 
@@ -206,8 +205,7 @@ showMonitor(Id) :-
 
 atualizaAtributoMonitor(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("monitores", Id, Object),
-    split_string(Object.disciplinas, ",", "", ConteudoAux),
-    (Atributo = "disciplina" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeMonitor(Id), addMonitor(Object.id, NovoConteudo, Object.horarios);
+    (Atributo = "disciplina" -> removeMonitor(Id), addMonitor(Object.id, ConteudoAtualizado, Object.horarios);
      Atributo = "horarios" -> removeMonitor(Id), addMonitor(Object.id, Object.disciplina, ConteudoAtualizado)).
 
 monitorToJSON(Id, Disciplina, Horarios, Out) :-
@@ -291,7 +289,7 @@ atualizaAtributoTicket(Id, Atributo, ConteudoAtualizado):-
     getObjetoByID("tickets", Id, Object),
     split_string(Object.mensagens, ",", "", ConteudoAux),
     (Atributo = "mensagens" ->  append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, NovoConteudo, Object.status, Object.disciplina); 
-    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, Object.mensagens, ConteudoAtualizado, Object.disciplina)).
+    Atributo = "status" -> removeTicket(Id), addTicket(Object.id, Object.titulo, Object.autor, ConteudoAux, ConteudoAtualizado, Object.disciplina)).
 
 %-------------------------- Funções de Mensagens --------------------------%
 

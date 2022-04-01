@@ -1,5 +1,4 @@
 :- module('AlunoController', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1]).
-
 :- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, atualizaAtributoAluno/3, checaExistencia/2, addAluno/4, removeAluno/1]).
 :- use_module('../controller/MonitorController.pl', [ehMonitor/1]).
 
@@ -8,9 +7,7 @@ getAluno(Id, Aluno):-
     split_string(AlunoJson.disciplinas, ",", "", DisciplinasFormated),
     put_dict([disciplinas=DisciplinasFormated], AlunoJson, Aluno).
 
-
 ehAluno(Id):- checaExistencia("alunos", Id).
-
 
 vinculaAlunoDisciplina(Disciplina):-
     writeln("Digite a matrícula do Aluno (caso o aluno ainda não exista, digite 0"),
@@ -26,7 +23,6 @@ vinculaAlunoDisciplina(Disciplina):-
         cadastraAluno("", [Disciplina])   
     ).
     
-
 cadastraAluno(Nome, Disciplina):-
     (Nome = "" -> 
         writeln("Digite o nome do ingressante (entre aspas duplas): "),

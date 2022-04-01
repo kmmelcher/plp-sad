@@ -40,19 +40,19 @@
         "disciplina": "psoft"
     },
     {
-        "id": "7",
-        "titulo": "Erro ao retornar Json no swagger",
-        "autor": "120110005",
-        "mensagens": "23,24,25,26",
-        "status": "Em andamento",
-        "disciplina": "psoft"
-    },
-    {
         "id": "6",
         "titulo": "Duvida sobre normalizacao",
         "autor": "120110002",
         "mensagens": "20,21,22,27",
         "status": "Em andamento",
         "disciplina": "bd"
+    },
+    {
+        "id": "7",
+        "titulo": "Erro ao retornar Json no swagger",
+        "autor": "120110005",
+        "mensagens": "23,24,25,26",
+        "status": "Em andamento",
+        "disciplina": "psoft"
     }
 ]

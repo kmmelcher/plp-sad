@@ -1,11 +1,8 @@
-
-:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, adicionaTicket/2, excluirTicket/1]).
-:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4,  addTicket/6, removeMensagem/1, removeTicket/1]).
+:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1, adicionaTicket/2, excluirTicket/1]).
+:- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4, addTicket/6, removeMensagem/1, removeTicket/1]).
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
 :- use_module('ProfessorController.pl', [ehProfessor/1, getProfessor/2]).
-
-
 %----------------------------------------------------- FUNÇÕES DE GET -----------------------------------------------------%
 
 getTicket(Id, Ticket):-
@@ -116,6 +113,33 @@ checaEntidadeParaMensagem(Id, Disciplina, Autor, Entidade):-
 
 msgInputInvalido():- writeln("Insira um valor valido\n").
 
+marcarTicketAlunoComoResolvido(Aluno) :-
+    getTicketsAluno(Aluno.id,TicketsAluno),
+    exibeTicketsAluno(Aluno.id),
+    writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
+    read(Opcao), atom_string(Opcao,OpcaoStr),
+    (verificarIdTicketAoResolver(TicketsAluno,Aluno.id) -> atualizaAtributoTicket(OpcaoStr,"status","Resolvido"), writeln("Status de ticket atualizado com sucesso") ; writeln('Id invalido !')).
+
+verificarIdTicketAoResolver([H|T],AutorId) :-
+    (H.autor = AutorId ->
+        H.status = "Em andamento";
+        verificarIdTicketAoResolver(T,AutorId)).
+
+verificarIdTicketAoMandarMsg(IdTicket,Aluno) :-
+    getTicket(IdTicket,Ticket),
+    Ticket.autor = Aluno.id,
+    Ticket.status = "Em andamento".
+
+adicionarMensagemTicketAluno(Aluno) :-
+    exibeTicketsAluno(Aluno.id),
+    writeln('\nInsira o id do ticket no qual deseja enviar uma mensagem: '),
+    read(IdTicket), atom_string(IdTicket,IdTicketStr),
+    (verificarIdTicketAoMandarMsg(IdTicketStr,Aluno) -> 
+       getTicket(IdTicketStr,Ticket),
+       adicionaMensagem(Aluno,Ticket)
+       ;
+       writeln('\nId invalido !')).   
+    
 adicionaTicket(Aluno, Disciplina):-
     writeln("Insira o titulo do seu ticket: "),
     read(Titulo),
