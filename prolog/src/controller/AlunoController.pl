@@ -1,4 +1,4 @@
-:- module('AlunoController', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1]).
+:- module('AlunoController', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1, desvinculaAlunoDisciplina/1]).
 :- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, atualizaAtributoAluno/3, checaExistencia/2, addAluno/4, removeAluno/1]).
 :- use_module('../controller/MonitorController.pl', [ehMonitor/1]).
 
@@ -9,7 +9,7 @@ getAluno(Id, Aluno):-
 
 ehAluno(Id):- checaExistencia("alunos", Id).
 
-vinculaAlunoDisciplina(Disciplina):-
+vinculaAlunoDisciplina(Disciplina) :-
     writeln("Digite a matrícula do Aluno (caso o aluno ainda não exista, digite 0"),
     read(Id),
     atom_string(Disciplina, DisciplinaStr),
@@ -20,7 +20,7 @@ vinculaAlunoDisciplina(Disciplina):-
                 atualizaAtributoAluno(Aluno.id, "disciplinas", NovasDisciplinas)
         );
         writeln("Este aluno não está cadastrado no SAD."),
-        cadastraAluno("", [Disciplina])   
+        cadastraAluno("", [Disciplina])
     ).
     
 cadastraAluno(Nome, Disciplina):-
@@ -39,7 +39,20 @@ cadastraAluno(Nome, Disciplina):-
     addAluno(Matricula, NomeAluno, DisciplinaAluno, ""), !. 
 
 removerAluno(Id):-
-    (ehAluno(Id)-> 
-        removeAluno(Id), writeln("Aluno removido com sucesso!"); 
-            writeln("Aluno não existe no sistema.")).
-    
+    removeAluno(Id),
+    writeln("Aluno removido com sucesso!").
+
+desvinculaAlunoDisciplina(Disciplina) :-
+    writeln("Matrícula:"),
+    read(AtomMatricula),
+    (
+        ehAluno(AtomMatricula)-> 
+            atom_string(AtomMatricula, Matricula),
+            getAluno(Matricula, Aluno),
+            member(Disciplina, Aluno.disciplinas),
+            delete(Aluno.disciplinas, Disciplina , DisciplinasRestantes),
+            atualizaAtributoAluno(Matricula, "removerDisciplina", DisciplinasRestantes),
+            swritef(Out,"Aluno desvinculado da disciplina %w", [Disciplina]),
+            writeln(Out);
+        writeln("Aluno não existe no sistema.")
+    ).

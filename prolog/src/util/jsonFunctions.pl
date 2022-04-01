@@ -102,8 +102,8 @@ showAluno(Id) :-
 
 atualizaAtributoAluno(Id, "removerDisciplina", DisciplinasAtualizadas):-
     getObjetoByID("alunos", Id, Object),
-    removeAluno(Id), 
-    addAluno(Object.id, Object.nome, DisciplinasAtualizadas, Object.senha).
+     removeAluno(Id), 
+     addAluno(Object.id, Object.nome, DisciplinasAtualizadas, Object.senha).
 atualizaAtributoAluno(Id, "disciplinas", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
@@ -114,12 +114,12 @@ atualizaAtributoAluno(Id, "nome", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
     removeAluno(Id), 
-    addAluno(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha).
+    addAluno(Object.id, ConteudoAtualizado, ConteudoAux, Object.senha).
 atualizaAtributoAluno(Id, "senha", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
     removeAluno(Id), 
-    addAluno(Object.id, Object.nome, Object.disciplinas, ConteudoAtualizado).
+    addAluno(Object.id, Object.nome, ConteudoAux, ConteudoAtualizado).
 
 addAluno(Matricula, Nome, Disciplinas, Senha) :- 
     NomeArquivo = "alunos",
@@ -322,7 +322,7 @@ atualizaAtributoTicket(Id, "status", ConteudoAtualizado):-
     getObjetoByID("tickets", Id, Object),
     split_string(Object.mensagens, ",", "", ConteudoAux),
     removeTicket(Id), 
-    addTicket(Object.id, Object.titulo, Object.autor, Object.mensagens, ConteudoAtualizado, Object.disciplina).
+    addTicket(Object.id, Object.titulo, Object.autor, ConteudoAux, ConteudoAtualizado, Object.disciplina).
 
 %-------------------------- Funções de Mensagens --------------------------%
 

@@ -2,7 +2,7 @@
 :- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1, desvinculaMonitor/0, listarMonitoresByDisciplina/1]).
 :- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1, adicionaTicket/2, excluirTicket/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2, ehProfessor/1]).
-:- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1]).
+:- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1, desvinculaAlunoDisciplina/1]).
 :- use_module('util/jsonFunctions', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3, getObjetoByID/3, atualizaAtributoTicket/3]).
 :- use_module('util/EncriptFunctions.pl', [encripta/3]).
 
@@ -128,7 +128,9 @@ menuRemocaoProfessor(Professor) :-
     decideMenuRemocao(Opcao, Professor),
     exibeMenuProfessor(Professor.id).
 
-decideMenuRemocao(1, _).
+decideMenuRemocao(1, Professor) :-
+    perguntaDisciplina(Professor.disciplinas, Disciplina), 
+    (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor) ;  desvinculaAlunoDisciplina(Disciplina)).
 
 decideMenuRemocao(2, Professor) :-
     desvinculaMonitor(),
