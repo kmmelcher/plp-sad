@@ -248,8 +248,7 @@ addMonitor(Matricula, Disciplinas, Horarios) :-
     NomeArquivo = "monitores",
     readJSON(NomeArquivo, File),
     monitoresToJSON(File, ListaObjectsJSON),
-    stringlist_concat(Disciplinas, ",", "", DisciplinasFormated),
-    monitorToJSON(Matricula, DisciplinasFormated, Horarios, ObjectJSON),
+    monitorToJSON(Matricula, Disciplinas, Horarios, ObjectJSON),
     append(ListaObjectsJSON, [ObjectJSON], Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).

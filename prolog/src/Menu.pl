@@ -110,12 +110,12 @@ menuCadastroProfessor(Professor) :-
 
 decideMenuCadastro('1', Professor):-
     perguntaDisciplina(Professor.disciplinas, Disciplina), 
-    (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor); 
+    (Disciplina = "INVALIDA" -> decideMenuProfessor('-1', Professor); 
     vinculaAlunoDisciplina(Disciplina)).
 
 decideMenuCadastro('2', Professor):-
     perguntaDisciplina(Professor.disciplinas, Disciplina), 
-    (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor) ;  vinculaMonitor(Disciplina)).
+    (Disciplina = "INVALIDA" -> decideMenuProfessor('-1', Professor) ;  vinculaMonitor(Disciplina)).
 
 decideMenuCadastro('3', _).
 

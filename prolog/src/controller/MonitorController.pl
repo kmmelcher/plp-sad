@@ -26,7 +26,7 @@ ehMonitor(Id):- checaExistencia("monitores", Id).
 
 adicionaMonitor(Matricula, Disciplina) :-
     writeln("Horarios de atendimento do monitor:"),
-    input(HorariosAtom),atom_string(HorariosAtom,Horarios),
+    input(Horarios),
     addMonitor(Matricula, Disciplina, Horarios),
     writeln("Monitor cadastrado com sucesso.").
 

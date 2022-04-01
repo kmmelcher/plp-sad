@@ -35,8 +35,7 @@ vinculaAlunoDisciplina(Disciplina):-
 cadastraAluno(Nome, Disciplina):-
     (Nome = "" -> 
         writeln("Digite o nome do ingressante: "),
-        input(NomeAtom), atom_string(NomeAtom,NomeAluno);
-            NomeAluno = Nome),
+        input(NomeAluno); NomeAluno = Nome),
     
     (Disciplina = "" ->
             writeln("Digite a disciplina do ingressante: "),
