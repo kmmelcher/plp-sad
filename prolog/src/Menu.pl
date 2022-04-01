@@ -1,9 +1,9 @@
 :- module('Menu', [menuPrincipal/0]).
-:- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1, desvinculaMonitor/0]).
-:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2]).
+:- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1, desvinculaMonitor/0, listarMonitoresByDisciplina/1]).
+:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1, adicionaTicket/2, excluirTicket/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2, ehProfessor/1]).
-:- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/0]).
-:- use_module('util/jsonFunctions', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3, getObjetoByID/3]).
+:- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1]).
+:- use_module('util/jsonFunctions', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3, getObjetoByID/3, atualizaAtributoTicket/3]).
 :- use_module('util/EncriptFunctions.pl', [encripta/3]).
 
 menuPrincipal() :- writeln('\n\nBem vindo ao SAD: Sistema de Atendimento ao Discente! :):'), menuLogin().
@@ -40,10 +40,10 @@ trocarSenha(Entidade):-
     writeln('Digite sua nova senha:'),
     read(Senha),
     encripta(Senha, Entidade.nome, SenhaEncriptada),
-    (
-       ehAluno(Entidade.id) -> atualizaAtributoAluno(Entidade.id, "senha", SenhaEncriptada);
-       atualizaAtributoProfessor(Entidade.id, "senha", SenhaEncriptada)
-    ).
+    (   
+        ehAluno(Entidade.id) ->atualizaAtributoAluno(Entidade.id, "senha", SenhaEncriptada);
+        atualizaAtributoProfessor(Entidade.id, "senha", SenhaEncriptada)
+    ), writeln("Senha alterada com sucesso").
 
 perguntaDisciplina(Disciplinas, Disciplina):-
     length(Disciplinas, Size), Size > 1,
@@ -67,7 +67,7 @@ exibeMenuProfessor(Id):-
     writeln('\n== SAD: MENU PROFESSOR =='),
     swritef(Out, "\nID: %w | Nome: %w | Disciplinas: %w\n", [Professor.id, Professor.nome, Professor.disciplinas]), write(Out),
     writeln('Digite o numero da acao que deseja executar!\n'),
-    writeln('1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Alterar senha de acesso\n6) Deslogar\n'),
+    writeln('1) Exibir tickets\n2) Responder Tickets em andamento\n3) Vincular aluno/monitor\n4) Desvincular aluno/monitor\n5) Alterar senha de acesso\n6) Listar monitores por disciplina\n7) Deslogar\n'),
     read(Opcao),
     decideMenuProfessor(Opcao, Professor),
     exibeMenuProfessor(Id).
@@ -75,7 +75,6 @@ exibeMenuProfessor(Id):-
 decideMenuProfessor(1, Professor) :- 
     perguntaDisciplina(Professor.disciplinas, Disciplina), 
     (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor) ; exibeTicketsDisciplina(Disciplina)).
-    
 
 decideMenuProfessor(2, Professor):- 
     perguntaDisciplina(Professor.disciplinas, Disciplina), 
@@ -85,13 +84,22 @@ decideMenuProfessor(3, Professor):- menuCadastroProfessor(Professor).
 
 decideMenuProfessor(4, Professor):- menuRemocaoProfessor(Professor).
 
-decideMenuProfessor(5, Professor):- 
-    trocarSenhaProfessor(Professor),
+decideMenuProfessor(5, Professor):-
+    trocarSenhaProfessor(Professor).
+
+decideMenuProfessor(6, Professor) :-
+    perguntaDisciplina(Professor.disciplinas, Disciplina),
+    (
+        Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor)
+    ;
+        listarMonitoresByDisciplina(Disciplina)
+    ).
+
+decideMenuProfessor(7, _) :- writeln('Deslogando...'), menuPrincipal().
+
+decideMenuProfessor(_, Professor) :- 
+    msgInputInvalido(),
     exibeMenuProfessor(Professor.id).
-
-decideMenuProfessor(6, _) :- writeln('Deslogando...'), menuPrincipal().
-
-decideMenuProfessor(_, _) :- msgInputInvalido().
 
 menuCadastroProfessor(Professor) :- 
     writeln('\nQuem voce deseja vincular?'),
@@ -138,7 +146,7 @@ exibeMenuAlunoMonitor(Id) :-
     write('\nComo deseja entrar no sistema?\n\n1) Entrar como Aluno\n2) Entrar como Monitor de '), write(Monitor.disciplina), nl,
     read(Opcao),
     decideMenuAlunoMonitor(Opcao, Id).
-  
+
 decideMenuAlunoMonitor(1, Id) :- exibeMenuAluno(Id).
 decideMenuAlunoMonitor(2, Id) :- exibeMenuMonitor(Id).
 decideMenuAlunoMonitor(_, _) :- msgInputInvalido(), exibeMenuAlunoMonitor().
@@ -180,17 +188,21 @@ decideMenuAluno(1, Aluno):-
 
 decideMenuAluno(2, Aluno):- exibeTicketsAluno(Aluno.id).
 
-decideMenuAluno(3, _).
+decideMenuAluno(3, Aluno):-
+    perguntaDisciplina(Aluno.disciplinas, Disciplina),
+    (Disciplina = "INVALIDA" -> writeln("Disciplina inválida"), decideMenuAluno(-1, Aluno);
+    adicionaTicket(Aluno, Disciplina)
+    ).
 
-decideMenuAluno(4, _).
+decideMenuAluno(4, Aluno) :-
+    adicionarMensagemTicketAluno(Aluno).
 
-decideMenuAluno(5, _).
+decideMenuAluno(5, Aluno) :-
+    marcarTicketAlunoComoResolvido(Aluno).
 
-decideMenuAluno(6, _).
+decideMenuAluno(6, Aluno):- excluirTicket(Aluno.id).
 
-decideMenuAluno(7, Aluno):- 
-    trocarSenha(Aluno),
-    exibeMenuAluno(Aluno.id).
+decideMenuAluno(7, Aluno):- trocarSenha(Aluno).
 
 decideMenuAluno(8, _) :- write('\nDeslogando...'), menuPrincipal().
 

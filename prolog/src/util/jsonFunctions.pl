@@ -10,10 +10,15 @@
     buscaNovoID/2, 
     addMensagem/4, 
     atualizaAtributoProfessor/3,
-    atualizaAtributoTicket/3
+    atualizaAtributoTicket/3,
+    addTicket/6,
+    removeTicket/1,
+    removeMensagem/1,
+    showMonitoresAux/1
     ]).
 
 :- use_module(library(http/json)).
+:- use_module('../controller/AlunoController.pl', [getAluno/2]).
 
 stringlist_concat([H|[]], _, ResultAux, ResultReal):- string_concat(ResultAux, H, ResultReal).
 stringlist_concat([H|T], Sep, ResultAux, ResultReal):-
@@ -27,7 +32,6 @@ getIDs([H|T], ListaIDs, Result):-
     atom_number(H.id, X),
     getIDs(T,ListaIDs, ResultAux),
     append([X], ResultAux, Result).
-    
 
 max([Max], Max).
 max([Head | List], Max) :-
@@ -100,20 +104,17 @@ atualizaAtributoAluno(Id, "removerDisciplina", DisciplinasAtualizadas):-
     getObjetoByID("alunos", Id, Object),
     removeAluno(Id), 
     addAluno(Object.id, Object.nome, DisciplinasAtualizadas, Object.senha).
-
 atualizaAtributoAluno(Id, "disciplinas", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
     append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), 
     removeAluno(Id), 
     addAluno(Object.id, Object.nome, NovoConteudo, Object.senha).
-
 atualizaAtributoAluno(Id, "nome", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
     removeAluno(Id), 
     addAluno(Object.id, ConteudoAtualizado, Object.disciplinas, Object.senha).
-
 atualizaAtributoAluno(Id, "senha", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
@@ -134,7 +135,7 @@ addAluno(Matricula, Nome, Disciplinas, Senha) :-
 alunoToJSON(Id, Nome, Disciplinas, Senha, Out) :-
     swritef(Out, '{"id":"%w", "nome":"%w","disciplinas":"%w", "senha":"%w"}', [Id, Nome, Disciplinas,Senha]).
 
-% Convertendo uma lista de objetos em JSON para 
+% Convertendo uma lista de objetos em JSON para NovoConteudo
 alunosToJSON([], []).
 alunosToJSON([H|T], [X|Out]) :- 
     alunoToJSON(H.id, H.nome, H.disciplinas, H.senha, X), 
@@ -149,7 +150,6 @@ removeAluno(Id) :-
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 %-------------------------- Funções de Professores--------------------------%
- 
 showProfessoresAux([]):- !.
 
 showProfessoresAux([H|T]) :- 
@@ -205,13 +205,13 @@ addProfessor(Matricula, Nome, Disciplinas, Senha) :-
 
 %-------------------------- Funções de Monitores--------------------------%
 
-showMonitoresAux([]):- !.
-showMonitoresAux([H|T]) :- 
-    write("Matricula: "), writeln(H.id),
-    write("Nome: "), writeln(H.nome), 
-    split_string(H.disciplinas, ",", "", Disciplinas),
-    write("Disciplinas: "), showRecursively(Disciplinas), nl,
-    write("Horários: "), showRecursively(H.horarios),  nl, 
+showMonitoresAux([]).
+showMonitoresAux([H|T]) :-
+    getAluno(H.id, Aluno),
+    write("Matrícula: "), writeln(H.id),
+    write("Nome: "), writeln(Aluno.nome),
+    write("Horários: "), writeln(H.horarios),
+    nl,
     showMonitoresAux(T).
 
 showMonitores() :-
@@ -292,10 +292,10 @@ ticketToJSON([H|T], [X|Out]) :-
     ticketToJSON(H.id, H.titulo,H.autor,H.mensagens, H.status,H.disciplina, X), 
     ticketToJSON(T, Out).
 
-%Quando criar um novo ticket passar como -1
-addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina) :- 
+%Quando criar um novo ticket passar como ""
+addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina):- 
     NomeArquivo = "tickets",
-    (ID =:= -1 -> buscaNovoID(NomeArquivo, IDAux); IDAux = ID),
+    (ID = "" -> buscaNovoID(NomeArquivo, IDAux); IDAux = ID),
     readJSON(NomeArquivo, File),
     ticketToJSON(File, ListaObjectsJSON),
     stringlist_concat(Mensagens, ",", "", MensagensFormated),
@@ -324,7 +324,6 @@ atualizaAtributoTicket(Id, "status", ConteudoAtualizado):-
     removeTicket(Id), 
     addTicket(Object.id, Object.titulo, Object.autor, Object.mensagens, ConteudoAtualizado, Object.disciplina).
 
-
 %-------------------------- Funções de Mensagens --------------------------%
 
 showMensagensAux([]):- !.
@@ -349,7 +348,7 @@ showMensagens(Id) :-
     write("Disciplina: "), writeln(H.disciplina).
 
 mensagemToJSON(ID, Autor, Conteudo, Horario, Out) :-
-    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w""}', [ID, Autor, Conteudo, Horario]).
+    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w"}', [ID, Autor, Conteudo, Horario]).
 
 mensagensToJSON([], []).
 mensagensToJSON([H|T], [X|Out]) :- 

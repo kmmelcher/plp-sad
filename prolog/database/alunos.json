@@ -92,7 +92,7 @@
     {
         "id": "120210017",
         "nome": "Roberto Miranda",
-        "disciplinas": "oac,loac,plp",
+        "disciplinas": "oac,loac",
         "senha": "2565021311210702430914678"
     },
     {
@@ -123,12 +123,6 @@
         "id": "120110001",
         "nome": "Alef Adonis",
         "disciplinas": "plp,leda,ip,psoft",
-        "senha": "457621624220182332810530"
-    },
-    {
-        "id": "120110006",
-        "nome": "Homem de Ferro",
-        "disciplinas": "leda,ip,psoft",
         "senha": "457621624220182332810530"
     }
 ]
