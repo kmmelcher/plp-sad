@@ -118,12 +118,12 @@ marcarTicketAlunoComoResolvido(Aluno) :-
     exibeTicketsAluno(Aluno.id),
     writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
     read(Opcao), atom_string(Opcao,OpcaoStr),
-    (verificarIdTicketAoResolver(TicketsAluno,Aluno.id) -> atualizaAtributoTicket(OpcaoStr,"status","Resolvido") ; writeln('Id invalido !')).
+    (verificarIdTicketAoResolver(TicketsAluno,Aluno.id) -> atualizaAtributoTicket(OpcaoStr,"status","Resolvido"), writeln("Status de ticket atualizado com sucesso") ; writeln('Id invalido !')).
 
 verificarIdTicketAoResolver([H|T],AutorId) :-
     (H.autor = AutorId ->
-        ((H.status = "Em andamento") -> true ; false) ;
-         verificarIdTicketAoResolver(T,AutorId)).
+        H.status = "Em andamento";
+        verificarIdTicketAoResolver(T,AutorId)).
 
 verificarIdTicketAoMandarMsg(IdTicket,Aluno) :-
     getTicket(IdTicket,Ticket),
