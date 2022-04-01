@@ -307,15 +307,19 @@ addTicket(ID, Titulo, Autor, Mensagens, Status, Disciplina):-
 removeTicket(Id) :-
     NomeArquivo = "tickets",
     readJSON(NomeArquivo, File),
-    removeObjectJSON(File, Id, SaidaParcial),
+    removeObjectJSON(File, Id, SaidaParcial),   
     ticketToJSON(SaidaParcial, Saida),
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
 atualizaAtributoTicket(Id, "mensagens", ConteudoAtualizado):-
     getObjetoByID("tickets", Id, Object),
-    split_string(Object.mensagens, ",", "", ConteudoAux),
-    append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), 
+    (
+        Object.mensagens = "" -> 
+            NovoConteudo = [ConteudoAtualizado];
+                split_string(Object.mensagens, ",", "", ConteudoAux),
+                append(ConteudoAux, [ConteudoAtualizado], NovoConteudo)
+        ), 
     removeTicket(Id), 
     addTicket(Object.id, Object.titulo, Object.autor, NovoConteudo, Object.status, Object.disciplina).
 atualizaAtributoTicket(Id, "status", ConteudoAtualizado):-

@@ -116,7 +116,6 @@ responderTicket(Entidade, Disciplina):-
 
 adicionaMensagem(Entidade, Ticket):-
     checaEntidadeParaMensagem(Entidade.id, Ticket.disciplina, _, _),
-    (Ticket.mensagens \== [""] -> exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina)),
     writeln("Insira a mensagem entre aspas simples: "), read(Conteudo),
     get_time(T), format_time(string(Horario), "%c", T),
     addMensagem(Entidade.id, Conteudo, Horario, IdMensagem),
