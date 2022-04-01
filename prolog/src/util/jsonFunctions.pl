@@ -14,7 +14,8 @@
     addTicket/6,
     removeTicket/1,
     removeMensagem/1,
-    showMonitoresAux/1
+    showMonitoresAux/1,
+    removeAluno/1
     ]).
 
 :- use_module(library(http/json)).
