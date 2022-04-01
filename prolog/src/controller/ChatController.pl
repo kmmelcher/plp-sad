@@ -1,4 +1,4 @@
-:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/1, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1, adicionaTicket/2, excluirTicket/1]).
+:- module('ChatController', [exibeTicketsDisciplina/1, responderTicket/2, exibeTicketsAluno/2, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1, adicionaTicket/2, excluirTicket/1]).
 :- use_module('../util/jsonFunctions', [readJSON/2, getObjetoByID/3, atualizaAtributoTicket/3, addMensagem/4, addTicket/6, removeMensagem/1, removeTicket/1]).
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
@@ -53,9 +53,21 @@ exibirTickets([H|T]):-
     swritef(Out, "%w) %w (%w)", [H.id, H.titulo, H.status]), write(Out), nl,
     exibirTickets(T).
 
-exibeTicketsAluno(Matricula):-
+exibeTicketsAluno(Matricula, Ticket):-
     getTicketsAluno(Matricula, Tickets),
-    (Tickets = [] -> writeln("Voce ainda nao criou nenhum ticket."); exibirTickets(Tickets)).
+    (Tickets = [] -> writeln("Voce ainda nao criou nenhum ticket."); 
+        writeln("Estes sao os tickets criados por voce\n"),
+        exibirTickets(Tickets), 
+        writeln("\nInsira o id do ticket que deseja visualizar mensagens:\n"),
+        read(OpcaoAtom), atom_string(OpcaoAtom, Opcao),
+        (
+            checaIdValidoEmTickets(Opcao, Tickets) -> 
+                getTicket(Opcao, Ticket), 
+                (Ticket.mensagens = [""] -> writeln("Ainda nao ha mensagens nesse ticket.");
+                exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina));
+            msgInputInvalido()
+        ) 
+    ).
 
 exibeTicketsDisciplina(SiglaDisciplina):-
     getTicketsDisciplina(SiglaDisciplina, Tickets),
@@ -64,11 +76,16 @@ exibeTicketsDisciplina(SiglaDisciplina):-
         ;
         swritef(Out, "Estes sao os tickets da disciplina: %w\n", [SiglaDisciplina]), write(Out),
         exibirTickets(Tickets),
-        writeln("\n Qual o numero do ticket que deseja visualizar mensagens? "), 
+        writeln("\n Qual o numero do ticket que deseja visualizar mensagens?"), 
         read(Opcao),
         atom_string(Opcao, OpcaoStr),
         (
-            checaIdValidoEmTickets(OpcaoStr, Tickets) -> getTicket(OpcaoStr, Ticket), exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina); 
+            checaIdValidoEmTickets(OpcaoStr, Tickets) -> 
+                getTicket(OpcaoStr, Ticket),
+                (
+                    Ticket.mensagens = [""] -> writeln("Ainda nao ha mensagens neste ticket");
+                    exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina)
+                ); 
             msgInputInvalido()
         )
     ).
@@ -99,7 +116,7 @@ responderTicket(Entidade, Disciplina):-
 
 adicionaMensagem(Entidade, Ticket):-
     checaEntidadeParaMensagem(Entidade.id, Ticket.disciplina, _, _),
-    exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina),
+    (Ticket.mensagens \== [""] -> exibeMensagensTicket(Ticket.mensagens, Ticket.disciplina)),
     writeln("Insira a mensagem entre aspas simples: "), read(Conteudo),
     get_time(T), format_time(string(Horario), "%c", T),
     addMensagem(Entidade.id, Conteudo, Horario, IdMensagem),
@@ -115,7 +132,7 @@ msgInputInvalido():- writeln("Insira um valor valido\n").
 
 marcarTicketAlunoComoResolvido(Aluno) :-
     getTicketsAluno(Aluno.id,TicketsAluno),
-    exibeTicketsAluno(Aluno.id),
+    exibeTicketsAluno(Aluno.id, _),
     writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
     read(Opcao), atom_string(Opcao,OpcaoStr),
     (verificarIdTicketAoResolver(TicketsAluno,Aluno.id) -> atualizaAtributoTicket(OpcaoStr,"status","Resolvido"), writeln("Status de ticket atualizado com sucesso") ; writeln('Id invalido !')).
@@ -131,19 +148,14 @@ verificarIdTicketAoMandarMsg(IdTicket,Aluno) :-
     Ticket.status = "Em andamento".
 
 adicionarMensagemTicketAluno(Aluno) :-
-    exibeTicketsAluno(Aluno.id),
-    writeln('\nInsira o id do ticket no qual deseja enviar uma mensagem: '),
-    read(IdTicket), atom_string(IdTicket,IdTicketStr),
-    (verificarIdTicketAoMandarMsg(IdTicketStr,Aluno) -> 
-       getTicket(IdTicketStr,Ticket),
-       adicionaMensagem(Aluno,Ticket)
-       ;
-       writeln('\nId invalido !')).   
+    exibeTicketsAluno(Aluno.id, Ticket),
+    adicionaMensagem(Aluno, Ticket).
     
 adicionaTicket(Aluno, Disciplina):-
-    writeln("Insira o titulo do seu ticket: "),
+    writeln("Insira o titulo do seu ticket (entre aspas simples): "),
     read(Titulo),
-    addTicket("", Titulo, Aluno.id, [""], "Em andamento", Disciplina).
+    addTicket("", Titulo, Aluno.id, [""], "Em andamento", Disciplina),
+    writeln("Ticket adicionado com sucesso.").
 
 removeMensagens(IdTicket):-
     getTicket(IdTicket, Ticket),

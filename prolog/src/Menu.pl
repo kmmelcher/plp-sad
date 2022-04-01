@@ -1,6 +1,6 @@
 :- module('Menu', [menuPrincipal/0]).
-:- use_module('controller/MonitorController.pl', [vinculaMonitor/0, getMonitor/2, ehMonitor/1, desvinculaMonitor/0, listarMonitoresByDisciplina/1]).
-:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/1, responderTicket/2, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1, adicionaTicket/2, excluirTicket/1]).
+:- use_module('controller/MonitorController.pl', [vinculaMonitor/1, getMonitor/2, ehMonitor/1, desvinculaMonitor/1, listarMonitoresByDisciplina/1]).
+:- use_module('controller/ChatController.pl', [exibeTicketsDisciplina/1, exibeTicketsAluno/2, responderTicket/2, getTicketsAluno/2,marcarTicketAlunoComoResolvido/1,adicionarMensagemTicketAluno/1, adicionaTicket/2, excluirTicket/1]).
 :- use_module('controller/ProfessorController.pl', [getProfessor/2, ehProfessor/1]).
 :- use_module('controller/AlunoController.pl', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1, desvinculaAlunoDisciplina/1]).
 :- use_module('util/jsonFunctions', [checaExistencia/2, atualizaAtributoAluno/3, atualizaAtributoProfessor/3, getObjetoByID/3, atualizaAtributoTicket/3]).
@@ -84,8 +84,7 @@ decideMenuProfessor(3, Professor):- menuCadastroProfessor(Professor).
 
 decideMenuProfessor(4, Professor):- menuRemocaoProfessor(Professor).
 
-decideMenuProfessor(5, Professor):-
-    trocarSenhaProfessor(Professor).
+decideMenuProfessor(5, Professor):- trocarSenha(Professor).
 
 decideMenuProfessor(6, Professor) :-
     perguntaDisciplina(Professor.disciplinas, Disciplina),
@@ -114,8 +113,8 @@ decideMenuCadastro(1, Professor):-
     vinculaAlunoDisciplina(Disciplina)).
 
 decideMenuCadastro(2, Professor):-
-    vinculaMonitor(),
-    exibeMenuProfessor(Professor.id).
+    perguntaDisciplina(Professor.disciplinas, Disciplina), 
+    (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor) ;  vinculaMonitor(Disciplina)).
 
 decideMenuCadastro(3, _).
 
@@ -132,9 +131,9 @@ decideMenuRemocao(1, Professor) :-
     perguntaDisciplina(Professor.disciplinas, Disciplina), 
     (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor) ;  desvinculaAlunoDisciplina(Disciplina)).
 
-decideMenuRemocao(2, Professor) :-
-    desvinculaMonitor(),
-    exibeMenuProfessor(Professor.id).
+decideMenuRemocao(2, Professor) :- 
+    perguntaDisciplina(Professor.disciplinas, Disciplina), 
+    (Disciplina = "INVALIDA" -> decideMenuProfessor(-1, Professor) ;  desvinculaMonitor(Disciplina)).
 
 decideMenuRemocao(3, Professor):- exibeMenuProfessor(Professor.id).
 
@@ -188,11 +187,11 @@ decideMenuAluno(1, Aluno):-
     perguntaDisciplina(Aluno.disciplinas, Disciplina), 
     (Disciplina = "INVALIDA" -> decideMenuAluno(-1, Aluno) ; exibeTicketsDisciplina(Disciplina)).
 
-decideMenuAluno(2, Aluno):- exibeTicketsAluno(Aluno.id).
+decideMenuAluno(2, Aluno):- exibeTicketsAluno(Aluno.id, _).
 
 decideMenuAluno(3, Aluno):-
     perguntaDisciplina(Aluno.disciplinas, Disciplina),
-    (Disciplina = "INVALIDA" -> writeln("Disciplina inválida"), decideMenuAluno(-1, Aluno);
+    (Disciplina = "INVALIDA" -> decideMenuAluno(-1, Aluno);
     adicionaTicket(Aluno, Disciplina)
     ).
 

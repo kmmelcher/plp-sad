@@ -51,8 +51,16 @@
         "id": "7",
         "titulo": "Erro ao retornar Json no swagger",
         "autor": "120110005",
-        "mensagens": "23,24,25,26",
+        "mensagens": "23,24,25,26,27,28",
         "status": "Em andamento",
         "disciplina": "psoft"
+    },
+    {
+        "id": "8",
+        "titulo": "qual a data de entrega do projeto logico?",
+        "autor": "120110004",
+        "mensagens": "",
+        "status": "Em andamento",
+        "disciplina": "plp"
     }
 ]

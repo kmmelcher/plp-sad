@@ -80,7 +80,7 @@ checaExistencia(NomeArquivo, Id):-
     getObjetoRecursivamente(File, IdString, Result),
     Result \= "".
 
-%-------------------------- Funções de Alunos--------------------------%
+%-------------------------- Funçoes de Alunos--------------------------%
 showAlunosAux([]):- !.
 showAlunosAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
@@ -149,7 +149,7 @@ removeAluno(Id) :-
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-%-------------------------- Funções de Professores--------------------------%
+%-------------------------- Funçoes de Professores--------------------------%
 showProfessoresAux([]):- !.
 
 showProfessoresAux([H|T]) :- 
@@ -203,14 +203,14 @@ addProfessor(Matricula, Nome, Disciplinas, Senha) :-
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-%-------------------------- Funções de Monitores--------------------------%
+%-------------------------- Funçoes de Monitores--------------------------%
 
 showMonitoresAux([]).
 showMonitoresAux([H|T]) :-
     getAluno(H.id, Aluno),
-    write("Matrícula: "), writeln(H.id),
+    write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(Aluno.nome),
-    write("Horários: "), writeln(H.horarios),
+    write("Horarios: "), writeln(H.horarios),
     nl,
     showMonitoresAux(T).
 
@@ -224,7 +224,7 @@ showMonitor(Id) :-
     write("Nome: "), writeln(H.nome), 
     split_string(H.disciplinas, ",", "", Disciplinas),
     write("Disciplinas: "), showRecursively(Disciplinas), nl,
-    write("Horários: "), showRecursively(H.horarios),  nl.
+    write("Horarios: "), showRecursively(H.horarios),  nl.
 
 atualizaAtributoMonitor(Id, "horarios", ConteudoAtualizado):-
     getObjetoByID("monitores", Id, Object),
@@ -240,7 +240,7 @@ monitorToJSON(Id, Disciplina, Horarios, Out) :-
 
 monitoresToJSON([], []).
 monitoresToJSON([H|T], [X|Out]) :- 
-    monitorToJSON(H.id, H.disciplinas, H.horarios, X), 
+    monitorToJSON(H.id, H.disciplina, H.horarios, X), 
     monitoresToJSON(T, Out).
 
 addMonitor(Matricula, Disciplinas, Horarios) :- 
@@ -261,14 +261,14 @@ removeMonitor(Id) :-
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-%-------------------------- Funções de Ticket--------------------------%
+%-------------------------- Funçoes de Ticket--------------------------%
 
 showTicketAux([]):- !.
 showTicketAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome),
     write("Disciplinas: "), showRecursively(H.disciplinas), nl,
-    write("Horários: "), showRecursively(H.horarios),  nl, 
+    write("Horarios: "), showRecursively(H.horarios),  nl, 
     showTicketAux(T).
 
 showTicket() :-
@@ -324,14 +324,14 @@ atualizaAtributoTicket(Id, "status", ConteudoAtualizado):-
     removeTicket(Id), 
     addTicket(Object.id, Object.titulo, Object.autor, ConteudoAux, ConteudoAtualizado, Object.disciplina).
 
-%-------------------------- Funções de Mensagens --------------------------%
+%-------------------------- Funçoes de Mensagens --------------------------%
 
 showMensagensAux([]):- !.
 showMensagensAux([H|T]) :- 
     write("Matricula: "), writeln(H.id),
     write("Nome: "), writeln(H.nome), 
     write("Disciplinas: "), showRecursively(H.disciplinas), nl,
-    write("Horários: "), showRecursively(H.horarios),  nl, 
+    write("Horarios: "), showRecursively(H.horarios),  nl, 
     showMensagensAux(T).
 
 showMensagens() :-
@@ -373,7 +373,7 @@ removeMensagem(Id) :-
     getFilePath(NomeArquivo, FilePath),
     open(FilePath, write, Stream), write(Stream, Saida), close(Stream).
 
-%-------------------------- Funções de Disciplinas --------------------------%
+%-------------------------- Funçoes de Disciplinas --------------------------%
 
 getDisciplinaRecursivamente([], _, "").
 getDisciplinaRecursivamente([H|T], Sigla, Out):-

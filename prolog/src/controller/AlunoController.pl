@@ -1,6 +1,6 @@
 :- module('AlunoController', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1, desvinculaAlunoDisciplina/1]).
 :- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, atualizaAtributoAluno/3, checaExistencia/2, addAluno/4, removeAluno/1]).
-:- use_module('../controller/MonitorController.pl', [ehMonitor/1]).
+:- use_module('../controller/MonitorController.pl', [ehMonitor/1, getMonitor/2]).
 
 getAluno(Id, Aluno):-
     getObjetoByID("alunos", Id, AlunoJson),
@@ -10,23 +10,24 @@ getAluno(Id, Aluno):-
 ehAluno(Id):- checaExistencia("alunos", Id).
 
 vinculaAlunoDisciplina(Disciplina):-
-    writeln("Digite a matrícula do Aluno:"),
-    read(Id),
+    writeln("Digite a matricula do Aluno:"),
+    read(IdAtom), atom_string(IdAtom, Id),
     (
         ehAluno(Id) -> 
             getAluno(Id, Aluno),
             (
                 ehMonitor(Id), getMonitor(Id, Monitor), Disciplina = Monitor.disciplina -> 
-                    writeln("Este aluno é monitor de sua disciplina!")
+                    writeln("Este aluno eh monitor de sua disciplina!")
                 ;
                 (
                     member(Disciplina, Aluno.disciplinas) -> 
                         writeln("Este aluno ja esta nesta disciplina");
-                        atualizaAtributoAluno(Aluno.id, "disciplinas", Disciplina)
+                        atualizaAtributoAluno(Aluno.id, "disciplinas", Disciplina),
+                        writeln("Aluno vinculado com sucesso.")
                 )
                 
             );
-        writeln("Este aluno não está cadastrado no SAD."),
+        writeln("Este aluno nao esta cadastrado no SAD."),
         cadastraAluno("", [Disciplina])   
     ).
     
@@ -49,18 +50,22 @@ removerAluno(Id):-
     removeAluno(Id),
     writeln("Aluno removido com sucesso!").
 
-    desvinculaAlunoDisciplina(Disciplina) :-
-    writeln("Matrícula:"),
+desvinculaAlunoDisciplina(Disciplina) :-
+    writeln("Matricula:"),
     read(AtomMatricula),
     (
         ehAluno(AtomMatricula)-> 
             atom_string(AtomMatricula, Matricula),
             getAluno(Matricula, Aluno),
-            member(Disciplina, Aluno.disciplinas),
-            delete(Aluno.disciplinas, Disciplina , DisciplinasRestantes),
-            atualizaAtributoAluno(Matricula, "removerDisciplina", DisciplinasRestantes),
-            swritef(Out,"Aluno desvinculado da disciplina %w", [Disciplina]),
-            writeln(Out);
-        writeln("Aluno não existe no sistema.")
+            (
+                \+member(Disciplina, Aluno.disciplinas) -> 
+                    writeln("Este aluno nao esta vinculado a sua disciplina");
+                delete(Aluno.disciplinas, Disciplina , DisciplinasRestantes),
+                atualizaAtributoAluno(Matricula, "removerDisciplina", DisciplinasRestantes),
+                swritef(Out,"Aluno desvinculado da disciplina %w", [Disciplina]),
+                writeln(Out)
+            );
+            
+        writeln("Aluno nao existe no sistema.")
     ).
     
