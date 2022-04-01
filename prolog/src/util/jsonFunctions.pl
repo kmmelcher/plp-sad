@@ -1,4 +1,5 @@
 :- module('jsonFunctions', [
+    addAluno/4,
     addMonitor/3, 
     removeMonitor/1, 
     existeDisciplina/1, 
@@ -312,7 +313,7 @@ showMensagens(Id) :-
     write("Disciplina: "), writeln(H.disciplina).
 
 mensagemToJSON(ID, Autor, Conteudo, Horario, Out) :-
-    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w","senha":""}', [ID, Autor, Conteudo, Horario]).
+    swritef(Out, '{"id":"%w","autor":"%w","conteudo":"%w","horario":"%w""}', [ID, Autor, Conteudo, Horario]).
 
 mensagensToJSON([], []).
 mensagensToJSON([H|T], [X|Out]) :- 
