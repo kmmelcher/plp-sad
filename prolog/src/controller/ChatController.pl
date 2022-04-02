@@ -48,11 +48,27 @@ getTicketsEmAndamentoRecursivo([T|Ts], TicketsAux, TicketsEmAndamento):-
     getTicketsEmAndamentoRecursivo(Ts, NovosTickets, TicketsEmAndamento);
     getTicketsEmAndamentoRecursivo(Ts, TicketsAux, TicketsEmAndamento).
 
+getTicketsAlunoEmAndamento(Matricula, Saida):-
+    readJSON("tickets", TodosTickets),
+    getTicketsAlunoEmAndamentoRecursivo(TodosTickets, Matricula, Saida).
+
+getTicketsAlunoEmAndamentoRecursivo([],_, []).
+getTicketsAlunoEmAndamentoRecursivo([H|T],Matricula, Tickets):-
+    H.autor = Matricula,
+    H.status = "Em andamento",
+    getTicketsAlunoEmAndamentoRecursivo(T, Matricula, TicketsS),
+    append(TicketsS, [H], Tickets)
+    ;
+    getTicketsAlunoEmAndamentoRecursivo(T, Matricula, Tickets).
 %----------------------------------------------------- FUNÇÕES DE EXIBIÇÃO -----------------------------------------------------%
 exibirTickets([]).
 exibirTickets([H|T]):-
     swritef(Out, "%w) %w (%w)", [H.id, H.titulo, H.status]), write(Out), nl,
     exibirTickets(T).
+
+exibeTicketsAlunoEmAndamento(Tickets):-
+    writeln("Estes sao os tickets criados por voce\n"),
+    exibirTickets(Tickets).
 
 exibeTicketsAluno(Matricula, Ticket):-
     getTicketsAluno(Matricula, Tickets),
@@ -132,10 +148,24 @@ msgInputInvalido():- writeln("Insira um valor valido\n").
 
 marcarTicketAlunoComoResolvido(Aluno) :-
     getTicketsAluno(Aluno.id,TicketsAluno),
-    exibeTicketsAluno(Aluno.id, _),
-    writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
-    input(Opcao), atom_string(Opcao,OpcaoStr),
-    (verificarIdTicketAoResolver(TicketsAluno,Aluno.id) -> atualizaAtributoTicket(OpcaoStr,"status","Resolvido"), writeln("Status de ticket atualizado com sucesso") ; writeln('Id invalido !')).
+    (
+        TicketsAluno = [] -> 
+            writeln("Voce nao possui nenhum ticket criado.");
+                getTicketsAlunoEmAndamento(Aluno.id, TicketsEmAndamento),
+                (
+                    TicketsEmAndamento = [] -> 
+                        writeln("Voce não possui nenhum ticket em andamento.");
+                            exibeTicketsAlunoEmAndamento(TicketsEmAndamento),
+                            writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
+                            input(Opcao), atom_string(Opcao,OpcaoStr),
+                            (
+                                verificarIdTicketAoResolver(TicketsEmAndamento ,Aluno.id) -> 
+                                    atualizaAtributoTicket(OpcaoStr,"status","Resolvido"), 
+                                    writeln("Status de ticket atualizado com sucesso") ;   
+                                        writeln('Id invalido !')
+                            )
+                )
+    ).
 
 verificarIdTicketAoResolver([H|T],AutorId) :-
     (H.autor = AutorId ->
