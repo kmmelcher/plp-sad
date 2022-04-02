@@ -1,6 +1,8 @@
 :- module('AlunoController', [getAluno/2, ehAluno/1, vinculaAlunoDisciplina/1, removeAluno/1, desvinculaAlunoDisciplina/1]).
 :- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, atualizaAtributoAluno/3, checaExistencia/2, addAluno/4, removeAluno/1]).
 :- use_module('../controller/MonitorController.pl', [ehMonitor/1, getMonitor/2]).
+:- use_module('../util/input.pl',[input/1]).
+:- use_module('../util/EncriptFunctions.pl',[encripta/3]).
 
 getAluno(Id, Aluno):-
     getObjetoByID("alunos", Id, AlunoJson),
@@ -10,8 +12,8 @@ getAluno(Id, Aluno):-
 ehAluno(Id):- checaExistencia("alunos", Id).
 
 vinculaAlunoDisciplina(Disciplina):-
-    writeln("Digite a matricula do Aluno:"),
-    read(IdAtom), atom_string(IdAtom, Id),
+    writeln("Digite a matricula do Aluno :"),
+    input(IdAtom), atom_string(IdAtom, Id),
     (
         ehAluno(Id) -> 
             getAluno(Id, Aluno),
@@ -27,24 +29,30 @@ vinculaAlunoDisciplina(Disciplina):-
                 )
                 
             );
-        writeln("Este aluno nao esta cadastrado no SAD."),
-        cadastraAluno("", [Disciplina])   
+        writeln("\nEste aluno nao esta cadastrado no SAD.\n"),
+        cadastraAluno("", Id, Disciplina)   
     ).
-    
-cadastraAluno(Nome, Disciplina):-
+
+cadastraAluno(Nome, Matricula, Disciplina):-
     (Nome = "" -> 
-        writeln("Digite o nome do ingressante (entre aspas duplas): "),
-        read(NomeAluno);
-            NomeAluno = Nome),
+        writeln("Digite o nome do ingressante: "),
+        input(NomeAluno); NomeAluno = Nome),
     
     (Disciplina = "" ->
             writeln("Digite a disciplina do ingressante: "),
-            read(DisciplinaAluno);
+            input(DisciplinaAtom), atom_string(DisciplinaAtom,DisciplinaAluno);
             DisciplinaAluno = Disciplina
     ),
-    writeln("Digite a matrícula do ingressante: "),
-    read(Matricula),
-    addAluno(Matricula, NomeAluno, DisciplinaAluno, ""), !. 
+    (Matricula = "" ->
+        writeln("Digite a nova matricula do ingressante: "),
+        input(MatriculaAtom),atom_string(MatriculaAtom,MatriculaAluno);
+            MatriculaAluno = Matricula
+        ),
+    encripta('aluno', NomeAluno, SenhaEncriptada),    
+    addAluno(MatriculaAluno, NomeAluno, [DisciplinaAluno], SenhaEncriptada), 
+    swritef(Out, "\nAluno %w criado com matricula:%w e senha padrão:aluno", [Nome, Matricula]),
+    writeln(Out). 
+
 
 removerAluno(Id):-
     removeAluno(Id),
@@ -52,7 +60,7 @@ removerAluno(Id):-
 
 desvinculaAlunoDisciplina(Disciplina) :-
     writeln("Matricula:"),
-    read(AtomMatricula),
+    input(AtomMatricula),
     (
         ehAluno(AtomMatricula)-> 
             atom_string(AtomMatricula, Matricula),

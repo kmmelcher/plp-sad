@@ -13,7 +13,16 @@ Para usar o SAD é preciso ter as seguintes ferramentas instaladas:
 
 ```bash
 $ cd prolog
-$ ./sad
+```
+
+Para arquitetura Intel
+```
+$ ./SAD-intel
+```
+
+Para arquitetura AMD
+```
+$ ./SAD-amd
 ```
 
 ![Windows](https://img.shields.io/badge/Windows-017AD7?style=for-the-badge&logo=windows&logoColor=white)

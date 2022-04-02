@@ -3,6 +3,7 @@
 :- use_module('AlunoController.pl', [getAluno/2, ehAluno/1]).
 :- use_module('MonitorController.pl', [getMonitor/2, ehMonitor/1]).
 :- use_module('ProfessorController.pl', [ehProfessor/1, getProfessor/2]).
+:- use_module('../util/input.pl',[input/1]).
 %----------------------------------------------------- FUNÇÕES DE GET -----------------------------------------------------%
 
 getTicket(Id, Ticket):-
@@ -47,11 +48,27 @@ getTicketsEmAndamentoRecursivo([T|Ts], TicketsAux, TicketsEmAndamento):-
     getTicketsEmAndamentoRecursivo(Ts, NovosTickets, TicketsEmAndamento);
     getTicketsEmAndamentoRecursivo(Ts, TicketsAux, TicketsEmAndamento).
 
+getTicketsAlunoEmAndamento(Matricula, Saida):-
+    readJSON("tickets", TodosTickets),
+    getTicketsAlunoEmAndamentoRecursivo(TodosTickets, Matricula, Saida).
+
+getTicketsAlunoEmAndamentoRecursivo([],_, []).
+getTicketsAlunoEmAndamentoRecursivo([H|T],Matricula, Tickets):-
+    H.autor = Matricula,
+    H.status = "Em andamento",
+    getTicketsAlunoEmAndamentoRecursivo(T, Matricula, TicketsS),
+    append(TicketsS, [H], Tickets)
+    ;
+    getTicketsAlunoEmAndamentoRecursivo(T, Matricula, Tickets).
 %----------------------------------------------------- FUNÇÕES DE EXIBIÇÃO -----------------------------------------------------%
 exibirTickets([]).
 exibirTickets([H|T]):-
     swritef(Out, "%w) %w (%w)", [H.id, H.titulo, H.status]), write(Out), nl,
     exibirTickets(T).
+
+exibeTicketsAlunoEmAndamento(Tickets):-
+    writeln("Estes sao os tickets criados por voce\n"),
+    exibirTickets(Tickets).
 
 exibeTicketsAluno(Matricula, Ticket):-
     getTicketsAluno(Matricula, Tickets),
@@ -59,7 +76,7 @@ exibeTicketsAluno(Matricula, Ticket):-
         writeln("Estes sao os tickets criados por voce\n"),
         exibirTickets(Tickets), 
         writeln("\nInsira o id do ticket que deseja visualizar mensagens:\n"),
-        read(OpcaoAtom), atom_string(OpcaoAtom, Opcao),
+        input(OpcaoAtom), atom_string(OpcaoAtom, Opcao),
         (
             checaIdValidoEmTickets(Opcao, Tickets) -> 
                 getTicket(Opcao, Ticket), 
@@ -76,8 +93,8 @@ exibeTicketsDisciplina(SiglaDisciplina):-
         ;
         swritef(Out, "Estes sao os tickets da disciplina: %w\n", [SiglaDisciplina]), write(Out),
         exibirTickets(Tickets),
-        writeln("\n Qual o numero do ticket que deseja visualizar mensagens?"), 
-        read(Opcao),
+        writeln("\nQual o numero do ticket que deseja visualizar mensagens?"), 
+        input(Opcao),
         atom_string(Opcao, OpcaoStr),
         (
             checaIdValidoEmTickets(OpcaoStr, Tickets) -> 
@@ -107,7 +124,7 @@ responderTicket(Entidade, Disciplina):-
       Tickets = [] -> writeln("Ainda nao ha tickets em andamento para serem respondidos nesta disciplina.\n") ;
       swritef(Out, "Estes sao os tickets em andamento da disciplina: %w\n\n", [Disciplina]), write(Out),
         exibirTickets(Tickets),
-        writeln("Qual ticket voce deseja responder? "), read(Opcao), atom_string(Opcao, OpcaoStr),
+        writeln("Qual ticket voce deseja responder? "), input(Opcao), atom_string(Opcao, OpcaoStr),
         (
             checaIdValidoEmTickets(OpcaoStr, Tickets) -> getTicket(OpcaoStr, Ticket), adicionaMensagem(Entidade, Ticket);
             msgInputInvalido()
@@ -116,7 +133,7 @@ responderTicket(Entidade, Disciplina):-
 
 adicionaMensagem(Entidade, Ticket):-
     checaEntidadeParaMensagem(Entidade.id, Ticket.disciplina, _, _),
-    writeln("Insira a mensagem entre aspas simples: "), read(Conteudo),
+    writeln("Insira a mensagem: "), input(Conteudo),
     get_time(T), format_time(string(Horario), "%c", T),
     addMensagem(Entidade.id, Conteudo, Horario, IdMensagem),
     atualizaAtributoTicket(Ticket.id, "mensagens", IdMensagem),   
@@ -131,10 +148,24 @@ msgInputInvalido():- writeln("Insira um valor valido\n").
 
 marcarTicketAlunoComoResolvido(Aluno) :-
     getTicketsAluno(Aluno.id,TicketsAluno),
-    exibeTicketsAluno(Aluno.id, _),
-    writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
-    read(Opcao), atom_string(Opcao,OpcaoStr),
-    (verificarIdTicketAoResolver(TicketsAluno,Aluno.id) -> atualizaAtributoTicket(OpcaoStr,"status","Resolvido"), writeln("Status de ticket atualizado com sucesso") ; writeln('Id invalido !')).
+    (
+        TicketsAluno = [] -> 
+            writeln("Voce nao possui nenhum ticket criado.");
+                getTicketsAlunoEmAndamento(Aluno.id, TicketsEmAndamento),
+                (
+                    TicketsEmAndamento = [] -> 
+                        writeln("Voce não possui nenhum ticket em andamento.");
+                            exibeTicketsAlunoEmAndamento(TicketsEmAndamento),
+                            writeln('\nInsira o id do ticket que deseja marcar como concluído:'),
+                            input(Opcao), atom_string(Opcao,OpcaoStr),
+                            (
+                                verificarIdTicketAoResolver(TicketsEmAndamento ,Aluno.id) -> 
+                                    atualizaAtributoTicket(OpcaoStr,"status","Resolvido"), 
+                                    writeln("Status de ticket atualizado com sucesso") ;   
+                                        writeln('Id invalido !')
+                            )
+                )
+    ).
 
 verificarIdTicketAoResolver([H|T],AutorId) :-
     (H.autor = AutorId ->
@@ -151,8 +182,8 @@ adicionarMensagemTicketAluno(Aluno) :-
     adicionaMensagem(Aluno, Ticket).
     
 adicionaTicket(Aluno, Disciplina):-
-    writeln("Insira o titulo do seu ticket (entre aspas simples): "),
-    read(Titulo),
+    writeln("Insira o titulo do seu ticket: "),
+    input(Titulo),
     addTicket("", Titulo, Aluno.id, [""], "Em andamento", Disciplina),
     writeln("Ticket adicionado com sucesso.").
 
@@ -170,7 +201,7 @@ excluirTicket(IdAluno):-
         writeln("\nEstes sao os tickets criados por voce:"),
         exibirTickets(Tickets),
         writeln("\nQual ticket voce deseja exlcuir?\n"),
-        read(Opcao), atom_string(Opcao, OpcaoStr),
+        input(Opcao), atom_string(Opcao, OpcaoStr),
         (checaIdValidoEmTickets(OpcaoStr, Tickets) -> 
             removeMensagens(OpcaoStr),
             removeTicket(OpcaoStr), 
