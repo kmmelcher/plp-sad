@@ -21,6 +21,7 @@
 :- use_module(library(http/json)).
 :- use_module('../controller/AlunoController.pl', [getAluno/2]).
 
+stringlist_concat([],_,_,"").
 stringlist_concat([H|[]], _, ResultAux, ResultReal):- string_concat(ResultAux, H, ResultReal).
 stringlist_concat([H|T], Sep, ResultAux, ResultReal):-
     string_concat(H, Sep, NovoResultAux),
@@ -103,19 +104,22 @@ showAluno(Id) :-
 
 atualizaAtributoAluno(Id, "removerDisciplina", DisciplinasAtualizadas):-
     getObjetoByID("alunos", Id, Object),
-     removeAluno(Id), 
-     addAluno(Object.id, Object.nome, DisciplinasAtualizadas, Object.senha).
+    removeAluno(Id), 
+    addAluno(Object.id, Object.nome, DisciplinasAtualizadas, Object.senha).
+
 atualizaAtributoAluno(Id, "disciplinas", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
     append(ConteudoAux, [ConteudoAtualizado], NovoConteudo), 
     removeAluno(Id), 
     addAluno(Object.id, Object.nome, NovoConteudo, Object.senha).
+
 atualizaAtributoAluno(Id, "nome", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
     removeAluno(Id), 
     addAluno(Object.id, ConteudoAtualizado, ConteudoAux, Object.senha).
+
 atualizaAtributoAluno(Id, "senha", ConteudoAtualizado):-
     getObjetoByID("alunos", Id, Object),
     split_string(Object.disciplinas, ",", "", ConteudoAux),
