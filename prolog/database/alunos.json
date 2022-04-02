@@ -1,11 +1,5 @@
 [
     {
-        "id": "120110002",
-        "nome": "Vinicius da Silva",
-        "disciplinas": "oac,loac,bd,ip,psoft,plp",
-        "senha": "2079022575249702236515738"
-    },
-    {
         "id": "120110003",
         "nome": "Pedro Adrian Pereira",
         "disciplinas": "psoft,plp,so,redes,bd",
@@ -124,5 +118,11 @@
         "nome": "Kilian Macedo Melcher",
         "disciplinas": "psoft,plp,oac,loac,bd",
         "senha": "2017622575243002236512900"
+    },
+    {
+        "id": "120110002",
+        "nome": "Vinicius da Silva",
+        "disciplinas": "oac,loac,bd,ip,psoft,plp",
+        "senha": "2079022575249702236515738"
     }
 ]

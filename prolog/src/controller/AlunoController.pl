@@ -2,6 +2,7 @@
 :- use_module('../util/jsonFunctions.pl', [getObjetoByID/3, atualizaAtributoAluno/3, checaExistencia/2, addAluno/4, removeAluno/1]).
 :- use_module('../controller/MonitorController.pl', [ehMonitor/1, getMonitor/2]).
 :- use_module('../util/input.pl',[input/1]).
+:- use_module('../util/EncriptFunctions.pl',[encripta/3]).
 
 getAluno(Id, Aluno):-
     getObjetoByID("alunos", Id, AlunoJson),
@@ -47,7 +48,8 @@ cadastraAluno(Nome, Matricula, Disciplina):-
         input(MatriculaAtom),atom_string(MatriculaAtom,MatriculaAluno);
             MatriculaAluno = Matricula
         ),
-    addAluno(MatriculaAluno, NomeAluno, [DisciplinaAluno], "aluno"), 
+    encripta('aluno', NomeAluno, SenhaEncriptada),    
+    addAluno(MatriculaAluno, NomeAluno, [DisciplinaAluno], SenhaEncriptada), 
     swritef(Out, "\nAluno %w criado com matricula:%w e senha padrão:aluno", [Nome, Matricula]),
     writeln(Out). 
 
